@@ -1,0 +1,75 @@
+
+H1	{
+		color:			Maroon;
+		font-family: 		Verdana,Arial,Helvetica,"sans-serif";
+		font-style:		italic;
+		page-break-before:	always
+	}
+	
+H2	{
+		margin-left:		10%;
+		border-top-style: 	ridge;
+		color:			Maroon;
+		font-family:	 	Verdana,Arial,Helvetica,"sans-serif";
+	}
+
+H3	{
+		margin-left:		10%;
+		color:			Maroon;
+		font-family: 		Verdana,Arial,Helvetica,"sans-serif";
+	}
+	
+P	{
+		margin-left:		10%;
+		align:			justify;
+	}
+
+UL	{
+		margin-left:		15%
+	}
+
+LI	{
+		padding-top:		2pt;
+		padding-bottom: 	2pt
+	}
+
+DD	{
+		font-style:		italic
+	}
+	
+DL	{
+		margin-left:		10%;
+		padding-left:		2pt;
+		padding-right:		2pt;
+		border-left-style:	solid
+	}
+
+BODY,TD	{
+		margin-left:		5%;
+		margin-right:		5%;
+		font-family: 		Georgia,Verdana,Arial,Helvetica,"sans-serif";
+		font-size:		12pt;
+		text-align:		left
+	}
+
+TABLE	{
+		margin-left:		10%;
+		margin-right:		10%;
+		font-family: 		Georgia,Verdana,Arial,Helvetica,"sans-serif";
+		font-size:		12pt;
+		text-align:		left
+	}
+
+PRE	{
+		margin-left:		10%;
+		background:		#EEEEEE;
+		padding-left:		2%;
+		padding-right:		2%;
+		padding-top:		1%;
+		padding-bottom:		1%;
+		border-left-style:	solid;
+		border-right-style:	solid;		
+		font-family: 		"Lucida Console",Courier;
+		font-size:		10pt;
+		text-align:		left		
+	}
