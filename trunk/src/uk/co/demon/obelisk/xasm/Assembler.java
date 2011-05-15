@@ -726,7 +726,7 @@ public abstract class Assembler extends Application
 	};
 
 	/**
-	 * An <CODE>Opcode</CODE> that handles .IFNABS directives
+	 * An <CODE>Opcode</CODE> that handles .IFNREL directives
 	 */
 	protected final Opcode 		IFNREL		= new Opcode (KEYWORD, ".IFNREL", true)
 	{
@@ -774,7 +774,7 @@ public abstract class Assembler extends Application
 	};
 
 	/**
-	 * An <CODE>Opcode</CODE> that handles .IF directives
+	 * An <CODE>Opcode</CODE> that handles .ENDIF directives
 	 */
 	protected final Opcode 		ENDIF		= new Opcode (KEYWORD, ".ENDIF", true)
 	{
@@ -793,7 +793,7 @@ public abstract class Assembler extends Application
 	};
 
 	/**
-	 * An <CODE>Opcode</CODE> that handles .MACROS directives
+	 * An <CODE>Opcode</CODE> that handles .MACRO directives
 	 */
 	protected final Token 		MACRO		= new Opcode (KEYWORD, ".MACRO")
 	{
@@ -871,7 +871,7 @@ public abstract class Assembler extends Application
 			Expr expr = parseExpr ();
 			
 			if (expr.isAbsolute ()) {
-				savedLines = new RepeatSource (expr.resolve(null, null));
+				savedLines = new RepeatSource (expr.resolve (null, null));
 			}
 			else
 				error (ERR_CONSTANT_EXPR);
