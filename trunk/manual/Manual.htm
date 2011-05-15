@@ -1,0 +1,1298 @@
+<HTML>
+	<head>
+		<title>As65/Lk65/Lb65 - A Portable 65xx Family Assembler</title>
+		<LINK media="screen,print" href="stylesheet.css" type="text/css" rel="StyleSheet">
+	</head>
+	<body>
+		<P><STRONG><FONT size="7">A Portable 65xx Family Assembler Development System</FONT></STRONG></P>
+		<P>As65, Lk65 and Lb65 form a portable development toolset for 65xx, 65C02 and 
+			65816 assembly language programming. All of the programs are coded in Java 
+			(using JDK 1.4.2) and should execute on any compatible JDK or JRE environment 
+			that has the JAXP (XML processing) package and a SAX parser (included in the 
+			standard SUN Java distribution).</P>
+		<H1>Assembler (As65)</H1>
+		<p>The assembler (As65) produces a relocatable object modules by compiling lines of 
+			source code held in local files. The format of each source line must follow the 
+			pattern shown below. The 'square' brackets enclose optional components within 
+			the line (like the label) whilst the&nbsp; '(X|Y)' pattern indicates a choice 
+			between types delimited by '|' characters.&nbsp;</p>
+		<pre>[[label[:]] [(opcode|directive|macro) [arguments]]] [; comment]</pre>
+		<P>Opcodes and directives names are case insensitive in source code but labels and 
+			macro names are case sensitive. Given this syntax all of the following examples 
+			are valid.</P>
+		<pre>; A comment line
+a_label_by_itself
+        NOP             ; Opcode with no argument followed by a comment
+        nop             ; Same as above
+        LDA #1
+        .6502		; Generate code for 6502 processor
+        MYMACRO 1,2,3   ; Generate a parameterised macro</pre>
+		<h3>Labels</h3>
+		<P>Labels can&nbsp; be placed before all opcodes or on lines by themselves. A 
+			global label is comprised of a letter or underscore ('_') followed by a series 
+			of alphanumeric and/or underscore characters. A label may optionally be 
+			followed by a colon (':').</P>
+		<P>A local label has the same grammatical construction as a global label but begins 
+			with a period ('.'). Whilst a global label may only be used once with a module 
+			a local label may be defined several times provided it appears each time within 
+			the scope of a different global label.</P>
+		<pre>SomeGlobalLabel:
+.ALocalLabel:</pre>
+		<P>Most directives do not allow labels. Those that do give them special meaning 
+			(e.g. macro name, symbol name in .EQU and .SET, etc.)</P>
+		<h2>Expressions</h2>
+		<P>The arguments provided to most opcodes and directives are expression comprised 
+			of absolute (e.g. constant literals), relative (e.g. the address of some 
+			relocatable instruction or piece of data) and external values (e.g. values 
+			defined in other source modules).</P>
+		<P>The expression parser evaluates operations on absolute values during processing 
+			to produce constant values but expressions involving relative and external 
+			terms are left for the linker to resolve. The following table shows all the 
+			supported operators in decreasing order or precedence.&nbsp;&nbsp;</P>
+		<table border="1" width="60%" height="170" cellspacing="0">
+			<tr>
+				<td width="20%" height="16"><b>Operator</b></td>
+				<td width="50%" height="16"><b>Description</b></td>
+			</tr>
+			<tr>
+				<td width="20%" height="16">$<br>
+					( sub-expression )<br>
+					number<br>
+					symbol<br>
+					'character literal'</td>
+				<td width="50%" height="16">Unary values</td>
+			</tr>
+			<tr>
+				<td width="20%" height="16">+<br>
+					-<br>
+					~<br>
+					!<br>
+					LO<br>
+					HI<br>
+					BANK</td>
+				<td width="50%" height="16">Unary plus (ignored)<br>
+					Negation<br>
+					Complement<br>
+					Logical Not<br>
+					Bits 7 to 0<br>
+					Bits 15 to 8<br>
+					Bits 31 to 16</td>
+			</tr>
+			<tr>
+				<td width="20%" height="16">*<br>
+					/<br>
+					%</td>
+				<td width="50%" height="16">Multiply<br>
+					Divide<br>
+					Remainder</td>
+			</tr>
+			<tr>
+				<td width="20%" height="16">+<br>
+					-</td>
+				<td width="50%" height="16">Addition<br>
+					Subtraction</td>
+			</tr>
+			<tr>
+				<td width="20%" height="16">&lt;&lt;<br>
+					&gt;&gt;</td>
+				<td width="50%" height="16">Right Shift<br>
+					Left Shift</td>
+			</tr>
+			<tr>
+				<td width="20%" height="16">&lt;<br>
+					&lt;=<br>
+					&gt;<br>
+					&gt;=</td>
+				<td width="50%" height="16">Less Than<br>
+					Less Than Or Equal<br>
+					Greater Than<br>
+					Greater Than Or Equal</td>
+			</tr>
+			<tr>
+				<td width="20%" height="16">==<br>
+					!=</td>
+				<td width="50%" height="16">Equal<br>
+					Not Equal</td>
+			</tr>
+			<tr>
+				<td width="20%" height="16">&amp;<br>
+					|<br>
+					^</td>
+				<td width="50%" height="16">Binary AND<br>
+					Binary OR<br>
+					Binary XOR</td>
+			</tr>
+			<tr>
+				<td width="20%" height="32">&amp;&amp;<br>
+					||</td>
+				<td width="50%" height="32">Logical AND<br>
+					Logical OR</td>
+			</tr>
+		</table>
+		<P>Expressions may only contain numeric values. There are no string functions.</P>
+		<h3>Literals</h3>
+		<P>Literal numeric values can be expressed in binary, decimal, octal, decimal and 
+			as character values. Literal values may be up to 32-bits in size and all 
+			expressions are evaluated at this precision. Values are masked to 8- and 16- 
+			bits when generating code.</P>
+		<pre>        LDA #%10101100    ; Load a binary constant
+        LDX #@177         ; Load an octal constant
+        LDA 127           ; Load from a location specified in decimal
+        STA $FFC1         ; Store at a location specified in hexadecimal
+        lda #'X'          ; Load ASCII for 'X' into the accumlator
+        .LONG 'ABCD'      ; A 32-bit character constant</pre>
+		<P>&nbsp;</P>
+		<H2>Directives</H2>
+		<P>&nbsp;The assembler currently takes a minimalist approach to directives and 
+			opcodes. It does not provide any&nbsp;synonyms for the instructions.</P>
+		<h3>.6501</h3>
+		<P>This directive places the assembler in 6501 processor mode. The 6501 processor 
+			supports all normal 6502 instructions as well as the extended BBR, BBS, SMB and 
+			RMB instructions.</P>
+		<h3>.6502</h3>
+		<P>This directive places the assembler in 6502 processor mode. Only the traditional 
+			6502 instructions and addressing modes are supported.</P>
+		<h3>.65C02</h3>
+		<P>This directive places the assembler in 65C02 processor mode.&nbsp; The 65C02 
+			processor supports all normal 6502 instructions plus new addressing modes and 
+			extra some instructions including the BBR, BBS, SMB and RMB instructions,&nbsp;</P>
+		<h3>.65SC02</h3>
+		<P>This directive places the assembler in 65SC02 processor mode.&nbsp; The 65SC02 
+			processor supports the same instructions as the 65C02 BUT does not have then 
+			extended BBR, BBS, SMB and RMB instructions,&nbsp;</P>
+		<h3>.65816</h3>
+		<P>This directive places the assembler into 65816 processor mode.</P>
+		<h3>
+            .65832</h3>
+        <p>
+            This directive places the assembler into 65832processor mode.
+        </p>
+        <p>
+            The 65832 was designed by WDC but never actually made it into production. It is
+            very similar to the 65816 but supports 32-bit accumulator and index registers.</p>
+        <h3>
+            .CODE</h3>
+		<p>The .CODE directive tells the assembler to place any code generated by 
+			instructution or data directives into the object files code section.</p>
+		<h3>.DATA</h3>
+		<P>The .DATA directive tells the assembler to place any code generated by 
+			instructution or data directives into the object files initialised&nbsp;data 
+			section.</P>
+		<h3>.BSS</h3>
+		<P>The .BSS directive tells the assembler to place any code generated by 
+			instructution or data directives into the object files uninitialised&nbsp;data 
+			section.</P>
+		<h3>.PAGE0</h3>
+		<p>The .PAGE0 directive tells the assembler to place any code generated by 
+			instructution or data directives into a specially marked section that will be 
+			located on page 0 ($0000-$00FF on 8-bit CPUs or $000000-$00FFFF on 
+			16-bit&nbsp;CPUs)&nbsp;.</p>
+		<h3>.ORG &lt;constant expr&gt;</h3>
+		<p>The .ORG directive sets the absolute target address for the current section.</p>
+		<h3>.DPAGE &lt;constant expr&gt;</h3>
+		<P>The .DPAGE directive informs the assembler of the assumed value of the direct 
+			page register for the following sequence of instructions so that addressing 
+			modes resulting in shorter instructions are generated where possible.</P>
+		<h3>.LONGA (ON|OFF)</h3>
+		<P>When compiling for the 65816 processor this directive controls the size of 
+			immediate values loaded into the accumulator. If a .LONGA ON directive has been 
+			processed then 16 bit literals will be generated otherwise they will be 8 bits.</P>
+		<h3>.LONGI (ON|OFF)</h3>
+		<P>When compiling for the 65816 processor this directive controls the size of 
+			immediate values loaded into the X and Y registers. If a .LONGI ON directive 
+			has been processed then 16 bit literals will be generated otherwise they will 
+			be 8 bits.</P>
+        <h3>
+            .WIDEA (ON|OFF)</h3>
+        <P>
+            When compiling for the 65832 processor this directive controls the size of immediate
+            values loaded into the accumulator. If a .WIDEA ON directive has been processed
+            then 32 bit literals will be generated otherwise they will be 8 bits.</p>
+        <h3>
+            .WIDEI (ON|OFF)</h3>
+        <P>
+            When compiling for the 65832 processor this directive controls the size of immediate
+            values loaded into the X and Y registers. If a .WIDEI ON directive has been processed
+            then 32 bit literals will be generated otherwise they will be 8 bits.</p>
+		<h3>.IF &lt;constant expr&gt;</h3>
+		<P>Assembles the following source code up to the matching .ELSE or .ENDIF if the 
+			constant expression evaluates to a non-zero value.</P>
+		<pre>        JSR DoSomething
+        .IF DEBUGGING
+        JSR DumpRegisters
+        .ENDIF
+        JSR DoTheNextBit</pre>
+		<h3>.IFABS &lt;expr&gt;</h3>
+		<P>Assembles the following source code up to the matching .ELSE or .ENDIF if the 
+			expression evaluates to a absolute (i.e. constant) value.</P>
+		<P>This directive is useful in macros to test the type of the parameter value.</P>
+		<h3>.IFNABS &lt;expr&gt;</h3>
+		<P>Assembles the following source code up to the matching .ELSE or .ENDIF if the 
+			expression does not evaluate to a absolute (i.e. constant) value.</P>
+		<P>This directive is useful in macros to test the type of the parameter value.</P>
+		<h3>.IFREL &lt;expr&gt;</h3>
+		<P>Assembles the following source code up to the matching .ELSE or .ENDIF if the 
+			expression evaluates to a relocatable value.</P>
+		<P>This directive is useful in macros to test the type of the parameter value.</P>
+		<h3>.IFNREL &lt;expr&gt;</h3>
+		<P>Assembles the following source code up to the matching .ELSE or .ENDIF if the 
+			expression does not evaluate to a relocatable value.</P>
+		<P>This directive is useful in macros to test the type of the parameter value.</P>
+		<h3>.ELSE</h3>
+		<P>Assembles the folloing source code up the matching .ENDIF if&nbsp;the 
+			condition&nbsp;for the&nbsp;preceding matching .IF, .IFABS, .IFNABS, .IFREL, 
+			.IFNREL directive was not met.&nbsp;</P>
+		<h3>.ENDIF</h3>
+		<P>The .ENDIF directive marks the end of condition code section.</P>
+		<h3>.INCLUDE "filename"</h3>
+		<P>Causes the contents of the indicated file to be read and processed before the 
+			remainder of the current file.</P>
+		<h3>.APPEND "filename"</h3>
+		<P>The current source file is close and processing continues at the first line of 
+			the indicated file.</P>
+		<pre>        NOP
+
+        .APPEND "AnotherFile.asm"
+
+        NOP             ; This line will not be processed.</pre>
+		<h3>.END</h3>
+		<p>The .END directive marks the end of the source code.</p>
+		<pre>        NOP
+
+        .END
+
+        NOP             ; This line will not be processed.</pre>
+		<h3>.INSERT "filename"</h3>
+		<P>The .INSERT directive reads the binary contents of the indicated file and 
+			inserts it directly into the generated object code.</P>
+		<P>A typically use is to insert pre-compiled data such as graphics images, 
+			encryption keys or lookup tables into the code.</P>
+		<h3>.REPEAT &lt;constant expr&gt;</h3>
+		<P>Causes the source lines up to the matching .ENDR directive to repeated the 
+			number of times indicated by the constant expression</P>
+		<pre>        .REPEAT 8       ; Generate 8 NOPs
+        NOP
+        .ENDR</pre>
+		<h3>.ENDR</h3>
+		<P>Marks the end of .REPEAT section.</P>
+		<h3>.MACRO [&lt;arg&gt;[,&lt;arg&gt;]*]</h3>
+		<p>The .MACRO directive indicates that the following source lines upto the matching 
+			.ENDM should be used to define a macro. The name of the macro is taken from the 
+			label preceding the .MACRO command.</p>
+		<PRE>_NOT16 .MACRO VLA,RES<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LDA VLA+0<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; EOR #$FF<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; STA RES+0<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LDA VLA+1<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; EOR #$FF<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; STA RES+1<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .ENDM</PRE>
+		<p>Macro arguments can be accessed by defining symbolic names for them or by 
+			positional references (using \0 thru \9). The sequence \? can be used with a 
+			macro to obtain the macro expansion count, for example to generate unique 
+			labels for branches within the macro.</p>
+		<h3>.ENDM</h3>
+		<P>Marks the end of a .MACRO definition</P>
+		<h3>.EXITM</h3>
+		<P>When used within a macro it causes an immediate termination of the expansion 
+			process.</P>
+		<h3>.GLOBAL &lt;symbol&gt;[,&lt;symbol&gt;]*</h3>
+		<P>The .GLOBAL directive lists one or more symbols defined in the current module 
+			that can be referenced by code in other modules.</P>
+		<h3>.EXTERN &lt;symbol&gt;[,&lt;symbol&gt;]*</h3>
+		<P>The .EXTERN directive lists one or more symbols defined in other modules so that 
+			they can be used in expressions within the current module (e.g. subroutine 
+			addresses, key data areas, etc.).</P>
+		<h3>.BYTE&nbsp; (&lt;expr&gt;|&lt;string&gt;)[,(&lt;expr&gt;|&lt;string&gt;)]*</h3>
+		<P>The .BYTE directive deposits a series of 8-bit values into the object code for 
+			the current module. The values can be defined as the result of an expression 
+			(this includes simple numeric values) or as strings delimited by quotes.</P>
+		<pre>        .BYTE "Hello World",$0D,$0A,0</pre>
+		<h3>.WORD &lt;expr&gt;[,&lt;expr&gt;]*</h3>
+		<P>The .LONG directive deposits a series of 16-bit values defined by a series of 
+			expressions into the object code for the current module.</P>
+		<pre>        .WORD 1,$2,3+5</pre>
+		<h3>.ADDR &lt;expr&gt;,[&lt;expr&gt;]*</h3>
+		<P>The .ADDR directive deposits a series of 24-bit values defined by a series of 
+			expressions into the object code for the current module.</P>
+		<pre>        .ADDR Function1,Function2</pre>
+		<P>The .ADDR directive is primarily intended for creating function jump tables for 
+			the 65816 processor.</P>
+		<h3>.LONG &lt;expr&gt;[,&lt;expr&gt;]*</h3>
+		<P>The .LONG directive deposits a series of 32-bit values defined by a series of 
+			expressions into the object code for the current module.</P>
+		<pre>        .LONG 1,$2,3+5</pre>
+		<h3>.SPACE &lt;constant expr&gt;</h3>
+		<P>The .SPACE directive reserves the specified number of zero valued bytes in the 
+			object code.</P>
+		<PRE>PTRA&nbsp;&nbsp;&nbsp; .SPACE 2</PRE>
+		<H3>.LIST</H3>
+		<P>The .LIST directive enables the output of lines to the listing file.</P>
+		<H3>.NOLIST</H3>
+		<P>The .NOLIST directive suspends the generation of a listing.</P>
+		<H3>.TITLE</H3>
+		<P>The .TITLE directive sets the string shown as the title at the top of the 
+			listing page.</P>
+		<H3>.PAGE</H3>
+		<P>The .PAGE directive forces the listing to restart at the top of the next page.</P>
+		<h2>Opcodes</h2>
+		<P>The assembler recognizes all the opcodes for the 6501, 6502, 65C02, 65SC02 and 
+			65816 processors but will only generate code&nbsp;for currently selected 
+			processor type. Using an inappropriate opcode will generate an error.</P>
+		<table border="1" width="70%" cellspacing="0" height="0">
+			<tr>
+				<td width="16%"><b>Opcode</b></td>
+				<td width="16%"><b>6501</b></td>
+				<td width="17%"><b>6502</b></td>
+				<td width="17%"><b>65C02</b></td>
+				<td width="17%"><b>65SC02</b></td>
+				<td width="17%"><b>65816</b></td>
+			</tr>
+			<tr>
+				<td width="16%">ADC</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">AND</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">ASL</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BBR0<br>
+					BBR1<br>
+					BBR2<br>
+					BBR3<br>
+					BBR4<br>
+					BBR5<br>
+					BBR6<br>
+					BBR7</td>
+				<td width="16%">Y</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+			</tr>
+			<tr>
+				<td width="16%">
+					BBS0<br>
+					BBS1<br>
+					BBS2<br>
+					BBS3<br>
+					BBS4<br>
+					BBS5<br>
+					BBS6<br>
+					BBS7</td>
+				<td width="16%">Y</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+			</tr>
+			<tr>
+				<td width="16%">BCC</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BCS</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BEQ</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BIT</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BMI</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BNE</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BPL</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BRA</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BRK</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BRL</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BVC</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">BVS</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">CLC</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">CLD</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">CLI</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">CLV</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">CMP</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">COP</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">CPX</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">CPY</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">DEC</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">DEX</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">DEY</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">EOR</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">INC</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">INX</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">INY</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">JML</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">JSL</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">LDA</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">LDX</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">LDY</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">LSR</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">MVN</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">MVP</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">NOP</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">ORA</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PEA</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PEI</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PER</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PHA</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PHB</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PHD</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PHK</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PHX</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PHY</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PLA</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PLB</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PLD</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PLP</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PLX</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">PLY</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">REP</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+			</tr>
+			<tr>
+				<td width="16%">RMB0<br>
+					RMB1<br>
+					RMB2<br>
+					RMB3<br>
+					RMB4<br>
+					RMB5<br>
+					RMB6<br>
+					RMB7</td>
+				<td width="16%">Y</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+			</tr>
+			<tr>
+				<td width="16%">ROL</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">ROR</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">RTI</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">RTL</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">RTS</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">SBC</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">SEC</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">SED</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">SEI</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">SEP</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">SMB0<br>
+					SMB1<br>
+					SMB2<br>
+					SMB3<br>
+					SMB4<br>
+					SMB5<br>
+					SMB6<br>
+					SMB7</td>
+				<td width="16%">Y</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+			</tr>
+			<tr>
+				<td width="16%">STA</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">STP</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">STX</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">STY</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">STZ</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TAX</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TAY</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TCD</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TCS</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TDC</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TRB</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TSB</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TSX</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TXA</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TXS</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TXY</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TYA</td>
+				<td width="16%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">TYX</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">WAI</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">WDM</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">XBA</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+			<tr>
+				<td width="16%">XCE</td>
+				<td width="16%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">&nbsp;</td>
+				<td width="17%">Y</td>
+			</tr>
+		</table>
+		<P>&nbsp;</P>
+		<h2>Addressing Modes</h2>
+		<P>The 65xx family of processors support a number of different addressing modes 
+			which can be used with each instruction.</P>
+		<P>
+			<TABLE width="70%" border="1">
+				<TR>
+					<TD height="22"><STRONG>Syntax</STRONG></TD>
+					<TD height="22"><STRONG>Description</STRONG></TD>
+					<TD height="22"><STRONG>Example</STRONG></TD>
+				</TR>
+				<TR>
+					<TD height="20"></TD>
+					<TD height="20">Implied</TD>
+					<TD height="20">NOP</TD>
+				</TR>
+				<TR>
+					<TD height="20">A</TD>
+					<TD height="20">Accumulator</TD>
+					<TD height="20">LSR A</TD>
+				</TR>
+				<TR>
+					<TD>#expr</TD>
+					<TD>Immediate</TD>
+					<TD>LDA #'A'</TD>
+				</TR>
+				<TR>
+					<TD>#&lt;expr</TD>
+					<TD>Immediate (lo byte)</TD>
+					<TD>LDX #&lt;ADDR</TD>
+				</TR>
+				<TR>
+					<TD>#&gt;expr</TD>
+					<TD>Immediate&nbsp;(hi byte)</TD>
+					<TD>LDY #&gt;ADDR</TD>
+				</TR>
+				<TR>
+					<TD>#^expr</TD>
+					<TD>Immediate (bank byte)</TD>
+					<TD>LDA #^ADDR</TD>
+				</TR>
+				<TR>
+					<TD>&lt;expr</TD>
+					<TD>Direct</TD>
+					<TD>STA &lt;PTR</TD>
+				</TR>
+				<TR>
+					<TD>&lt;expr,X</TD>
+					<TD>Direct Indexed by X&nbsp;</TD>
+					<TD>LDA &lt;TBL,X</TD>
+				</TR>
+				<TR>
+					<TD>&lt;expr,Y</TD>
+					<TD>Direct Indexed by Y</TD>
+					<TD>LDA &lt;TBL,Y</TD>
+				</TR>
+				<TR>
+					<TD>&gt;expr</TD>
+					<TD>Absolute Long (65816 only)</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>&gt;expr,X</TD>
+					<TD>Absolute Long Indexed by X (65816 only)</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>[expr]</TD>
+					<TD>Long Indirect (65816 only)</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>[expr],Y</TD>
+					<TD>Long Indirect Indexed (65816 only)</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>(expr,X)</TD>
+					<TD>Indexed Indirect</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>(expr),Y</TD>
+					<TD>Indirect Indexed</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>(expr,S),Y
+					</TD>
+					<TD>Stack Relative Indirect Indexed (65816 only)</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>(expr)</TD>
+					<TD>Indirect</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>|expr</TD>
+					<TD>Absolute</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>|expr,X</TD>
+					<TD>Absolute Indexed by X</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>|expr,Y</TD>
+					<TD>Absolute Indexed by Y</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>expr</TD>
+					<TD>Absolute or Direct</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>expr,X</TD>
+					<TD>Absolute or Direct Indexed by X</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>expr,Y</TD>
+					<TD>Absolute or Direct Indexed by Y&nbsp;</TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD>expr,S</TD>
+					<TD>Stack Relative (65816 only)</TD>
+					<TD></TD>
+				</TR>
+			</TABLE>
+		</P>
+		<P>If the absolute address of the target memory location is known the assembler 
+			will attempt to generate the smallest instruction (e.g.&nbsp;direct page 
+			instead of absolute). The explicit direct (&lt; expr) and absolute (| expr) 
+			allow the programmer to specify an exact addressing mode for&nbsp;expressions 
+			which are not absolute, for example those referencing external symbols.</P>
+        <h3>
+            BRK &amp; COP</h3>
+        <p>
+            The BRK and COP instructions are usually documented as immediate although they both
+            expect the opcode to be followed by a data byte and the PC is incremented by two.</p>
+        <p>
+            The assembler allows these instructions to be used either in the normal immediate
+            way or with the immediate addressing mode to specify the data byte. For example
+            the following results in the same code.</p>
+        <pre>
+        BRK             ; Normal usage
+        .BYTE $7E
+
+        BRK #$7E        ; Generate opcode and data byte together</pre>
+		<H2>Code Sections</H2>
+		<P>The assembler can generate code into four different sections (e.g. CODE, DATA, 
+			BSS and PAGE0). At the start of each pass the sections&nbsp;are defined 
+			as&nbsp;relative. Using the .ORG directive any section can be forced to place 
+			code or data at a specific absolute memory address.</P>
+		<PRE>        .CODE<BR>        NOP             ; A relocatable NOP<BR> <BR>        .ORG     $F000  ; Make the section absolute<BR>        NOP             ; Place a NOP at $F000<BR> <BR>        .DATA           ; Switch to the (relative) DATA section<BR>        .BYTE 1,2,3<BR><BR> <BR>        .CODE           ; Switch back to the absolute code section<BR>        NOP             ; Place a NOP at $F001<BR></PRE>
+		<P>You can switch&nbsp;between the sections throughout your code. Any&nbsp;code or 
+			data generated will be added&nbsp;where the section was left when it was 
+			previously used.</P>
+		<P>Once a section has been made absolute it can not be made relative again. The 
+			.ORG directive can be used multiple times within the same section, for example 
+			to reserve memory in different RAM areas.</P>
+		<H1>Linker (Lk65)</H1>
+		<P>&nbsp;</P>
+		<P>&nbsp;</P>
+		<H1>Librarian (Lb65)</H1>
+		<P>&nbsp;</P>
+		<P>&nbsp;</P>
+		<h1>Colophon</h1>
+		<P>I've been meaning to write a relocating 6502 assembler for about 22 years but 
+			never seemed to have the time to get around to it. Before writing this package 
+			I tried out all kinds of demos and shareware but none of them was quite what I 
+			was looking for so I finally put the fingers to the keyboard.
+		</P>
+		<P>All of the applications are 65XX specialised versions of an underlying more 
+			generic application. One day I might bolt a Z80/GameBoy Color or ARM/THUMB 
+			lexical analyser on the top. Send me an e-mail if you would like a copy of the 
+			sources.</P>
+		<P>The data format used to represent the object modules and libraries is gzip'ed 
+			XML. It might not be the most efficient way to represent object modules but in 
+			this day and age who cares about a few extra bytes and machine cycles. Besides 
+			its so much easier to debug than a binary format.
+		</P>
+		<P>Andrew Jacobs, November 2005</P>
+	</body>
+</HTML>
