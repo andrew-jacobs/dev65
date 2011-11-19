@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -48,7 +48,7 @@ public final class Library
 	public boolean updateModule (Module module)
 	{
 		for (int index = 0; index < modules.size (); ++index) {
-			Module target = (Module) modules.elementAt (index);
+			Module target = modules.elementAt (index);
 			
 			if (target.getName().equals (module.getName())) {
 				modules.set (index, module);
@@ -62,7 +62,7 @@ public final class Library
 	public boolean removeModule (Module module)
 	{
 		for (int index = 0; index < modules.size (); ++index) {
-			Module target = (Module) modules.elementAt (index);
+			Module target = modules.elementAt (index);
 			
 			if (target.getName().equals (module.getName())) {
 				modules.remove (index);
@@ -91,7 +91,7 @@ public final class Library
 		
 		buffer.append ("<library>");
 		for (int index = 0; index < modules.size (); ++index)
-			buffer.append (((Module) modules.elementAt(index)).toString ());
+			buffer.append ((modules.elementAt(index)).toString ());
 		buffer.append ("</library>");
 		
 		return (buffer.toString ());
@@ -100,5 +100,5 @@ public final class Library
 	/**
 	 * All the modules in the library.
 	 */
-	private Vector			modules = new Vector ();
+	private Vector<Module>		modules = new Vector<Module> ();
 }

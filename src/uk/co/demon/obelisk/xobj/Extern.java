@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -70,7 +70,7 @@ public final class Extern extends Expr
 	/**
 	 * {@inheritDoc}
 	 */
-	public int resolve (SectionMap sections, SymbolMap symbols)
+	public long resolve (SectionMap sections, SymbolMap symbols)
 	{
 		if ((sections == null) && (symbols == null))
 			return (0);

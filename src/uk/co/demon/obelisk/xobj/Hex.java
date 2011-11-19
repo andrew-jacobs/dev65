@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2006 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -22,7 +22,7 @@
 package uk.co.demon.obelisk.xobj;
  
 /**
- * A utility class for hexidecimal string conversion.
+ * A utility class for hexadecimal string conversion.
  * 
  * @author 	Andrew Jacobs
  * @version	$Id$
@@ -36,19 +36,19 @@ public abstract class Hex
 	 * @param 	length			The required length.
 	 * @return	The hex string value.
 	 */
-	public static String toHex (int value, int length)
+	public static String toHex (long value, int length)
 	{
 		buffer.setLength (0);
 	
 		switch (length) {
-		case 8:	buffer.append (HEX.charAt((value >> 28) & 0x0f));
-		case 7:	buffer.append (HEX.charAt((value >> 24) & 0x0f));
-		case 6:	buffer.append (HEX.charAt((value >> 20) & 0x0f));
-		case 5:	buffer.append (HEX.charAt((value >> 16) & 0x0f));
-		case 4:	buffer.append (HEX.charAt((value >> 12) & 0x0f));
-		case 3:	buffer.append (HEX.charAt((value >>  8) & 0x0f));
-		case 2:	buffer.append (HEX.charAt((value >>  4) & 0x0f));
-		case 1:	buffer.append (HEX.charAt((value >>  0) & 0x0f));
+		case 8:	buffer.append (HEX.charAt((int)((value >> 28) & 0x0f)));
+		case 7:	buffer.append (HEX.charAt((int)((value >> 24) & 0x0f)));
+		case 6:	buffer.append (HEX.charAt((int)((value >> 20) & 0x0f)));
+		case 5:	buffer.append (HEX.charAt((int)((value >> 16) & 0x0f)));
+		case 4:	buffer.append (HEX.charAt((int)((value >> 12) & 0x0f)));
+		case 3:	buffer.append (HEX.charAt((int)((value >>  8) & 0x0f)));
+		case 2:	buffer.append (HEX.charAt((int)((value >>  4) & 0x0f)));
+		case 1:	buffer.append (HEX.charAt((int)((value >>  0) & 0x0f)));
 		}
 		
 		return (buffer.toString ());
@@ -59,5 +59,8 @@ public abstract class Hex
 	 */
 	private static final String	HEX				= "0123456789ABCDEF";
 	
+	/**
+	 * String buffer used to construct values
+	 */
 	private static StringBuffer	buffer			= new StringBuffer ();
 }

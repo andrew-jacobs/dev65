@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2006 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -42,10 +42,10 @@ public final class SymbolMap
 	 * @param 	name			The symbol name.
 	 * @param 	value			Its memory address.
 	 */
-	public void addAddress (final String name, int value)
+	public void addAddress (final String name, long value)
 	{
 //		System.out.println ("Placing " + name + " at " + value);
-		map.put (name, new Integer (value));
+		map.put (name, new java.lang.Long (value));
 	}
 	
 	/**
@@ -54,18 +54,18 @@ public final class SymbolMap
 	 * @param 	name			The target symbol name.
 	 * @return	The associated memory address.
 	 */
-	public int addressOf (final String name)
+	public long addressOf (final String name)
 	{
-		return (((Integer) map.get (name)).intValue ());
+		return (map.get (name).longValue ());
 	}
 	
-	public Vector getSymbols ()
+	public Vector<String> getSymbols ()
 	{
-		Vector			symbols = new Vector ();
-		Enumeration		cursor 	= map.keys ();
+		Vector<String>	symbols = new Vector<String> ();
+		Enumeration<String>	cursor 	= map.keys ();
 		
 		while (cursor.hasMoreElements ())
-			symbols.add ((String) cursor.nextElement());
+			symbols.add (cursor.nextElement());
 		
 		return (symbols);
 	}
@@ -73,5 +73,6 @@ public final class SymbolMap
 	/**
 	 * A map of symbol name to address as an Integer.
 	 */
-	private Hashtable		map		= new Hashtable (); 
+	private Hashtable<String, java.lang.Long> map
+		= new Hashtable<String, java.lang.Long> (); 
 }

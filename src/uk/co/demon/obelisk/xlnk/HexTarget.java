@@ -43,11 +43,23 @@ class HexTarget extends CachedTarget
 	 * @param start			Start of data area.
 	 * @param end			End of data area.
 	 */
-	public HexTarget (int start, int end)
+	public HexTarget (long start, long end)
 	{
-		super (start, end);
+		this (start, end, 8);
 	}
 		
+	/**
+	 * Constructs a <CODE>HexTarget</CODE> that will generate code for
+	 * the indicated address range.
+	 * 
+	 * @param start			Start of data area.
+	 * @param end			End of data area.
+	 */
+	public HexTarget (long start, long end, int byteSize)
+	{
+		super (start, end, byteSize);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -55,11 +67,12 @@ class HexTarget extends CachedTarget
 	{
 		try {
 			PrintWriter		writer = new PrintWriter (file);
+			int				span  = getByteSize () / 4;
 			
 			for (int index = 0; index < size; index += 16) {
 				for (int offset = 0; offset < 16; ++offset) {
 					if ((index + offset) < size) {
-						writer.print (Hex.toHex (code [index + offset], 2));
+						writer.print (Hex.toHex (code [index + offset], span));
 					}
 					else
 						break;

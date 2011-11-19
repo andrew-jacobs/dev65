@@ -39,7 +39,7 @@ final class Area
 {
 	/**
 	 * Constructs an <CODE>Area</CODE> given
-	 * a character string containg a list of memory address pairs (e.g.
+	 * a character string containing a list of memory address pairs (e.g.
 	 * '$FF00-$FDFF,$FF00-$FFFF').
 	 * 
 	 * @param 	location		The memory address pairs.
@@ -54,7 +54,7 @@ final class Area
 		
 			boolean handled = false;
 			for (int position = 0; position < regions.size (); ++position) {
-				Region other = (Region) regions.elementAt (position);
+				Region other = regions.elementAt (position);
 				
 				if (region.getStart () < other.getStart()) {
 					regions.insertElementAt (region, position);
@@ -71,7 +71,7 @@ final class Area
 	 * 
 	 * @return	The free regions left for this section type.
 	 */
-	public Vector getRegions ()
+	public Vector<Region> getRegions ()
 	{
 		return (regions);
 	}
@@ -81,7 +81,7 @@ final class Area
 	 *  
 	 * @return	The lowest free memory address.
 	 */
-	public int getLoAddr ()
+	public long getLoAddr ()
 	{
 		return (((Region) regions.firstElement ()).getStart ());
 	}
@@ -91,7 +91,7 @@ final class Area
 	 *  
 	 * @return	The highest free memory address.
 	 */
-	public int getHiAddr ()
+	public long getHiAddr ()
 	{
 		return (((Region) regions.lastElement()).getEnd ());
 	}
@@ -103,9 +103,9 @@ final class Area
 	 * @param 	section			The <CODE>Section</CODE> to be fitted.
 	 * @return	The address where the <CODE>Section</CODE> was placed.
 	 */
-	public int fitSection (Section section)
+	public long fitSection (Section section)
 	{
-		int				addr = -1;
+		long			addr = -1;
 		int				size = section.getSize ();
 				
 		if (section.isAbsolute()) {
@@ -145,5 +145,5 @@ final class Area
 	 * Contains the free <CODE>Region</CODE> list in increase address
 	 * order.
 	 */
-	private Vector			regions			= new Vector ();
+	private Vector<Region>		regions		= new Vector<Region> ();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2009 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -67,24 +67,23 @@ public final class Parser
 	}
 	
 	/**
-	 * A customized SAX handler to process the XML input stream
+	 * A customised SAX handler to process the XML input stream
 	 */
 	private static class Handler extends DefaultHandler
 	{
 		public void characters (char[] ch, int start, int length)
 			throws SAXException
 		{
+			int		span = module.getByteSize () / 4;
+			String	chars = new String (ch, start, length);	
+			
 			if (tags.peek ().equals ("section")) {
-				for (int index = 0; index < length; index += 2) {
-					int hi = hex.indexOf (ch [start + index + 0]);
-					int lo = hex.indexOf (ch [start + index + 1]);
-					section.addByte ((hi << 4) | lo);
+				for (int index = 0; index < length; index += span) {
+					section.addByte (java.lang.Long.parseLong (
+							chars.substring (index, index + span), 16));
 				}
-				chars = null;
 			}
 			else {
-				chars = new String (ch, start, length);			
-	
 				if (tags.peek().equals ("gbl"))
 					stack.push (chars);
 			}
@@ -106,7 +105,10 @@ public final class Parser
 				
 			case 'm':
 				if (localName.equals ("module")) {
-					module = new Module (attrs.getValue("target"), !attrs.getValue("endian").equals ("little"));
+					module = new Module (
+							attrs.getValue("target"),
+							!attrs.getValue("endian").equals ("little"),
+							Integer.parseInt (attrs.getValue ("byteSize")));
 
 					if (attrs.getIndex ("name") != -1)
 						module.setName (attrs.getValue ("name"));
@@ -118,7 +120,7 @@ public final class Parser
 			case 's':
 				if (localName.equals ("section")) {
 					if (attrs.getIndex ("addr") != -1) {
-						int start = Integer.parseInt (attrs.getValue ("addr"), 16);
+						long start = java.lang.Long.parseLong (attrs.getValue ("addr"), 16);
 				
 						section = module.findSection (attrs.getValue("name"), start);;						
 					}
@@ -259,15 +261,15 @@ public final class Parser
 					return;
 				}
 				if (localName.equals ("library")) {
-					Stack modules = new Stack ();
+					Stack<Module> modules = new Stack<Module> ();
 					
 					while (stack.peek() instanceof Module)
-						modules.push (stack.pop ());
+						modules.push ((Module) stack.pop ());
 		
 					Library library = (Library) stack.peek ();
 					
 					while (!modules.empty ())
-						library.addModule ((Module) modules.pop ());
+						library.addModule (modules.pop ());
 				}
 				break;
 				
@@ -371,9 +373,7 @@ public final class Parser
 			}
 		}
 		
-		private static String			hex		= "0123456789ABCDEF";
-		
-		private Stack					tags	= new Stack ();
+		private Stack<String>			tags	= new Stack<String> ();
 		
 		private Module					module;
 		
@@ -402,7 +402,7 @@ public final class Parser
 	/**
 	 * A <CODE>Stack</CODE> used to hold objects under construction.
 	 */
-	private static Stack			stack	= new Stack ();
+	private static Stack<Object>	stack	= new Stack<Object> ();
 
 	/**
 	 * Returns a <CODE>SAXParser</CODE> that will be used to process the XML

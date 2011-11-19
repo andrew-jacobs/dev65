@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2009 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -27,6 +27,9 @@ import java.util.Vector;
 import java.util.Stack;
 
 import uk.co.demon.obelisk.xasm.Assembler;
+import uk.co.demon.obelisk.xasm.Error;
+import uk.co.demon.obelisk.xasm.ErrorHandler;
+import uk.co.demon.obelisk.xasm.MemoryModelByte;
 import uk.co.demon.obelisk.xasm.Pass;
 import uk.co.demon.obelisk.xasm.Opcode;
 import uk.co.demon.obelisk.xasm.Token;
@@ -260,9 +263,9 @@ public final class As65 extends Assembler
 				Expr expr = parseExpr ();
 			
 				if (expr.isAbsolute())
-					dataBank = expr.resolve (null, null) & 0xff;
+					dataBank = (int) expr.resolve (null, null) & 0xff;
 				else
-					error (ERR_CONSTANT_EXPR);		
+					error (Error.ERR_CONSTANT_EXPR);		
 			}
 			else
 				error (ERR_65816_ONLY);
@@ -286,9 +289,9 @@ public final class As65 extends Assembler
 				Expr expr = parseExpr ();
 				
 				if (expr.isAbsolute())
-					directPage = expr.resolve (null, null) & 0xffff;
+					directPage = (int) expr.resolve (null, null) & 0xffff;
 				else
-					error (ERR_CONSTANT_EXPR);
+					error (Error.ERR_CONSTANT_EXPR);
 			}
 			else
 				error (ERR_65816_ONLY);
@@ -418,10 +421,10 @@ public final class As65 extends Assembler
 				if (expr != null)
 					addAddr (expr);
 				else
-					error (ERR_INVALID_EXPRESSION);
+					error (Error.ERR_INVALID_EXPRESSION);
 			} while (token == COMMA);
 			
-			if (token != EOL) error (ERR_INVALID_EXPRESSION); 
+			if (token != EOL) error (Error.ERR_INVALID_EXPRESSION); 
 			return (true);
 		}
 	};
@@ -790,6 +793,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
+			case IMPL:
 			case ACCM:	genImpl (0x0A);	break;
 			case DPAG:	genDpag (0x06, arg);	break;
 			case ABSL:	genAbsl (0x0E, arg);	break;
@@ -1849,6 +1853,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
+			case IMPL:
 			case ACCM:	genImpl (0x4A);	break;
 			case DPAG:	genDpag (0x46, arg);	break;
 			case ABSL:	genAbsl (0x4E, arg);	break;
@@ -2459,6 +2464,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
+			case IMPL:
 			case ACCM:	genImpl (0x2A);	break;
 			case DPAG:	genDpag (0x26, arg);	break;
 			case ABSL:	genAbsl (0x2E, arg);	break;
@@ -2482,6 +2488,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
+			case IMPL:
 			case ACCM:	genImpl (0x6A);	break;
 			case DPAG:	genDpag (0x66, arg);	break;
 			case ABSL:	genAbsl (0x6E, arg);	break;
@@ -3599,6 +3606,20 @@ public final class As65 extends Assembler
 			return (true);
 		}
 	};
+	
+	protected final ErrorHandler	errorHandler
+		= new ErrorHandler ()
+		{
+			public void error (final String message)
+			{
+				this.error (message);
+			}
+			
+			public void warning (final String message)
+			{
+				this.warning (message);
+			}				
+		};
 
 	/**
 	 * Constructs an <CODE>As65</CODE> instance and initialises the object
@@ -3607,6 +3628,8 @@ public final class As65 extends Assembler
 	protected As65 ()
 	{
 		super (new Module ("65XX", false));
+		
+		setMemoryModel (new MemoryModelByte (errorHandler));
 
 		// Directives
 		addToken (P6501);
@@ -3826,6 +3849,8 @@ public final class As65 extends Assembler
 	 */
 	protected String formatListing ()
 	{
+		int			byteCount = memory.getByteCount ();
+		
 		output.setLength (0);
 		
 		switch (lineType) {
@@ -3845,7 +3870,7 @@ public final class As65 extends Assembler
 	
 				for (int index = 0; index < 8; ++index) {
 					if (index < byteCount)
-						output.append (Hex.toHex (bytes [index], 2));
+						output.append (Hex.toHex (memory.getByte (index), 2));
 					else
 						output.append ("  ");
 				}
@@ -3884,7 +3909,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler - V1.5 (2010-06-25)";
+		title 		= "Portable 65xx Assembler - V1.6 (2011-11-19)";
 	}
 	
 	/**
@@ -4477,7 +4502,7 @@ public final class As65 extends Assembler
 
 		if (token == EOL) return (IMPL);
 
-		// Handle Accumlator
+		// Handle Accumulator
 		if (token == A) {
 			token = nextRealToken ();
 			arg = null;
@@ -4525,7 +4550,7 @@ public final class As65 extends Assembler
 			return (DPAG);
 		}
 		
-		// Hande >.. and >..,X
+		// Handle >.. and >..,X
 		if (token == GT) {
 			token = nextRealToken ();
 			arg = parseExpr ();
@@ -4641,11 +4666,11 @@ public final class As65 extends Assembler
 			token = nextRealToken ();
 			if (token == X) {
 				token = nextRealToken ();				
-				return ((arg.isAbsolute() && isByte (arg.resolve (null, null))) ? DPGX : ABSX);
+				return ((arg.isAbsolute() && isByte ((int) arg.resolve (null, null))) ? DPGX : ABSX);
 			}
 			if (token == Y) {
 				token = nextRealToken ();
-				return ((arg.isAbsolute() && isByte (arg.resolve (null, null))) ? DPGY : ABSY);
+				return ((arg.isAbsolute() && isByte ((int) arg.resolve (null, null))) ? DPGY : ABSY);
 			}
 			if (token == S) {
 				token = nextRealToken ();
@@ -4655,7 +4680,7 @@ public final class As65 extends Assembler
 			return (UNKN);
 		}
 		if (arg.isAbsolute()) {
-			int addr = arg.resolve (null, null);
+			int addr = (int) arg.resolve (null, null);
 			
 			if ((processor & (M65816 | M65832)) != 0) {
 				if ((addr & 0xff0000) == 0) {
@@ -4865,7 +4890,7 @@ public final class As65 extends Assembler
 		Expr	offset 	= Expr.sub (target, Expr.add (getOrigin (), TWO));
 		
 		if (offset.isAbsolute ())
-			return (isByte (offset.resolve (null, null)));
+			return (isByte ((int) offset.resolve (null, null)));
  
 		return (false);	
 	}
@@ -4894,7 +4919,7 @@ public final class As65 extends Assembler
 	/**
 	 * A <CODE>Hashtable</CODE> of keyword tokens to speed up classification.
 	 */
-	private Hashtable				tokens	= new Hashtable ();
+	private Hashtable<String, Token> tokens	= new Hashtable<String, Token> ();
 	
 	/**
 	 * A <CODE>StringBuffer</CODE> used to format output.
@@ -4910,17 +4935,17 @@ public final class As65 extends Assembler
 	
 	private int						loopIndex;
 	
-	private Stack					ifs			= new Stack ();
+	private Stack<Integer>			ifs			= new Stack<Integer> ();
 	
-	private Stack					loops		= new Stack ();
+	private Stack<Integer>			loops		= new Stack<Integer> ();
 	
-	private Vector					elseAddr 	= new Vector ();
+	private Vector<Value>			elseAddr 	= new Vector<Value> ();
 	
-	private Vector					endifAddr	= new Vector ();
+	private Vector<Value>			endifAddr	= new Vector<Value> ();
 	
-	private Vector					loopAddr	= new Vector ();
+	private Vector<Value>			loopAddr	= new Vector<Value> ();
 	
-	private Vector					endAddr		= new Vector ();
+	private Vector<Value>			endAddr		= new Vector<Value> ();
 	
 	/**
 	 * Adds a token to the hash table indexed by its text in UPPER case.

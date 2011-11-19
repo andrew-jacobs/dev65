@@ -39,22 +39,23 @@ public final class SectionMap
 	 * @param 	section			The target <CODE>Section</CODE>
 	 * @return	The base address of the section.
 	 */
-	public int baseAddressOf (Section section)
+	public long baseAddressOf (Section section)
 	{
-		return (((Integer) map.get (section)).intValue ());
+		return ((map.get (section)).longValue ());
 	}
 	
-	public void setBaseAddress (Section section, int addr)
+	public void setBaseAddress (Section section, long addr)
 	{
 //		System.out.println (">> Placing " + section.getName() +
 //			" (" + section.getSize () + ") at " + Hex.toHex (addr, 8));
 //		System.out.println ("Code:" + section);
 		
-		map.put (section, new Integer (addr));
+		map.put (section, new java.lang.Long (addr));
 	}
 	
 	/**
 	 * A mapping table for section to base address as an Integer.
 	 */
-	private Hashtable		map		= new Hashtable ();
+	private Hashtable<Section, java.lang.Long>	map
+		= new Hashtable<Section, java.lang.Long> ();
 }

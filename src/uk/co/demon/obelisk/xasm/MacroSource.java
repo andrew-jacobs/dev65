@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -34,11 +34,11 @@ import java.util.Vector;
 public final class MacroSource extends TextSource
 {
 	/**
-	 * Constructs a <CODE>MacroSource</CODE> templace instance.
+	 * Constructs a <CODE>MacroSource</CODE> template instance.
 	 * 
 	 * @param 	arguments		The list of argument names.
 	 */
-	public MacroSource (final Vector arguments)
+	public MacroSource (final Vector<String> arguments)
 	{
 		this.arguments = arguments;
 	}
@@ -50,7 +50,7 @@ public final class MacroSource extends TextSource
 	 * @param 	values			Argument values.
 	 * @return	A copy of the configured <CODE>MacroSource</CODE>.
 	 */
-	public MacroSource invoke (int instance, final Vector values)
+	public MacroSource invoke (int instance, final Vector<String> values)
 	{
 		return (new MacroSource (this, instance, values));
 	}
@@ -70,11 +70,11 @@ public final class MacroSource extends TextSource
 			
 			// Replace names arguments
 			for (int index = 0; index < arguments.size (); ++index) {
-				String arg = (String) arguments.elementAt (index);
+				String arg = arguments.elementAt (index);
 				String val = "";
 				
 				if (index < values.size ())
-					val = (String) values.elementAt (index);
+					val = values.elementAt (index);
 				
 				text = text.replace (arg, val);
 			}
@@ -85,7 +85,7 @@ public final class MacroSource extends TextSource
 				String val = "";
 				
 				if (index < values.size ())
-					val = (String) values.elementAt (index);
+					val = values.elementAt (index);
 				
 				text = text.replace (arg, val);
 			}
@@ -102,7 +102,7 @@ public final class MacroSource extends TextSource
 	 * @param 	instance		The macro instance counter.
 	 * @param 	values			The argument values.
 	 */
-	protected MacroSource (MacroSource template, int instance, Vector values)
+	protected MacroSource (MacroSource template, int instance, Vector<String> values)
 	{
 		super (template);
 		
@@ -114,7 +114,7 @@ public final class MacroSource extends TextSource
 	/**
 	 * The macro argument names.
 	 */
-	private Vector			arguments;
+	private Vector<String>	arguments;
 	
 	/**
 	 * The macro instance number.
@@ -124,5 +124,5 @@ public final class MacroSource extends TextSource
 	/**
 	 * The macro argument values.
 	 */
-	private Vector			values;	
+	private Vector<String>	values;	
 }

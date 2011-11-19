@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2006 Andrew John Jacobs.
+ * Copyright (C),2006-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -33,15 +33,15 @@ import java.io.File;
  * @author	Andrew Jacobs
  * @version	$Id$
  */
-abstract class CachedTarget implements Target
+abstract class CachedTarget extends Target
 {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void store (int addr, int value)
+	public void store (long addr, long value)
 	{
 		if ((start <= addr) && (addr <= end))
-			code [addr - start] = (byte) value;
+			code [(int)(addr - start)] = (int) value;
 	}
 	
 	/**
@@ -52,12 +52,12 @@ abstract class CachedTarget implements Target
 	/**
 	 * The start address of the memory area.
 	 */
-	protected int			start;
+	protected long			start;
 	
 	/**
 	 * The end address of the memory area.
 	 */
-	protected int			end;
+	protected long			end;
 	
 	/**
 	 * The size of the memory area.
@@ -65,9 +65,9 @@ abstract class CachedTarget implements Target
 	protected int			size;
 	
 	/**
-	 * The bytes comprising the linked code.
+	 * The data comprising the linked code.
 	 */
-	protected byte [] 		code;
+	protected int [] 		code;
 
 	/**
 	 * Constructs a <CODE>CachedTarget</CODE> that will capture and store
@@ -76,12 +76,14 @@ abstract class CachedTarget implements Target
 	 * @param 	start			The start address of the output code.
 	 * @param 	end				The end address of the output code.
 	 */
-	protected CachedTarget (int start, int end)
+	protected CachedTarget (long start, long end, int byteSize)
 	{
+		super (byteSize);
+		
 		this.start = start;
 		this.end   = end;
-		size = end - start + 1;
+		size = (int)(end - start + 1);
 		
-		code = new byte [size];
+		code = new int [size];
 	}
 }

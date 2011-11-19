@@ -41,9 +41,21 @@ public class BinTarget extends CachedTarget
 	 * @param 	start			The start address of the output code.
 	 * @param 	end				The end address of the output code.
 	 */
-	public BinTarget (int start, int end)
+	public BinTarget (long start, long end)
 	{
-		super (start, end);
+		this (start, end, 8);
+	}
+		
+	/**
+	 * Constructs a <CODE>BinTarget</CODE> that will contain code for the
+	 * indicated memory range.
+	 * 
+	 * @param 	start			The start address of the output code.
+	 * @param 	end				The end address of the output code.
+	 */
+	public BinTarget (long start, long end, int byteSize)
+	{
+		super (start, end, byteSize);
 	}
 		
 	/**
@@ -54,7 +66,27 @@ public class BinTarget extends CachedTarget
 		try {
 			FileOutputStream	stream = new FileOutputStream (file);
 			
-			stream.write (code);
+			byte [] bytes = new byte [code.length * (getByteSize () / 8)];
+			int offset = 0;
+			
+			switch (getByteSize ()) {
+			case 8:
+					for (int index = 0; index < code.length; ++index) {
+						bytes [offset++] = (byte) code [index];
+					}
+					break;
+					
+			case 16:
+				for (int index = 0; index < code.length; ++index) {
+					bytes [offset++] = (byte) ((code [index] >> 8) & 0xff);
+					bytes [offset++] = (byte) ((code [index] >> 0) & 0xff);
+				}
+				break;
+					
+			// TODO More sizes	
+			}
+			
+			stream.write (bytes);
 			stream.close ();
 		}
 		catch (Exception error) {
