@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2007 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -34,19 +34,19 @@ final class Region
 		this (parseAddr (start), parseAddr (end));
 	}
 	
-	public int getStart ()
+	public long getStart ()
 	{
 		return (start);
 	}
 	
-	public int getEnd ()
+	public long getEnd ()
 	{
 		return (end);
 	}
 	
 	public int getSize ()
 	{
-		return (end - start + 1);
+		return ((int)(end - start + 1));
 	}
 
 	/**
@@ -65,7 +65,7 @@ final class Region
 	 * @param 	addr		Where to split.
 	 * @return	The tail region.
 	 */
-	public Region split (int addr)
+	public Region split (long addr)
 	{
 		Region	tail = new Region (addr, end);
 		
@@ -80,7 +80,7 @@ final class Region
 	 * @param start			The start of the region.
 	 * @param end			The end of the region.
 	 */
-	protected Region (int start, int end)
+	protected Region (long start, long end)
 	{
 		this.start = start;
 		this.end   = end;
@@ -89,12 +89,12 @@ final class Region
 	/**
 	 * The start of the region.
 	 */
-	private int			start;
+	private long		start;
 	
 	/**
 	 * The end of the region.
 	 */
-	private int			end;
+	private long		end;
 	
 	/**
 	 * Parses an address expressed in hex, oct, bin or decimal.
@@ -102,13 +102,13 @@ final class Region
 	 * @param 	addr		The address string
 	 * @return	The parsed address.
 	 */
-	private static int parseAddr (final String addr)
+	private static long parseAddr (final String addr)
 	{
 		switch (addr.charAt(0)) {
-		case '%': 	return (Integer.parseInt(addr.substring (1), 2));
-		case '@': 	return (Integer.parseInt(addr.substring (1), 8));
-		case '$': 	return (Integer.parseInt(addr.substring (1), 16));
-		default:	return (Integer.parseInt(addr));
+		case '%': 	return (Long.parseLong(addr.substring (1), 2));
+		case '@': 	return (Long.parseLong(addr.substring (1), 8));
+		case '$': 	return (Long.parseLong(addr.substring (1), 16));
+		default:	return (Long.parseLong(addr));
 		}
 	}
 }

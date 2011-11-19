@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005 Andrew John Jacobs.
+ * Copyright (C),2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -28,7 +28,7 @@ import java.util.Vector;
  * The <CODE>Section</CODE> class represents a target memory area (e.g.
  * PAGE0, BSS, CODE or DATA) in the object module. <CODE>Section</CODE>
  * instance can be relative or absolute and are internally comprised of
- * <CODE>Part</CODE> instances that describle byte values or expressions.
+ * <CODE>Part</CODE> instances that describe byte values or expressions.
  * 
  * @author Andrew Jacobs
  * @version	$Id$
@@ -58,7 +58,7 @@ public class Section
 	 * @param 	name			The section name.
 	 * @param	start			The start address.
 	 */
-	public Section (final Module module, final String name, int start)
+	public Section (final Module module, final String name, long start)
 	{
 		this.module = module;
 		this.name   = name;
@@ -103,7 +103,7 @@ public class Section
 	 * 
 	 * @return	The start address of an absolute section.
 	 */
-	public int getStart ()
+	public long getStart ()
 	{
 		return (start);
 	}
@@ -138,7 +138,7 @@ public class Section
 	 * @param 	origin			The starting address for the section.
 	 * @return	The section representing the target address.
 	 */
-	public Section setOrigin (int origin)
+	public Section setOrigin (long origin)
 	{
 		return (module.findSection (name, origin));
 	}
@@ -202,10 +202,10 @@ public class Section
 	 * 
 	 * @param 	value			The byte value to add.
 	 */
-	public void addByte (int value)
+	public void addByte (long value)
 	{
 		if ((parts.isEmpty ()) || !(parts.lastElement() instanceof Code))
-			parts.add (new Code ());
+			parts.add (new Code (module));
 		
 		((Code)(parts.lastElement())).addByte (value);
 		++size;
@@ -216,18 +216,21 @@ public class Section
 	 * 
 	 * @param 	value			The word value to add.
 	 */
-	public void addWord (int value)
+	public void addWord (long value)
 	{
+		int		byteSize = module.getByteSize ();
+		long	byteMask = module.getByteMask ();
+		
 		if ((parts.isEmpty ()) || !(parts.lastElement() instanceof Code))
-			parts.add (new Code ());
+			parts.add (new Code (module));
 		
 		if (module.isBigEndian ()) {
-			((Code)(parts.lastElement())).addByte ((value & 0xff00) >> 8);
-			((Code)(parts.lastElement())).addByte ((value & 0x00ff) >> 0);
+			((Code)(parts.lastElement())).addByte ((value >> (1 * byteSize)) & byteMask);
+			((Code)(parts.lastElement())).addByte ((value >> (0 * byteSize)) & byteMask);
 		}
 		else {
-			((Code)(parts.lastElement())).addByte ((value & 0x00ff) >> 0);
-			((Code)(parts.lastElement())).addByte ((value & 0xff00) >> 8);
+			((Code)(parts.lastElement())).addByte ((value >> (0 * byteSize)) & byteMask);
+			((Code)(parts.lastElement())).addByte ((value >> (1 * byteSize)) & byteMask);
 		}
 		size += 2;		
 	}
@@ -237,22 +240,25 @@ public class Section
 	 * 
 	 * @param 	value			The long value to add.
 	 */
-	public void addLong (int value)
+	public void addLong (long value)
 	{
+		int		byteSize = module.getByteSize ();
+		long	byteMask = module.getByteMask ();
+
 		if ((parts.isEmpty ()) || !(parts.lastElement() instanceof Code))
-			parts.add (new Code ());
+			parts.add (new Code (module));
 		
 		if (module.isBigEndian ()) {
-			((Code)(parts.lastElement())).addByte ((value & 0xff000000) >> 24);
-			((Code)(parts.lastElement())).addByte ((value & 0x00ff0000) >> 16);
-			((Code)(parts.lastElement())).addByte ((value & 0x0000ff00) >>  8);
-			((Code)(parts.lastElement())).addByte ((value & 0x000000ff) >>  0);
+			((Code)(parts.lastElement())).addByte ((value >> (3 * byteSize)) & byteMask);
+			((Code)(parts.lastElement())).addByte ((value >> (2 * byteSize)) & byteMask);
+			((Code)(parts.lastElement())).addByte ((value >> (1 * byteSize)) & byteMask);
+			((Code)(parts.lastElement())).addByte ((value >> (0 * byteSize)) & byteMask);
 		}
 		else {
-			((Code)(parts.lastElement())).addByte ((value & 0x000000ff) >>  0);
-			((Code)(parts.lastElement())).addByte ((value & 0x0000ff00) >>  8);
-			((Code)(parts.lastElement())).addByte ((value & 0x00ff0000) >> 16);
-			((Code)(parts.lastElement())).addByte ((value & 0xff000000) >> 24);
+			((Code)(parts.lastElement())).addByte ((value >> (0 * byteSize)) & byteMask);
+			((Code)(parts.lastElement())).addByte ((value >> (1 * byteSize)) & byteMask);
+			((Code)(parts.lastElement())).addByte ((value >> (2 * byteSize)) & byteMask);
+			((Code)(parts.lastElement())).addByte ((value >> (3 * byteSize)) & byteMask);
 		}
 		size += 4;		
 	}
@@ -286,7 +292,7 @@ public class Section
 	 * 
 	 * @return	A vector of section parts.
 	 */
-	public Vector getParts ()
+	public Vector<Part> getParts ()
 	{
 		return (parts);
 	}
@@ -331,7 +337,7 @@ public class Section
 	/**
 	 * The start address of an absolute section.
 	 */
-	private int					start;
+	private long				start;
 	
 	/**
 	 * The size of the section.
@@ -341,5 +347,5 @@ public class Section
 	/**
 	 * The set of constituent parts that make up is section.
 	 */
-	private	Vector				parts		= new Vector ();
+	private	Vector<Part>		parts		= new Vector<Part> ();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2007 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -55,6 +55,18 @@ import uk.co.demon.obelisk.xobj.Word;
  */
 public abstract class Linker extends Application
 {
+	protected Linker ()
+	{
+		this (8);
+	}
+	
+	protected Linker (int byteSize)
+	{
+		this.byteSize = byteSize;
+		
+		byteMask = (1L << byteSize) - 1;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -78,8 +90,8 @@ public abstract class Linker extends Application
 		}
 		else {
 			Area		area;
-			int			hi	= Integer.MIN_VALUE;
-			int			lo	= Integer.MAX_VALUE;
+			long		hi	= 0x00000000L;
+			long		lo	= 0xffffffffL;
 			
 			if ((area = (Area) areas.get (".code")) != null) {
 				if (area.getHiAddr() > hi) hi = area.getHiAddr ();
@@ -91,11 +103,11 @@ public abstract class Linker extends Application
 			}
 			
 			if (hex.isPresent ())
-				target = new HexTarget (lo, hi);
+				target = new HexTarget (lo, hi, byteSize);
 			else if (bin.isPresent ())
-				target = new BinTarget (lo, hi);
+				target = new BinTarget (lo, hi, byteSize);
 			else if (s19.isPresent ())
-				target = new S19Target (lo, hi, getAddrSize ());
+				target = new S19Target (lo, hi, getAddrSize (), byteSize);
 		}
 		
 		if (getArguments ().length == 0) {
@@ -120,7 +132,7 @@ public abstract class Linker extends Application
 	
 				if ((object != null) && (object instanceof Module)) {
 					if (!modules.contains (object))
-						modules.add (object);
+						modules.add ((Module) object);
 					else
 						warning ("Module '" + arguments [index] + "' specified more than once");
 				}
@@ -134,7 +146,7 @@ public abstract class Linker extends Application
 				
 				if ((object != null) && (object instanceof Library)) {
 					if (!libraries.contains (object))
-						libraries.add (object);
+						libraries.add ((Library) object);
 					else
 						warning ("Library '" + arguments [index] + "' specified more than once");
 				}
@@ -153,21 +165,21 @@ public abstract class Linker extends Application
 		
 		// Stage II - process all the modules that must be linked
 		for (int index = 0; index < modules.size (); ++index)
-			processModule ((Module) modules.elementAt (index));
+			processModule (modules.elementAt (index));
 				
-		// Stage III - process libaries for any required modules
+		// Stage III - process libraries for any required modules
 		int		moduleCount;
 		do {
 			moduleCount = modules.size ();
 			for (int index = 0; index < libraries.size(); ++index)
-				processLibrary ((Library) libraries.elementAt (index)); 
+				processLibrary (libraries.elementAt (index)); 
 		} while (modules.size() != moduleCount);
 		
 		if (refs.size() > 0) {
-			Enumeration cursor = refs.keys();
+			Enumeration<String> cursor = refs.keys();
 			while (cursor.hasMoreElements ()) {
-				String key 		= (String) cursor.nextElement ();
-				Module module 	= (Module) refs.get (key); 
+				String key 		= cursor.nextElement ();
+				Module module 	= refs.get (key); 
 				error ("Undefined symbol: " + key + " in " + module.getName());
 			}
 			
@@ -177,16 +189,16 @@ public abstract class Linker extends Application
 
 		// Stage IV - Sort sections by type and size
 		for (int index = 0; index < modules.size (); ++index) {
-			Vector sections = ((Module) modules.elementAt (index)).getSections();
+			Vector<Section> sections = modules.elementAt (index).getSections();
 			
 			for (int count = 0; count < sections.size (); ++count) {
-				Section section = (Section) sections.elementAt (count);
+				Section section = sections.elementAt (count);
 				
-				Vector vec = section.isAbsolute () ? abs : rel;
+				Vector<Section> vec = section.isAbsolute () ? abs : rel;
 	
 				boolean handled = false;
 				for (int position = 0; position < vec.size (); ++position) {
-					Section	other = (Section) vec.elementAt (position);
+					Section	other = vec.elementAt (position);
 					
 					if (other.getSize () < section.getSize()) {
 						vec.insertElementAt(section, position);
@@ -200,16 +212,16 @@ public abstract class Linker extends Application
 		
 		// Stage V - Fit sections into available memory
 		for (int index = 0; index < abs.size (); ++index) {
-			Section		section = (Section) abs.elementAt (index);
-			int 		base 	= fitSection (section);
+			Section		section = abs.elementAt (index);
+			long 		base 	= fitSection (section);
 		
 			if (base == -1) return;
 			sectionMap.setBaseAddress (section, base);
 		}
 
 		for (int index = 0; index < rel.size (); ++index) {
-			Section		section = (Section) rel.elementAt (index);
-			int 		base 	= fitSection (section);
+			Section		section = rel.elementAt (index);
+			long 		base 	= fitSection (section);
 		
 			if (base == -1) return;
 			sectionMap.setBaseAddress (section, base);
@@ -217,11 +229,11 @@ public abstract class Linker extends Application
 		
 		// Stage VI - Calculate all the global symbol addresses
 		for (int index = 0; index < modules.size (); ++index) {
-			Module 		module = (Module) modules.elementAt (index);
-			Vector		globals = module.getGlobals ();
+			Module 		module = modules.elementAt (index);
+			Vector<String> globals = module.getGlobals ();
 			
 			for (int count = 0; count < globals.size (); ++count) {
-				String 	symbol 	= (String) globals.elementAt (count);
+				String 	symbol 	= globals.elementAt (count);
 				Expr	expr	= module.getGlobal (symbol);
 				
 				symbolMap.addAddress (symbol, expr.resolve (sectionMap, symbolMap));
@@ -343,45 +355,49 @@ public abstract class Linker extends Application
 	 * @return	The target memory address size.
 	 */
 	protected abstract int getAddrSize ();
+	
+	private final int byteSize;
+	
+	private final long byteMask;
 
 	/**
-	 * Option for specifiying target code areas.
+	 * Option for specifying target code areas.
 	 */
 	private Option			code
 		= new Option ("-code", "Code region(s)", "<regions>");
 	
 	/**
-	 * Option for specifiying target data areas.
+	 * Option for specifying target data areas.
 	 */
 	private Option			data
 		= new Option ("-data", "Data region(s)", "<regions>");
 
 	/**
-	 * Option for specifiying target bss areas.
+	 * Option for specifying target bss areas.
 	 */
 	private Option			bss
 		= new Option ("-bss", "BSS region(s)", "<regions>");
 	
 	/**
-	 * Option for specifiying hex output format.
+	 * Option for specifying hex output format.
 	 */
 	private Option			hex
 		= new Option ("-hex", "Generate HEX output");
 
 	/**
-	 * Option for specifiying binary output format.
+	 * Option for specifying binary output format.
 	 */
 	private Option			bin
 		= new Option ("-bin", "Generate binary output");
 
 	/**
-	 * Option for specifiying Motorola S19 output format.
+	 * Option for specifying Motorola S19 output format.
 	 */
 	private Option			s19
 		= new Option ("-s19", "Generate Motorola S19 output");
 
 	/**
-	 * Option for specifiying output file.
+	 * Option for specifying output file.
 	 */
 	private Option			output
 		= new Option ("-output", "Output file", "<file>");
@@ -389,37 +405,44 @@ public abstract class Linker extends Application
 	/**
 	 * The set of modules to be linked.
 	 */
-	private Vector			modules		= new Vector ();
+	private Vector<Module>		modules
+		= new Vector<Module> ();
 	
 	/**
 	 * Library modules that can be scanned.
 	 */
-	private Vector			libraries	= new Vector ();
+	private Vector<Library>		libraries
+		= new Vector<Library> ();
 	
 	/**
 	 * Symbols yet to be defined and the originating module.
 	 */
-	private Hashtable		refs		= new Hashtable ();
+	private Hashtable<String, Module> refs
+		= new Hashtable<String, Module> ();
 	
 	/**
 	 * Defined symbols and the module that defines them.
 	 */
-	private Hashtable		defs		= new Hashtable ();
+	private Hashtable<String, Module> defs
+		= new Hashtable<String, Module> ();
 
 	/**
 	 * The set of absolute sections in size order (biggest first)
 	 */
-	private Vector			abs 		= new Vector ();
+	private Vector<Section>		abs
+		= new Vector<Section> ();
 	
 	/**
 	 * The set of relative sections in size order (biggest first)
 	 */
-	private Vector			rel 		= new Vector ();
+	private Vector<Section>		rel
+		= new Vector<Section> ();
 	
 	/**
 	 * The .CODE, .DATA and .BSS memory areas
 	 */
-	private Hashtable		areas		= new Hashtable ();
+	private Hashtable<String, Area>	areas
+		= new Hashtable<String, Area> ();
 	
 	private SectionMap		sectionMap 	= new SectionMap ();
 	
@@ -436,13 +459,13 @@ public abstract class Linker extends Application
 	 */
 	private void processModule (Module module)
 	{
-		Vector			sections = module.getSections ();
+		Vector<Section>	sections = module.getSections ();
 
 		// Look for symbol references
 		for (int index = 0; index < sections.size(); ++index) {
-			Section			section = (Section) sections.elementAt (index);
+			Section			section = sections.elementAt (index);
 	
-			Vector			parts = section.getParts ();
+			Vector<Part>		parts = section.getParts ();
 			for (int count = 0; count < parts.size (); ++count) {
 				Part			part = (Part) parts.elementAt (count);
 				
@@ -452,9 +475,9 @@ public abstract class Linker extends Application
 		}
 		
 		// Process symbol definitions
-		Vector			globals = module.getGlobals ();
+		Vector<String>	globals = module.getGlobals ();
 		for (int index = 0; index < globals.size (); ++index) {
-			String			symbol = (String) globals.elementAt (index);
+			String			symbol = globals.elementAt (index);
 			
 			if (!defs.containsKey (symbol)) {
 				defs.put (symbol, module);
@@ -474,11 +497,11 @@ public abstract class Linker extends Application
 		// Process each module in the library
 		for (int count = 0; count < modules.length; ++count) {
 			Module			module 	= modules [count];
-			Vector			globals = module.getGlobals();
+			Vector<String>	globals = module.getGlobals();
 			
 			// Looking for globals that match referenced symbols
 			for (int index = 0; index < globals.size (); ++index) {
-				String			symbol = (String) globals.elementAt (index);
+				String			symbol = globals.elementAt (index);
 
 				if (refs.containsKey (symbol)) {
 					this.modules.add (module);
@@ -505,7 +528,7 @@ public abstract class Linker extends Application
 		}
 	}
 	
-	private int fitSection (Section section)
+	private long fitSection (Section section)
 	{
 		Area		area = (Area) areas.get (section.getName());
 		
@@ -520,30 +543,29 @@ public abstract class Linker extends Application
 	
 	private void fixUp (Module module)
 	{
-		Vector 		sections = module.getSections();
+		Vector<Section>	sections = module.getSections();
 		
 		for (int index = 0; index < sections.size (); ++index) {
-			Section		section = (Section) sections.elementAt (index);
-			Vector		parts	= section.getParts();
-			int			addr 	= sectionMap.baseAddressOf (section);
+			Section		section = sections.elementAt (index);
+			Vector<Part> parts	= section.getParts();
+			long		addr 	= sectionMap.baseAddressOf (section);
 			
 			for (int count = 0; count < parts.size (); ++count) {
-				Part 		part = (Part) parts.elementAt(count);
+				Part 		part = parts.elementAt(count);
 				
 				if (part instanceof Code) {
 					String		value = part.toString();
+					int			span  = module.getByteSize () / 4;
 			
-					for (int digit = 0; digit < value.length (); digit += 2) {
-						int hi = "0123456789ABCDEF".indexOf (value.charAt (digit + 0));
-						int lo = "0123456789ABCDEF".indexOf (value.charAt (digit + 1));
-						
-						target.store (addr, (hi << 4) | lo);
+					for (int digit = 0; digit < value.length (); digit += span) {						
+						target.store (addr,
+								Integer.parseInt (value.substring (digit, digit + span), 16));
 						++addr;
 					}
 				}
 				else if (part instanceof Evaluatable) {
 					Expr expr = ((Evaluatable) part).getExpr ();
-					int	 value = expr.resolve (sectionMap, symbolMap);
+					long value = expr.resolve (sectionMap, symbolMap);
 					
 					if (part instanceof Byte) {
 						target.store (addr, value);
@@ -562,31 +584,31 @@ public abstract class Linker extends Application
 		}
 	}
 	
-	private void storeWord (int addr, int value, boolean bigEndian)
+	private void storeWord (long addr, long value, boolean bigEndian)
 	{
 		if (bigEndian) {
-			target.store (addr + 0, (value & 0xff00) >> 8);
-			target.store (addr + 1, (value & 0x00ff) >> 0);
+			target.store (addr + 0, (value >> (1 * byteSize)) & byteMask);
+			target.store (addr + 1, (value >> (0 * byteSize)) & byteMask);
 		}
 		else {
-			target.store (addr + 1, (value & 0xff00) >> 8);
-			target.store (addr + 0, (value & 0x00ff) >> 0);
+			target.store (addr + 1, (value >> (0 * byteSize)) & byteMask);
+			target.store (addr + 0, (value >> (1 * byteSize)) & byteMask);
 		}
 	}
 
-	private void storeLong (int addr, int value, boolean bigEndian)
+	private void storeLong (long addr, long value, boolean bigEndian)
 	{
 		if (bigEndian) {
-			target.store (addr + 0, (value & 0xff000000) >> 24);
-			target.store (addr + 1, (value & 0x00ff0000) >> 16);
-			target.store (addr + 2, (value & 0x0000ff00) >>  8);
-			target.store (addr + 3, (value & 0x000000ff) >>  0);
+			target.store (addr + 0, (value >> (3 * byteSize)) & byteMask);
+			target.store (addr + 1, (value >> (2 * byteSize)) & byteMask);
+			target.store (addr + 2, (value >> (1 * byteSize)) & byteMask);
+			target.store (addr + 3, (value >> (0 * byteSize)) & byteMask);
 		}
 		else {
-			target.store (addr + 3, (value & 0xff000000) >> 24);
-			target.store (addr + 2, (value & 0x00ff0000) >> 16);
-			target.store (addr + 1, (value & 0x0000ff00) >>  8);
-			target.store (addr + 0, (value & 0x000000ff) >>  0);
+			target.store (addr + 3, (value >> (0 * byteSize)) & byteMask);
+			target.store (addr + 2, (value >> (1 * byteSize)) & byteMask);
+			target.store (addr + 1, (value >> (2 * byteSize)) & byteMask);
+			target.store (addr + 0, (value >> (3 * byteSize)) & byteMask);
 		}
 	}
 	

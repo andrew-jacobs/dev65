@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -57,7 +57,7 @@ public abstract class UnaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return ((exp.resolve (sections, symbols) != 0) ? 0 : 1);
 		}
@@ -92,7 +92,7 @@ public abstract class UnaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (~exp.resolve (sections, symbols));
 		}
@@ -128,7 +128,7 @@ public abstract class UnaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (-exp.resolve (sections, symbols));
 		}
@@ -161,7 +161,7 @@ public abstract class UnaryExpr extends Expr
 	/**
 	 * {@inheritDoc}
 	 */
-	public abstract int resolve (SectionMap sections, SymbolMap symbols);
+	public abstract long resolve (SectionMap sections, SymbolMap symbols);
 	
 	/**
 	 * The underlying expression.

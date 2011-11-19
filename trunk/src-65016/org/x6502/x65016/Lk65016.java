@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2011 Andrew John Jacobs.
+ * Copyright (C),2006-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -20,42 +20,53 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package uk.co.demon.obelisk.xlnk;
+package org.x6502.x65016;
 
-import java.io.File;
+import uk.co.demon.obelisk.xlnk.Linker;
 
 /**
- * Interface implemented by all output formats.
- * 
- * @author	Andrew Jacobs
+ * The <CODE>Lk65016</CODE> provides access to the base <CODE>Linker</CODE> code
+ * for the 65xx suite.
+ *
+ * @author 	Andrew Jacobs
  * @version	$Id$
  */
-public abstract class Target
+public final class Lk65016 extends Linker
 {
 	/**
-	 * Stores the given byte value at the indicated address.
+	 * Main program entry point.
 	 * 
-	 * @param	addr		Where to store.
-	 * @param 	value		What to store.
+	 * @param arguments		Command line arguments.
 	 */
-	public abstract void store (long addr, long value);
+	public static void main (String arguments [])
+	{
+		new Lk65016 ().run (arguments);
+	}
 	
 	/**
-	 * Write the store data content to the indicated file.
-	 * 
-	 * @param 	file		File to write output to.
+	 * Constructs an instance of <CODE>Lk65016</CODE>.
 	 */
-	public abstract void writeTo (File file);
-	
-	protected Target (int byteSize)
+	protected Lk65016 ()
 	{
-		this.byteSize = byteSize;
+		super (16);
 	}
 	
-	protected int getByteSize ()
+	/**
+	 * Creates memory areas for page zero based on target processor.
+	 */
+	protected void createAreas ()
 	{
-		return (byteSize);
+		super.createAreas ();
+		
+		// Create page zero areas
+		addArea (".page0", "$0000-$ffff");
 	}
 	
-	private final int byteSize;
+	/**
+	 * {@inheritDoc}
+	 */
+	protected int getAddrSize ()
+	{
+		return (32);
+	}
 }

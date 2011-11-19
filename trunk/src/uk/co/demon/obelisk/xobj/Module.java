@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2007 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -43,10 +43,25 @@ public final class Module
 	 */
 	public Module (final String target, boolean bigEndian)
 	{
-		this.target    = target;
-		this.bigEndian = bigEndian;
+		this (target, bigEndian, 8);
 	}
 	
+	/**
+	 * Constructs a <CODE>Module</CODE> for the given target.
+	 * 
+	 * @param 	target			The target architecture
+	 * @param 	bigEndian		The endianness of the target.
+	 * @param	byteSize		Number of bits in a byte.
+	 */
+	public Module (final String target, boolean bigEndian, int byteSize)
+	{
+		this.target    = target;
+		this.bigEndian = bigEndian;
+		this.byteSize  = byteSize;
+		
+		byteMask = (1L << byteSize) - 1;
+	}
+
 	/**
 	 * Provides access to the name of the module.
 	 * 
@@ -77,16 +92,26 @@ public final class Module
 		return (bigEndian);
 	}
 	
+	public int getByteSize ()
+	{
+		return (byteSize);
+	}
+	
+	public long getByteMask ()
+	{
+		return (byteMask);
+	}
+	
 	/**
 	 * Provides access to a vector of global symbol names.
 	 * 
 	 * @return	The global symbol vector.
 	 */
-	public Vector getGlobals ()
+	public Vector<String> getGlobals ()
 	{
-		Vector		result = new Vector ();
+		Vector<String>	result = new Vector<String> ();
 		
-		Enumeration cursor = globals.keys ();
+		Enumeration<String> cursor = globals.keys ();
 		while (cursor.hasMoreElements ())
 			result.add (cursor.nextElement());
 		
@@ -98,7 +123,7 @@ public final class Module
 	 * 
 	 * @return	The section vector.
 	 */
-	public Vector getSections ()
+	public Vector<Section> getSections ()
 	{
 		return (sections);
 	}
@@ -114,7 +139,7 @@ public final class Module
 		Section		section;
 		
 		for (int index = 0; index < sections.size (); ++index) {
-			section = (Section) sections.elementAt (index);
+			section = sections.elementAt (index);
 			
 			if (section.isRelative () && section.getName ().equals (name))
 				return (section);
@@ -133,12 +158,12 @@ public final class Module
 	 * @param	start		The start address of the section.
 	 * @return	The matching section.
 	 */
-	public Section findSection (final String name, int start)
+	public Section findSection (final String name, long start)
 	{
 		Section		section;
 		
 		for (int index = 0; index < sections.size (); ++index) {
-			section = (Section) sections.elementAt (index);
+			section = sections.elementAt (index);
 			
 			if (section.isAbsolute () && (section.getStart () == start) && section.getName ().equals (name)) 
 				return (section);
@@ -161,14 +186,14 @@ public final class Module
 	}
 	
 	/**
-	 * Fetchs the expression defining a global symbol.
+	 * Fetches the expression defining a global symbol.
 	 * 
 	 * @param 	name		The name of the symbol
 	 * @return	The related expression.
 	 */
 	public Expr getGlobal (final String name)
 	{
-		return ((Expr) globals.get (name));
+		return (globals.get (name));
 	}
 	
 	/**
@@ -177,7 +202,7 @@ public final class Module
 	public void clear ()
 	{
 		for (int index = 0; index < sections.size (); ++index)
-			((Section)(sections.elementAt (index))).clear ();
+			sections.elementAt (index).clear ();
 		
 		globals.clear ();
 	}
@@ -192,15 +217,16 @@ public final class Module
 		StringBuffer	buffer = new StringBuffer ();
 		
 		buffer.append ("<module");
-		buffer.append (" target='" + target + "' ");
+		buffer.append (" target='" + target + "'");
 		buffer.append (" endian='" + (bigEndian ? "big" : "little")+ "'");
+		buffer.append (" byteSize='" + byteSize + "'");
 		buffer.append (" name='" + name + "'>");
 		for (int index = 0; index < sections.size (); ++index)
 			buffer.append (sections.elementAt (index).toString ());
 		
-		for (Enumeration cursor = globals.keys (); cursor.hasMoreElements();) {
-			String	name	= (String) cursor.nextElement ();
-			Expr	expr	= (Expr) globals.get (name);
+		for (Enumeration<String> cursor = globals.keys (); cursor.hasMoreElements();) {
+			String	name	= cursor.nextElement ();
+			Expr	expr	= globals.get (name);
 			
 			buffer.append ("<gbl>" + name + expr + "</gbl>");
 		}
@@ -225,12 +251,21 @@ public final class Module
 	private final boolean	bigEndian;
 	
 	/**
+	 * The number of bits in a byte.
+	 */
+	private final int		byteSize;
+	
+	private final long		byteMask;
+	
+	/**
 	 * The set of sections defined in the module.
 	 */
-	private Vector 			sections	= new Vector ();
+	private Vector<Section>	sections
+		= new Vector<Section> ();
 	
 	/**
 	 * The set of exported symbols.
 	 */
-	private Hashtable		globals		= new Hashtable ();
+	private Hashtable<String, Expr>	globals
+		= new Hashtable<String, Expr> ();
 }

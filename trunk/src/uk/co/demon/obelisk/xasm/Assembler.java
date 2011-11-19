@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2010 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -55,45 +55,6 @@ import uk.co.demon.obelisk.xobj.Value;
  */
 public abstract class Assembler extends Application
 {
-	protected static String		WRN_LABEL_IGNORED
-		= "This statement cannot be labelled";
-
-	protected static String		ERR_UNKNOWN_OPCODE
-		= "Unknown opcode or directive";
-
-	protected static String		ERR_NO_SECTION
-		= "No active section";
-
-	protected static String		ERR_CONSTANT_EXPR
-		= "Constant expression required";
-
-	protected static String		ERR_NO_OPEN_IF
-		= ".ELSE or .ENDIF with no matching .IF";
-
-	protected static String		ERR_CLOSING_PAREN
-		= "Closing parenthesis missing in expression";
-
-	protected static String		ERR_NO_GLOBAL
-		= "A local label must be preceded by normal label";
-
-	protected static String		ERR_UNDEF_SYMBOL
-		= "Undefined symbol: ";
-	
-	protected static String		ERR_LABEL_REDEFINED
-		= "Label as already been defined: ";
-	
-	protected static String		ERR_FAILED_TO_FIND_FILE
-		= "Failed to find specified file";
-	
-	protected static String		ERR_EXPECTED_QUOTED_FILENAME
-		= "Expected quoted filename";
-	
-	protected static String		ERR_INSERT_IO_ERROR
-		= "I/O error while inserting binary data";
-	
-	protected static String		ERR_INVALID_EXPRESSION
-		= "Invalid expression";
-
 	/**
 	 * A <CODE>TokenKind</CODE> representing mathematical operators.
 	 */
@@ -332,10 +293,10 @@ public abstract class Assembler extends Application
 				if (reader != null)
 					sources.push (new FileSource (filename, reader));
 				else
-					error (ERR_FAILED_TO_FIND_FILE);
+					error (Error.ERR_FAILED_TO_FIND_FILE);
 			}
 			else
-				error (ERR_EXPECTED_QUOTED_FILENAME);
+				error (Error.ERR_EXPECTED_QUOTED_FILENAME);
 			
 			return (false);
 		}
@@ -360,10 +321,10 @@ public abstract class Assembler extends Application
 					sources.push (new FileSource (filename, reader));
 				}
 				else
-					error (ERR_FAILED_TO_FIND_FILE);
+					error (Error.ERR_FAILED_TO_FIND_FILE);
 			}
 			else
-				error (ERR_EXPECTED_QUOTED_FILENAME);
+				error (Error.ERR_EXPECTED_QUOTED_FILENAME);
 			
 			return (false);
 		}
@@ -393,14 +354,14 @@ public abstract class Assembler extends Application
 						buffer.close ();
 					}
 					catch (IOException error) {
-						error (ERR_INSERT_IO_ERROR);
+						error (Error.ERR_INSERT_IO_ERROR);
 					}
 				}
 				else
-					error (ERR_FAILED_TO_FIND_FILE);
+					error (Error.ERR_FAILED_TO_FIND_FILE);
 			}
 			else
-				error (ERR_EXPECTED_QUOTED_FILENAME);
+				error (Error.ERR_EXPECTED_QUOTED_FILENAME);
 		
 			return (false);
 		}
@@ -442,7 +403,7 @@ public abstract class Assembler extends Application
 						if (!symbols.containsKey (label.getText ()))
 							symbols.put (label.getText (), addr);
 						else
-							error (ERR_LABEL_REDEFINED);
+							error (Error.ERR_LABEL_REDEFINED);
 					}
 					else
 						error ("Symbol has already been defined with .SET");
@@ -491,13 +452,13 @@ public abstract class Assembler extends Application
 			Expr expr = parseExpr ();
 		
 			if (expr.isAbsolute ()) {
-				int		value = expr.resolve (null, null);
+				long	value = expr.resolve (null, null);
 				
 				for (int index = 0; index < value; ++index)
 					addByte (0);
 			}
 			else
-				error (ERR_CONSTANT_EXPR);
+				error (Error.ERR_CONSTANT_EXPR);
 			
 			return (true);
 		}
@@ -529,11 +490,11 @@ public abstract class Assembler extends Application
 					if (expr != null)
 						addByte (expr);
 					else
-						error (ERR_INVALID_EXPRESSION);
+						error (Error.ERR_INVALID_EXPRESSION);
 				}
 			} while (token == COMMA);
 			
-			if (token != EOL) error (ERR_INVALID_EXPRESSION); 
+			if (token != EOL) error (Error.ERR_INVALID_EXPRESSION); 
 			return (true);
 		}
 	};
@@ -557,10 +518,10 @@ public abstract class Assembler extends Application
 					addByte (Expr.and (expr, MASK));		
 				}
 				else
-					error (ERR_INVALID_EXPRESSION);
+					error (Error.ERR_INVALID_EXPRESSION);
 			} while (token == COMMA);
 			
-			if (token != EOL) error (ERR_INVALID_EXPRESSION); 
+			if (token != EOL) error (Error.ERR_INVALID_EXPRESSION); 
 			return (true);
 		}
 	};
@@ -582,10 +543,10 @@ public abstract class Assembler extends Application
 				if (expr != null)
 					addWord (expr);		
 				else
-					error (ERR_INVALID_EXPRESSION);
+					error (Error.ERR_INVALID_EXPRESSION);
 			} while (token == COMMA);
 			
-			if (token != EOL) error (ERR_INVALID_EXPRESSION); 
+			if (token != EOL) error (Error.ERR_INVALID_EXPRESSION); 
 			return (true);
 		}
 	};
@@ -607,10 +568,10 @@ public abstract class Assembler extends Application
 				if (expr != null)
 					addLong (expr);
 				else
-					error (ERR_INVALID_EXPRESSION);
+					error (Error.ERR_INVALID_EXPRESSION);
 			} while (token == COMMA);
 			
-			if (token != EOL) error (ERR_INVALID_EXPRESSION); 
+			if (token != EOL) error (Error.ERR_INVALID_EXPRESSION); 
 			return (true);
 		}
 	};
@@ -635,7 +596,7 @@ public abstract class Assembler extends Application
 					status.push ((isActive () && state) ? Boolean.TRUE : Boolean.FALSE);
 				}
 				else
-					error (ERR_CONSTANT_EXPR);
+					error (Error.ERR_CONSTANT_EXPR);
 			}
 			else
 				status.push (Boolean.FALSE);
@@ -767,7 +728,7 @@ public abstract class Assembler extends Application
 				status.push ((isActive () && !state) ? Boolean.TRUE : Boolean.FALSE);
 			}
 			else
-				error (ERR_NO_OPEN_IF);
+				error (Error.ERR_NO_OPEN_IF);
 
 			return (false);
 		}
@@ -786,7 +747,7 @@ public abstract class Assembler extends Application
 			if (!status.empty ())
 				status.pop ();
 			else
-				error (ERR_NO_OPEN_IF);
+				error (Error.ERR_NO_OPEN_IF);
 
 			return (false);
 		}
@@ -800,7 +761,7 @@ public abstract class Assembler extends Application
 		public boolean compile ()
 		{
 			if ((macroName = label.getText ()) != null) {
-				Vector		arguments	= new Vector ();
+				Vector<String>	arguments	= new Vector<String> ();
 			
 				for (;;) {
 					if ((token = nextRealToken ()) == EOL) break;
@@ -871,10 +832,10 @@ public abstract class Assembler extends Application
 			Expr expr = parseExpr ();
 			
 			if (expr.isAbsolute ()) {
-				savedLines = new RepeatSource (expr.resolve (null, null));
+				savedLines = new RepeatSource ((int) expr.resolve (null, null));
 			}
 			else
-				error (ERR_CONSTANT_EXPR);
+				error (Error.ERR_CONSTANT_EXPR);
 			
 			return (false);
 		}
@@ -955,7 +916,7 @@ public abstract class Assembler extends Application
 				section = section.setOrigin (expr.resolve (null, null));
 			}
 			else
-				error (ERR_CONSTANT_EXPR);
+				error (Error.ERR_CONSTANT_EXPR);
 			
 			return (true);
 		}
@@ -1084,19 +1045,12 @@ public abstract class Assembler extends Application
 	protected Expr				addr;
 	
 	/**
-	 * The first 9 bytes of generated code.
-	 */
-	protected byte []			bytes		= new byte [9];
-	
-	/**
-	 * The number of bytes generated so far.
-	 */
-	protected int				byteCount;
-	
-	/**
 	 * Title string for listing output
 	 */
 	protected String			title;
+	
+	
+	protected MemoryModel		memory = null;
 	
 	/**
 	 * Constructs an <CODE>Assembler</CODE> that adds code to the given module.
@@ -1106,6 +1060,11 @@ public abstract class Assembler extends Application
 	protected Assembler (Module module)
 	{
 		this.module = module;
+	}
+	
+	protected void setMemoryModel (MemoryModel memory)
+	{
+		this.memory = memory;
 	}
 	
 	/**
@@ -1214,6 +1173,36 @@ public abstract class Assembler extends Application
 		}
 	}
 	
+	protected void addByte (final Expr expr)
+	{
+		memory.addByte (module, section, expr);
+	}
+	
+	protected void addWord (final Expr expr)
+	{
+		memory.addWord (module, section, expr);
+	}
+	
+	protected void addLong (final Expr expr)
+	{
+		memory.addLong (module, section, expr);
+	}
+	
+	protected void addByte (int value)
+	{
+		memory.addByte (module, section, value);
+	}
+	
+	protected void addWord (int value)
+	{
+		memory.addWord (module, section, value);
+	}
+	
+	protected void addLong (int value)
+	{
+		memory.addLong (module, section, value);
+	}
+
 	/**
 	 * Output a line of text to the listing and 
 	 * @param text
@@ -1302,9 +1291,9 @@ public abstract class Assembler extends Application
 		if (!assemble (Pass.FINAL, fileName)) return (false);
 	
 		// Add globally define symbols to the object module. 
-		for (Iterator cursor = globals.iterator (); cursor.hasNext();) {
-			String name = (String) cursor.next ();
-			Expr   expr = (Expr) symbols.get (name);
+		for (Iterator<String> cursor = globals.iterator (); cursor.hasNext();) {
+			String name = cursor.next ();
+			Expr   expr = symbols.get (name);
 			
 			if (expr != null)
 				module.addGlobal (name, expr);
@@ -1346,7 +1335,7 @@ public abstract class Assembler extends Application
 		for (int index = 0; index < keys.length; ++index) {
 			String	name  = (String) keys [index];
 			Expr	expr  = (Expr) symbols.get (name);
-			int		value = expr.resolve (null, null);
+			long	value = expr.resolve (null, null);
 			
 			name = (name + "                                ").substring (0, 32);
 			
@@ -1376,7 +1365,7 @@ public abstract class Assembler extends Application
 		else
 			lineType = ' ';
 		
-		byteCount   = 0;
+		memory.clear ();
 		label		= null;
 		this.line   = line;
 		this.text   = line.getText ().toCharArray ();
@@ -1454,7 +1443,7 @@ public abstract class Assembler extends Application
 	
 				// Handle anything else
 				if (opcode.compile ()) {
-					if (byteCount > 0) {
+					if (memory.getByteCount () > 0) {
 						if (sources.peek () instanceof TextSource)
 							lineType = '+';
 						else
@@ -1467,7 +1456,7 @@ public abstract class Assembler extends Application
 								if (lastLabel != null)
 									setLabel (lastLabel + label.getText(), origin);
 								else
-									error (ERR_NO_GLOBAL);
+									error (Error.ERR_NO_GLOBAL);
 							}
 							else {
 								lastLabel = label.getText ();
@@ -1475,13 +1464,13 @@ public abstract class Assembler extends Application
 							}
 						}
 						else
-							error (ERR_NO_SECTION);
+							error (Error.ERR_NO_SECTION);
 
 						if (lineType == ' ') lineType = ':';
 					}
 				}
 				else
-					if (label != null) warning (WRN_LABEL_IGNORED);
+					if (label != null) warning (Error.WRN_LABEL_IGNORED);
 			}
 			else
 				lineType = '-';
@@ -1498,7 +1487,7 @@ public abstract class Assembler extends Application
 		// Handle macro calls
 		MacroSource source = (MacroSource) macros.get (token.getText ());
 		if (source != null) {
-			Vector			values = new Vector ();
+			Vector<String>	values = new Vector<String> ();
 			int				start;
 			int				end;
 			
@@ -1524,7 +1513,7 @@ public abstract class Assembler extends Application
 						if (lastLabel != null)
 							setLabel (lastLabel + label.getText(), origin);
 						else
-							error (ERR_NO_GLOBAL);
+							error (Error.ERR_NO_GLOBAL);
 					}
 					else {
 						lastLabel = label.getText ();
@@ -1532,7 +1521,7 @@ public abstract class Assembler extends Application
 					}
 				}
 				else
-					error (ERR_NO_SECTION);
+					error (Error.ERR_NO_SECTION);
 			}
 
 			sources.push (source.invoke (++instance, values));
@@ -1546,7 +1535,7 @@ public abstract class Assembler extends Application
 					if (lastLabel != null)
 						setLabel (lastLabel + label.getText(), origin);
 					else
-						error (ERR_NO_GLOBAL);
+						error (Error.ERR_NO_GLOBAL);
 				}
 				else {
 					lastLabel = label.getText ();
@@ -1554,12 +1543,12 @@ public abstract class Assembler extends Application
 				}
 			}
 			else
-				error (ERR_NO_SECTION);
+				error (Error.ERR_NO_SECTION);
 			
 			if (lineType == ' ') lineType = ':';
 		}
 	
-		error (ERR_UNKNOWN_OPCODE);
+		error (Error.ERR_UNKNOWN_OPCODE);
 	}
 
 	/**
@@ -1823,149 +1812,6 @@ public abstract class Assembler extends Application
 				((ch >= 'a') && (ch <= 'z')));
 	}
 	
-	/**
-	 * Adds a byte to the code and captures it for the listing.
-	 *  
-	 * @param 	expr			The code value. 
-	 */
-	protected void addByte (final Expr expr)
-	{
-		if (expr.isRelative ()) {
-			if (section != null) {
-				section.addByte (expr);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
-			}
-			else
-				error (ERR_NO_SECTION);
-		}
-		else
-			addByte (expr.resolve (null, null));
-	}
-	
-	/**
-	 * Adds a word to the code and captures it for the listing.
-	 *  
-	 * @param 	expr			The code value. 
-	 */
-	protected void addWord (final Expr expr)
-	{
-		if (expr.isRelative ()) {
-			if (section != null) {
-				section.addWord (expr);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
-			}
-			else
-				error (ERR_NO_SECTION);
-		}
-		else
-			addWord (expr.resolve (null, null));
-	}
-	
-	/**
-	 * Adds a long to the code and captures it for the listing.
-	 *  
-	 * @param 	expr			The code value. 
-	 */
-	protected void addLong (final Expr expr)
-	{
-		if (expr.isRelative ()) {
-			if (section != null) {
-				section.addLong (expr);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
-			}
-			else
-				error (ERR_NO_SECTION);
-		}
-		else
-			addLong (expr.resolve (null, null));
-	}
-	
-	/**
-	 * Adds a byte to the code and captures it for the listing.
-	 *  
-	 * @param 	value			The code value. 
-	 */
-	protected void addByte (int value)
-	{
-		if (section != null) {
-			section.addByte (value);
-			if (byteCount < bytes.length)
-				bytes [byteCount++] = (byte)(value & 0xff);
-		}
-		else
-			error (ERR_NO_SECTION);
-	}
-	
-	/**
-	 * Adds a word to the code and captures it for the listing.
-	 *  
-	 * @param 	value			The code value. 
-	 */
-	protected void addWord (int value)
-	{
-		if (section != null) {
-			section.addWord (value);
-			if (module.isBigEndian()) {
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 8) & 0xff);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 0) & 0xff);				
-			}
-			else {
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 0) & 0xff);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 8) & 0xff);
-			}
-		}
-		else
-			error (ERR_NO_SECTION);
-	}
-	
-	/**
-	 * Adds a long to the code and captures it for the listing.
-	 *  
-	 * @param 	value			The code value. 
-	 */
-	protected void addLong (int value)
-	{
-		if (section != null) {
-			section.addLong (value);
-			if (module.isBigEndian()) {
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 24) & 0xff);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 16) & 0xff);				
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 8) & 0xff);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 0) & 0xff);				
-			}
-			else {
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 0) & 0xff);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 8) & 0xff);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 16) & 0xff);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 24) & 0xff);				
-			}
-		}
-		else
-			error (ERR_NO_SECTION);
-	}
 	
 	/**
 	 * Sets the value of an symbol to the given expression value.
@@ -2095,17 +1941,17 @@ public abstract class Assembler extends Application
 	/**
 	 * A <CODE>Stack</CODE> used to store the active code sources.
 	 */
-	private Stack				sources		= new Stack ();
+	private Stack<Source>		sources		= new Stack<Source> ();
 	
 	/**
 	 * A <CODE>Stack</CODE> used to store previously processed tokens
 	 */
-	private Stack				tokens		= new Stack ();
+	private Stack<Token>		tokens		= new Stack<Token> ();
 	
 	/**
 	 * A <CODE>Stack</CODE> used record conditional status
 	 */
-	private Stack				status		= new Stack ();
+	private Stack<Boolean>		status		= new Stack<Boolean> ();
 	/**
 	 * The current line being assembled.
 	 */
@@ -2134,27 +1980,27 @@ public abstract class Assembler extends Application
 	/**
 	 * The set of all symbols defined in this module.
 	 */
-	private Hashtable			symbols		= new Hashtable ();
+	private Hashtable<String, Expr> symbols	= new Hashtable<String, Expr> ();
 	
 	/**
 	 * The subset of symbols that may be redefined.
 	 */
-	private HashSet				variable	= new HashSet ();
+	private HashSet<String>		variable	= new HashSet<String> ();
 	
 	/**
 	 * The set of symbols which will be exported.
 	 */
-	private HashSet				globals		= new HashSet ();
+	private HashSet<String>		globals		= new HashSet<String> ();
 	
 	/**
 	 * The set of symbol which have been imported.
 	 */
-	private HashSet				externs		= new HashSet ();
+	private HashSet<String>		externs		= new HashSet<String> ();
 	
 	/**
 	 * The set of defined macros.
 	 */
-	private Hashtable			macros		= new Hashtable ();
+	private Hashtable<String, TextSource>	macros = new Hashtable<String, TextSource> ();
 	
 	/**
 	 * The name of the current macro
@@ -2230,7 +2076,7 @@ public abstract class Assembler extends Application
 	private void setLabel (final String name, Value value)
 	{
 		if ((pass == Pass.FIRST) && symbols.containsKey (name))
-			error (ERR_LABEL_REDEFINED + name);
+			error (Error.ERR_LABEL_REDEFINED + name);
 		else
 			symbols.put (name, value);
 	}
@@ -2470,7 +2316,7 @@ public abstract class Assembler extends Application
 			token = nextRealToken ();
 			expr = parseExpr ();
 			if (token != RPAREN)
-				error (ERR_CLOSING_PAREN);
+				error (Error.ERR_CLOSING_PAREN);
 			else
 				token = nextRealToken ();
 		}
@@ -2483,14 +2329,14 @@ public abstract class Assembler extends Application
 				if (lastLabel != null)
 					expr = (Expr) symbols.get (lastLabel + token.getText ());
 				else
-					error (ERR_NO_GLOBAL);
+					error (Error.ERR_NO_GLOBAL);
 			}
 			else
 				expr = (Expr) symbols.get (token.getText ());
 			
 			if (expr == null) {
 				if (pass == Pass.FINAL)
-					error (ERR_UNDEF_SYMBOL + token.getText ());
+					error (Error.ERR_UNDEF_SYMBOL + token.getText ());
 				expr = ZERO;
 			}
 			

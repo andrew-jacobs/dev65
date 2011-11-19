@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2007 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -71,7 +71,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			if ((lhs.resolve (sections, symbols) != 0) && (rhs.resolve (sections, symbols) != 0))
 				return (1);
@@ -108,7 +108,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			if ((lhs.resolve (sections, symbols) != 0) || (rhs.resolve (sections, symbols) != 0))
 				return (1);
@@ -145,7 +145,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (lhs.resolve (sections, symbols) & rhs.resolve (sections, symbols));
 		}
@@ -179,7 +179,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (lhs.resolve (sections, symbols) | rhs.resolve (sections, symbols));
 		}
@@ -213,7 +213,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (lhs.resolve (sections, symbols) ^ rhs.resolve (sections, symbols));
 		}
@@ -247,7 +247,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (lhs.resolve (sections, symbols) + rhs.resolve (sections, symbols));
 		}
@@ -281,7 +281,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (lhs.resolve (sections, symbols) - rhs.resolve (sections, symbols));
 		}
@@ -315,7 +315,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (lhs.resolve (sections, symbols) * rhs.resolve (sections, symbols));
 		}
@@ -349,7 +349,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (lhs.resolve (sections, symbols) / rhs.resolve (sections, symbols));
 		}
@@ -383,7 +383,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (lhs.resolve (sections, symbols) % rhs.resolve (sections, symbols));
 		}
@@ -417,7 +417,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (lhs.resolve (sections, symbols) >> rhs.resolve (sections, symbols));
 		}
@@ -451,7 +451,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			return (lhs.resolve (sections, symbols) << rhs.resolve (sections, symbols));
 		}
@@ -485,7 +485,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			if (lhs.resolve (sections, symbols) == rhs.resolve (sections, symbols))
 				return (1);
@@ -522,7 +522,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			if (lhs.resolve (sections, symbols) != rhs.resolve (sections, symbols))
 				return (1);
@@ -559,7 +559,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			if (lhs.resolve (sections, symbols) < rhs.resolve (sections, symbols))
 				return (1);
@@ -596,7 +596,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			if (lhs.resolve (sections, symbols) <= rhs.resolve (sections, symbols))
 				return (1);
@@ -633,7 +633,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			if (lhs.resolve (sections, symbols) > rhs.resolve (sections, symbols))
 				return (1);
@@ -670,7 +670,7 @@ public abstract class BinaryExpr extends Expr
 		/**
 		 * {@inheritDoc}
 		 */
-		public int resolve (SectionMap sections, SymbolMap symbols)
+		public long resolve (SectionMap sections, SymbolMap symbols)
 		{
 			if (lhs.resolve (sections, symbols) >= rhs.resolve (sections, symbols))
 				return (1);
@@ -706,7 +706,7 @@ public abstract class BinaryExpr extends Expr
 	/**
 	 * {@inheritDoc}
 	 */
-	public abstract int resolve (SectionMap sections, SymbolMap symbols);
+	public abstract long resolve (SectionMap sections, SymbolMap symbols);
 
 	/**
 	 * The left hand sub-expression.

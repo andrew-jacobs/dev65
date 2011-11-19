@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -49,7 +49,7 @@ public abstract class TextSource implements Source
 	public Line nextLine ()
 	{
 		if (nextLine < lines.size ())
-			return ((Line) lines.elementAt (nextLine++));
+			return (lines.elementAt (nextLine++));
 		
 		return (null);
 	}
@@ -85,7 +85,7 @@ public abstract class TextSource implements Source
 	/**
 	 * A <CODE>Vector</CODE> of stored source lines.
 	 */
-	private Vector			lines		= new Vector ();
+	private Vector<Line>	lines		= new Vector<Line> ();
 	
 	/**
 	 * The index of the next line to be read.

@@ -44,11 +44,22 @@ class S19Target extends CachedTarget
 	 */
 	public S19Target (int start, int end, int addrSize)
 	{
-		super (start, end);
+		this (start, end, addrSize, 8);
+	}
+		
+	/**
+	 * Constructs a <CODE>HexTarget</CODE> that will generate data for
+	 * the indicated address range.
+	 * 
+	 * @param start			Start of data area.
+	 * @param end			End of data area.
+	 */
+	public S19Target (long start, long end, int addrSize, int byteSize)
+	{
+		super (start, end, byteSize);
 		
 		this.addrSize = addrSize;
 	}
-		
 	/**
 	 * {@inheritDoc}
 	 */
@@ -63,7 +74,7 @@ class S19Target extends CachedTarget
 			
 			// Generate code records
 			for (int index = 0; index < size; index += 32) {
-				int addr = start + index;
+				long addr = start + index;
 				writer.print ('S');
 				total = 0;
 

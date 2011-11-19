@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -419,7 +419,7 @@ public abstract class Expr
 	 * @param 	symbols			A structure showing where symbols are located.
 	 * @return	The target value of the symbol.
 	 */
-	public abstract int	resolve (SectionMap sections, SymbolMap symbols);
+	public abstract long resolve (SectionMap sections, SymbolMap symbols);
 	
 	/**
 	 * A constant <CODE>Value</CODE> representing a true state.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -38,7 +38,7 @@ public final class Value extends Expr
 	 * @param 	section				The relative section or <CODE>null</CODE>.
 	 * @param 	value				An integer value.
 	 */
-	public Value (final Section section, int value)
+	public Value (final Section section, long value)
 	{
 		this.section = section;
 		this.value   = value;
@@ -75,7 +75,7 @@ public final class Value extends Expr
 	 * 
 	 * @return	The integer value.
 	 */
-	public int getValue ()
+	public long getValue ()
 	{
 		return (value);
 	}
@@ -83,7 +83,7 @@ public final class Value extends Expr
 	/**
 	 * {@inheritDoc}
 	 */
-	public int resolve (SectionMap sections, SymbolMap symbols)
+	public long resolve (SectionMap sections, SymbolMap symbols)
 	{
 		if ((section == null) || ((sections == null) && (symbols == null)))
 			return (value);
@@ -112,5 +112,5 @@ public final class Value extends Expr
 	/**
 	 * The absolute or relative offset value.
 	 */
-	private final int		value;
+	private final long		value;
 }

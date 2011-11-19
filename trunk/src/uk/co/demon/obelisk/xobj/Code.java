@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005 Andrew John Jacobs.
+ * Copyright (C),2005-2011 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -33,17 +33,19 @@ public final class Code extends Part
 	/**
 	 * Constructs a <CODE>Code</CODE> instance.
 	 */
-	public Code ()
-	{ }
+	public Code (final Module module)
+	{
+		this.module = module;
+	}
 	
 	/**
 	 * Adds a byte value to the current code string.
 	 * 
 	 * @param 	value			The value to add.
 	 */
-	public void addByte (int value)
+	public void addByte (long value)
 	{
-		data.append (Hex.toHex (value, 2));
+		data.append (Hex.toHex (value, module.getByteSize () / 4));
 	}
 	
 	/**
@@ -58,4 +60,6 @@ public final class Code extends Part
 	 * A buffer containing the code bytes.
 	 */
 	private StringBuffer	data	= new StringBuffer ();
+	
+	private final Module	module;
 }
