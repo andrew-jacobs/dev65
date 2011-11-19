@@ -55,11 +55,6 @@ import uk.co.demon.obelisk.xobj.Word;
  */
 public abstract class Linker extends Application
 {
-	protected Linker ()
-	{
-		this (8);
-	}
-	
 	protected Linker (int byteSize)
 	{
 		this.byteSize = byteSize;

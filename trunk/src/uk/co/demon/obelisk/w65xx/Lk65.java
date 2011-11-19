@@ -45,6 +45,14 @@ public final class Lk65 extends Linker
 	}
 
 	/**
+	 * Constructs a <CODE>Lk65</CODE> instance.
+	 */
+	protected Lk65 ()
+	{
+		super (8);
+	}
+	
+	/**
 	 * {@inheritDoc}
 	 */
 	protected void startUp ()
