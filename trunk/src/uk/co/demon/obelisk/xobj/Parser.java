@@ -75,7 +75,7 @@ public final class Parser
 			throws SAXException
 		{
 			int		span = module.getByteSize () / 4;
-			String	chars = new String (ch, start, length);	
+			chars = new String (ch, start, length);	
 			
 			if (tags.peek ().equals ("section")) {
 				for (int index = 0; index < length; index += span) {
