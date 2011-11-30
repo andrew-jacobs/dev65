@@ -44,15 +44,16 @@ public class MemoryModelShort extends MemoryModel
 		super (errorHandler);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public int getByte (int index)
 	{
 		return (bytes [index]);
 	}
 	
 	/**
-	 * Adds a BYTETYPE to the code and captures it for the listing.
-	 *  
-	 * @param 	expr			The code value. 
+	 * {@inheritDoc}
 	 */
 	public void addByte (final Module module, Section section, final Expr expr)
 	{
@@ -70,9 +71,7 @@ public class MemoryModelShort extends MemoryModel
 	}
 	
 	/**
-	 * Adds a word to the code and captures it for the listing.
-	 *  
-	 * @param 	expr			The code value. 
+	 * {@inheritDoc} 
 	 */
 	public void addWord (final Module module, Section section, final Expr expr)
 	{
@@ -92,9 +91,7 @@ public class MemoryModelShort extends MemoryModel
 	}
 	
 	/**
-	 * Adds a long to the code and captures it for the listing.
-	 *  
-	 * @param 	expr			The code value. 
+	 * {@inheritDoc} 
 	 */
 	public void addLong (final Module module, Section section, final Expr expr)
 	{
@@ -118,9 +115,7 @@ public class MemoryModelShort extends MemoryModel
 	}
 	
 	/**
-	 * Adds a BYTETYPE to the code and captures it for the listing.
-	 *  
-	 * @param 	value			The code value. 
+	 * {@inheritDoc} 
 	 */
 	public void addByte (final Module module, Section section, long value)
 	{
@@ -134,9 +129,7 @@ public class MemoryModelShort extends MemoryModel
 	}
 	
 	/**
-	 * Adds a word to the code and captures it for the listing.
-	 *  
-	 * @param 	value			The code value. 
+	 * {@inheritDoc} 
 	 */
 	public void addWord (final Module module, Section section, long value)
 	{
@@ -160,9 +153,7 @@ public class MemoryModelShort extends MemoryModel
 	}
 	
 	/**
-	 * Adds a long to the code and captures it for the listing.
-	 *  
-	 * @param 	value			The code value. 
+	 * {@inheritDoc} 
 	 */
 	public void addLong (final Module module, Section section, long value)
 	{
@@ -193,5 +184,8 @@ public class MemoryModelShort extends MemoryModel
 			error (Error.ERR_NO_SECTION);
 	}
 	
+	/**
+	 * Captured data used to generate the listing.
+	 */
 	protected short []		bytes = new short [9];
 }

@@ -1062,6 +1062,12 @@ public abstract class Assembler extends Application
 		this.module = module;
 	}
 	
+	/**
+	 * Set the <CODE>MemoryModel</CODE> instance that describes that target
+	 * devices memory.
+	 * 
+	 * @param	memory			The <CODE>MemoryModel</CODE> instance.
+	 */
 	protected void setMemoryModel (MemoryModel memory)
 	{
 		this.memory = memory;
@@ -1173,31 +1179,61 @@ public abstract class Assembler extends Application
 		}
 	}
 	
+	/**
+	 * Adds a byte value to the output memory area.
+	 * 
+	 * @param	expr		The expression defining the value.
+	 */
 	protected void addByte (final Expr expr)
 	{
 		memory.addByte (module, section, expr);
 	}
 	
+	/**
+	 * Adds a word value to the output memory area.
+	 * 
+	 * @param	expr		The expression defining the value.
+	 */
 	protected void addWord (final Expr expr)
 	{
 		memory.addWord (module, section, expr);
 	}
 	
+	/**
+	 * Adds a long value to the output memory area.
+	 * 
+	 * @param	expr		The expression defining the value.
+	 */
 	protected void addLong (final Expr expr)
 	{
 		memory.addLong (module, section, expr);
 	}
 	
+	/**
+	 * Adds a literal byte value to the output memory area.
+	 * 
+	 * @param	value		The literal value.
+	 */
 	protected void addByte (int value)
 	{
 		memory.addByte (module, section, value);
 	}
 	
+	/**
+	 * Adds a literal word value to the output memory area.
+	 * 
+	 * @param	value		The literal value.
+	 */
 	protected void addWord (int value)
 	{
 		memory.addWord (module, section, value);
 	}
 	
+	/**
+	 * Adds a literal long value to the output memory area.
+	 * 
+	 * @param	value		The literal value.
+	 */
 	protected void addLong (int value)
 	{
 		memory.addLong (module, section, value);
@@ -1262,6 +1298,11 @@ public abstract class Assembler extends Application
 		return (((Source) sources.peek ()).nextLine ());
 	}
 	
+	/**
+	 * Returns the current <CODE>Section</CODE>.
+	 * 
+	 * @return	The current <CODE>Section</CODE>.
+	 */
 	protected final Section getSection ()
 	{
 		return (section);
@@ -1378,6 +1419,9 @@ public abstract class Assembler extends Application
 		// Extract and save the labels
 		if (token != WS) {
 			label = token;
+			if (label.getKind () != SYMBOL)
+				if (pass == Pass.FIRST) warning (Error.WRN_LABEL_IS_A_RESERVED_WORD);
+			
 			if ((token = nextToken ()) == COLON)
 				token = nextToken ();
 		}
@@ -2062,10 +2106,12 @@ public abstract class Assembler extends Application
 			process ();
 		}
 		catch (FileNotFoundException error) {
-			error ("Source file not found");
+			System.err.println ("Source file not found: " + fileName);
+			System.exit (2);
 		}
 		catch (IOException error) {
-			error ("Could not create listing file");
+			System.err.println ("Could not create listing file");
+			System.exit (2);
 		}
 		
 		endPass ();
@@ -2324,7 +2370,7 @@ public abstract class Assembler extends Application
 			expr = new Value (null, ((Integer)(token.getValue ())).intValue ());
 			token = nextRealToken ();
 		}
-		else if (token.getKind () == SYMBOL) {
+		else if ((token.getKind () == SYMBOL) || (token.getKind () == KEYWORD)) {
 			if (token.getText ().charAt (0) == '.') {
 				if (lastLabel != null)
 					expr = (Expr) symbols.get (lastLabel + token.getText ());

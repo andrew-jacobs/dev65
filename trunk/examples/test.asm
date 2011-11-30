@@ -1720,7 +1720,7 @@ COUNT	.SET	COUNT+1
 	 TYA
 	 LDX #0
 	 REPEAT
-	  ASL A
+	  ASL
 	  PHP
 	  IF CS
 	   INX
@@ -1729,9 +1729,7 @@ COUNT	.SET	COUNT+1
 	 UNTIL EQ
 	 INY
 	 CPY #128
-	 IF EQ
-	  BREAK
-	 ENDIF
+	 BREAK EQ
 	FOREVER
 	
 ; Nonsense code to show long branches

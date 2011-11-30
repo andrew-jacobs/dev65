@@ -23,27 +23,52 @@
 package uk.co.demon.obelisk.xlnk;
 
 /**
+ * The <CODE>Region</CODE> class contains the lower and upper address of a
+ * memory block from which areas are consumed as code and data modules are
+ * processed. 
  * 
  * @author 	Andrew Jacobs
  * @version	$Id$
  */
 final class Region
 {
+	/**
+	 * Constructs a <CODE>Region</CODE> to represent the indicated memory
+	 * area range.
+	 * 
+	 * @param start			The start address of the memory block.
+	 * @param end			The end address of the memory block.
+	 */
 	public Region (final String start, final String end)
 	{
 		this (parseAddr (start), parseAddr (end));
 	}
 	
+	/**
+	 * Returns the start address of the <CODE>Region</CODE>.
+	 * 
+	 * @return The start address of the <CODE>Region</CODE>
+	 */
 	public long getStart ()
 	{
 		return (start);
 	}
 	
+	/**
+	 * Returns the end address of the <CODE>Region</CODE>.
+	 * 
+	 * @return The end address of the <CODE>Region</CODE>
+	 */
 	public long getEnd ()
 	{
 		return (end);
 	}
-	
+
+	/**
+	 * Returns the remaining size of the <CODE>Region</CODE>.
+	 * 
+	 * @return The remaining size of the <CODE>Region</CODE>.
+	 */
 	public int getSize ()
 	{
 		return ((int)(end - start + 1));

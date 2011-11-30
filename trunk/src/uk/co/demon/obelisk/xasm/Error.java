@@ -22,6 +22,13 @@
 
 package uk.co.demon.obelisk.xasm;
 
+/**
+ * The <CODE>Error</CODE> class contains all the error message strings used by
+ * the <CODE>Assembler</CODE>.
+ * 
+ * @author 	Andrew Jacobs
+ * @version	$Id$
+ */
 public final class Error
 {
 	public static final String	WRN_LABEL_IGNORED
@@ -62,6 +69,9 @@ public final class Error
 	
 	public static final String	ERR_INVALID_EXPRESSION
 		= "Invalid expression";
+	
+	public static final String	WRN_LABEL_IS_A_RESERVED_WORD
+		= "This label is a reserved word";
 	
 	private Error ()
 	{ }

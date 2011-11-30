@@ -2139,11 +2139,23 @@ public final class As65016 extends Assembler
 		{
 			if (loops.size () > 0) {
 				int index = ((Integer) loops.peek ()).intValue ();
+				
+				token = nextRealToken ();
 
 				Expr target = (Expr) loopAddr.get (index);
 				if (target == null) target = getOrigin ();
 				
-				genJump (target);
+				if (token == EOL) genJump (target);
+				else if (token == EQ) genBranch (token, target);
+				else if (token == NE) genBranch (token, target);
+				else if (token == CC) genBranch (token, target);
+				else if (token == CS) genBranch (token, target);
+				else if (token == PL) genBranch (token, target);
+				else if (token == MI) genBranch (token, target);
+				else if (token == VC) genBranch (token, target);
+				else if (token == VS) genBranch (token, target);
+				else
+					error (ERR_INVALID_CONDITIONAL);
 			}
 			else
 				error (ERR_NO_ACTIVE_LOOP);
@@ -2162,11 +2174,23 @@ public final class As65016 extends Assembler
 		{
 			if (loops.size () > 0) {
 				int index = ((Integer) loops.peek ()).intValue ();
+				
+				token = nextRealToken ();
 
 				Expr target = (Expr) endAddr.get (index);
 				if (target == null) target = getOrigin ();
 				
-				genJump (target);
+				if (token == EOL) genJump (target);
+				else if (token == EQ) genBranch (token, target);
+				else if (token == NE) genBranch (token, target);
+				else if (token == CC) genBranch (token, target);
+				else if (token == CS) genBranch (token, target);
+				else if (token == PL) genBranch (token, target);
+				else if (token == MI) genBranch (token, target);
+				else if (token == VC) genBranch (token, target);
+				else if (token == VS) genBranch (token, target);
+				else
+					error (ERR_INVALID_CONDITIONAL);
 			}
 			else
 				error (ERR_NO_ACTIVE_LOOP);
