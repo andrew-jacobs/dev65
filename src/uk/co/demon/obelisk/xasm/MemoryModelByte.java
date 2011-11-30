@@ -26,22 +26,36 @@ import uk.co.demon.obelisk.xobj.Expr;
 import uk.co.demon.obelisk.xobj.Module;
 import uk.co.demon.obelisk.xobj.Section;
 
+/**
+ * The <CODE>MemoryModelByte</CODE> class implements a <CODE>MemoryModel</CODE>
+ * for an 8-bit byte.
+ * 
+ * @author 	Andrew Jacobs
+ * @version	$Id$
+ */
 public class MemoryModelByte extends MemoryModel
 {
+	/**
+	 * Constructs a <CODE>MemoryModelByte</CODE> that uses the indicated
+	 * <CODE>ErrorHandler</CODE> to report problems.
+	 * 
+	 * @param errorHandler	The <CODE>ErrorHandler</CODE> instance.
+	 */
 	public MemoryModelByte (final ErrorHandler errorHandler)
 	{
 		super (errorHandler);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public int getByte (int index)
 	{
 		return (bytes [index]);
 	}
 	
 	/**
-	 * Adds a BYTETYPE to the code and captures it for the listing.
-	 *  
-	 * @param 	expr			The code value. 
+	 * {@inheritDoc}
 	 */
 	public void addByte (final Module module, Section section, final Expr expr)
 	{
@@ -59,9 +73,7 @@ public class MemoryModelByte extends MemoryModel
 	}
 	
 	/**
-	 * Adds a word to the code and captures it for the listing.
-	 *  
-	 * @param 	expr			The code value. 
+	 * {@inheritDoc} 
 	 */
 	public void addWord (final Module module, Section section, final Expr expr)
 	{
@@ -81,9 +93,7 @@ public class MemoryModelByte extends MemoryModel
 	}
 	
 	/**
-	 * Adds a long to the code and captures it for the listing.
-	 *  
-	 * @param 	expr			The code value. 
+	 * {@inheritDoc} 
 	 */
 	public void addLong (final Module module, Section section, final Expr expr)
 	{
@@ -107,9 +117,7 @@ public class MemoryModelByte extends MemoryModel
 	}
 	
 	/**
-	 * Adds a BYTETYPE to the code and captures it for the listing.
-	 *  
-	 * @param 	value			The code value. 
+	 * {@inheritDoc} 
 	 */
 	public void addByte (final Module module, Section section, long value)
 	{
@@ -123,9 +131,7 @@ public class MemoryModelByte extends MemoryModel
 	}
 	
 	/**
-	 * Adds a word to the code and captures it for the listing.
-	 *  
-	 * @param 	value			The code value. 
+	 * {@inheritDoc} 
 	 */
 	public void addWord (final Module module, Section section, long value)
 	{
@@ -149,9 +155,7 @@ public class MemoryModelByte extends MemoryModel
 	}
 	
 	/**
-	 * Adds a long to the code and captures it for the listing.
-	 *  
-	 * @param 	value			The code value. 
+	 * {@inheritDoc} 
 	 */
 	public void addLong (final Module module, Section section, long value)
 	{
@@ -182,5 +186,8 @@ public class MemoryModelByte extends MemoryModel
 			error (Error.ERR_NO_SECTION);
 	}
 	
+	/**
+	 * Captured data used to generate the listing.
+	 */
 	protected byte []		bytes = new byte [9];
 }

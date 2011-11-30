@@ -50,6 +50,9 @@ import uk.co.demon.obelisk.xobj.UnaryExpr;
 import uk.co.demon.obelisk.xobj.Word;
 
 /**
+ * The <CODE>Linker</CODE> class implements the framework for a generic
+ * linker customised by derived classes to match specific processors.
+ *
  * @author 	Andrew Jacobs
  * @version	$Id$
  */
@@ -351,8 +354,14 @@ public abstract class Linker extends Application
 	 */
 	protected abstract int getAddrSize ();
 	
+	/**
+	 * The number of bits in a byte.
+	 */
 	private final int byteSize;
 	
+	/**
+	 * A mask pattern used to strip a long down to a byte value.
+	 */
 	private final long byteMask;
 
 	/**
@@ -439,18 +448,30 @@ public abstract class Linker extends Application
 	private Hashtable<String, Area>	areas
 		= new Hashtable<String, Area> ();
 	
+	/**
+	 * The section map for the program being linked.
+	 */
 	private SectionMap		sectionMap 	= new SectionMap ();
 	
+	/**
+	 * The symbol map for the program being linked.
+	 */
 	private SymbolMap		symbolMap	= new SymbolMap ();
 	
+	/**
+	 * The <CODE>Target</CODE> class instance used to create the output file.
+	 */
 	private Target			target;
 	
+	/**
+	 * The number of error encountered during linking.
+	 */
 	private int				errors		= 0;
 	
 	/**
-	 * Process a code module.
+	 * Process a code module looking for symbol references and definitions.
 	 * 
-	 * @param module
+	 * @param module		The <CODE>Module</CODE> to be processed.
 	 */
 	private void processModule (Module module)
 	{
@@ -485,6 +506,12 @@ public abstract class Linker extends Application
 		}
 	}
 	
+	/**
+	 * Process a library looking for modules that define symbols referenced
+	 * else where.
+	 * 
+	 * @param library		The <CODE>Library</CODE> to be processed.	
+	 */
 	private void processLibrary (Library library)
 	{
 		Module []		modules	= library.getModules();
@@ -507,6 +534,12 @@ public abstract class Linker extends Application
 		}
 	}
 	
+	/**
+	 * Process an expression looking for external symbol references.
+	 * 
+	 * @param expr			The <CODE>Expr</CODE> to process.
+	 * @param module		The containing <CODE>Module</CODE>.
+	 */
 	private void processExpression (Expr expr, Module module)
 	{
 		if (expr instanceof Extern) {
@@ -523,6 +556,13 @@ public abstract class Linker extends Application
 		}
 	}
 	
+	/**
+	 * Attempts to fit a <CODE>Section</CODE> within an appropriate memory
+	 * <CODE>Area</CODE>.
+	 * 
+	 * @param section		The <CODE>Section</CODE> to be fitted.
+	 * @return The address where the <CODE>Section</CODE> was placed.
+	 */
 	private long fitSection (Section section)
 	{
 		Area		area = (Area) areas.get (section.getName());
@@ -536,6 +576,12 @@ public abstract class Linker extends Application
 		return (area.fitSection (section));
 	}
 	
+	/**
+	 * Re-processes a <CODE>Module</CODE> to fix up any expressions that depend
+	 * on external symbols.
+	 * 
+	 * @param module		The <CODE>Module</CODE> to be processed.
+	 */
 	private void fixUp (Module module)
 	{
 		Vector<Section>	sections = module.getSections();
@@ -579,6 +625,14 @@ public abstract class Linker extends Application
 		}
 	}
 	
+	/**
+	 * Stores a word value in the <CODE>Target</CODE> in an appropriate
+	 * byte order.
+	 * 
+	 * @param addr			The memory address to store at.
+	 * @param value			The value to be written.
+	 * @param bigEndian		The endianess of the code.
+	 */
 	private void storeWord (long addr, long value, boolean bigEndian)
 	{
 		if (bigEndian) {
@@ -586,11 +640,19 @@ public abstract class Linker extends Application
 			target.store (addr + 1, (value >> (0 * byteSize)) & byteMask);
 		}
 		else {
-			target.store (addr + 1, (value >> (0 * byteSize)) & byteMask);
-			target.store (addr + 0, (value >> (1 * byteSize)) & byteMask);
+			target.store (addr + 1, (value >> (1 * byteSize)) & byteMask);
+			target.store (addr + 0, (value >> (0 * byteSize)) & byteMask);
 		}
 	}
 
+	/**
+	 * Stores a long value in the <CODE>Target</CODE> in an appropriate
+	 * byte order.
+	 * 
+	 * @param addr			The memory address to store at.
+	 * @param value			The value to be written.
+	 * @param bigEndian		The endianess of the code.
+	 */
 	private void storeLong (long addr, long value, boolean bigEndian)
 	{
 		if (bigEndian) {
@@ -600,17 +662,17 @@ public abstract class Linker extends Application
 			target.store (addr + 3, (value >> (0 * byteSize)) & byteMask);
 		}
 		else {
-			target.store (addr + 3, (value >> (0 * byteSize)) & byteMask);
-			target.store (addr + 2, (value >> (1 * byteSize)) & byteMask);
-			target.store (addr + 1, (value >> (2 * byteSize)) & byteMask);
-			target.store (addr + 0, (value >> (3 * byteSize)) & byteMask);
+			target.store (addr + 3, (value >> (3 * byteSize)) & byteMask);
+			target.store (addr + 2, (value >> (2 * byteSize)) & byteMask);
+			target.store (addr + 1, (value >> (1 * byteSize)) & byteMask);
+			target.store (addr + 0, (value >> (0 * byteSize)) & byteMask);
 		}
 	}
 	
 	/**
 	 * Writes a sorted list of symbols and address to the map file.
 	 * 
-	 * @param 	file			The <CODE>File</CODE> to write the map to.
+	 * @param file			The <CODE>File</CODE> to write the map to.
 	 */
 	private void writeMap (File file)
 	{
