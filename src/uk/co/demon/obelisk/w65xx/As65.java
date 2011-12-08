@@ -4694,11 +4694,11 @@ public final class As65 extends Assembler
 			token = nextRealToken ();
 			if (token == X) {
 				token = nextRealToken ();				
-				return ((arg.isAbsolute() && isByte ((int) arg.resolve (null, null))) ? DPGX : ABSX);
+				return ((arg.isAbsolute() && isByteAddress ((int) arg.resolve (null, null))) ? DPGX : ABSX);
 			}
 			if (token == Y) {
 				token = nextRealToken ();
-				return ((arg.isAbsolute() && isByte ((int) arg.resolve (null, null))) ? DPGY : ABSY);
+				return ((arg.isAbsolute() && isByteAddress ((int) arg.resolve (null, null))) ? DPGY : ABSY);
 			}
 			if (token == S) {
 				token = nextRealToken ();
@@ -4996,6 +4996,20 @@ public final class As65 extends Assembler
 		switch (value & 0xffffff00) {
 		case 0x00000000:	return (true);
 		case 0xffffff00:	return (true);
+		default:			return (false);
+		}
+	}
+
+	/**
+	 * Determines if an address can be represented by a byte.
+	 * 
+	 * @param value			The value to be tested.
+	 * @return <CODE>true</CODE> if the value is a byte, <CODE>false</CODE> otherwise.
+	 */
+	private boolean isByteAddress (int value)
+	{
+		switch (value & 0xffffff00) {
+		case 0x00000000:	return (true);
 		default:			return (false);
 		}
 	}

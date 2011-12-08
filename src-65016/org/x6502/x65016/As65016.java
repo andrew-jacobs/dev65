@@ -3050,11 +3050,11 @@ public final class As65016 extends Assembler
 			token = nextRealToken ();
 			if (token == X) {
 				token = nextRealToken ();				
-				return ((arg.isAbsolute() && isByte (arg.resolve (null, null))) ? DPGX : ABSX);
+				return ((arg.isAbsolute() && isByteAddress (arg.resolve (null, null))) ? DPGX : ABSX);
 			}
 			if (token == Y) {
 				token = nextRealToken ();
-				return ((arg.isAbsolute() && isByte (arg.resolve (null, null))) ? DPGY : ABSY);
+				return ((arg.isAbsolute() && isByteAddress (arg.resolve (null, null))) ? DPGY : ABSY);
 			}
 			error (ERR_EXPECTED_X_OR_Y);
 			return (UNKN);
@@ -3329,5 +3329,18 @@ public final class As65016 extends Assembler
 		long	masked = value & 0xffffffffffff0000L;
 		
 		return ((masked == 0x0000000000000000L) || (masked == 0xffffffffffff0000L));
+	}
+	
+	/**
+	 * Determines if an address can be represented by a byte.
+	 * 
+	 * @param value			The value to be tested.
+	 * @return <CODE>true</CODE> if the value is a byte, <CODE>false</CODE> otherwise.
+	 */
+	private boolean isByteAddress (long value)
+	{
+		long	masked = value & 0xffffffffffff0000L;
+		
+		return (masked == 0x0000000000000000L);
 	}
 }
