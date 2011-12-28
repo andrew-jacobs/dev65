@@ -75,12 +75,15 @@ public final class Parser
 			throws SAXException
 		{
 			int		span = module.getByteSize () / 4;
-			chars = new String (ch, start, length);	
-			
+			chars = new String (ch, start, length).trim ();
+						
 			if (tags.peek ().equals ("section")) {
-				for (int index = 0; index < length; index += span) {
+				bytes.append (chars);
+				
+				while (bytes.length () >= span) {
 					section.addByte (java.lang.Long.parseLong (
-							chars.substring (index, index + span), 16));
+							bytes.substring (0, span), 16));
+					bytes.delete (0, span);
 				}
 			}
 			else {
@@ -126,6 +129,8 @@ public final class Parser
 					}
 					else
 						section = module.findSection (attrs.getValue("name"));
+					
+					bytes.setLength (0);
 				}
 				break;
 				
@@ -382,6 +387,8 @@ public final class Parser
 		private String					sect;
 		
 		private String					chars;
+		
+		private StringBuffer			bytes	= new StringBuffer ();
 	}
 	
 	/**
