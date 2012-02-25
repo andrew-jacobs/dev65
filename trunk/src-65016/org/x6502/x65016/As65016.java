@@ -3059,13 +3059,7 @@ public final class As65016 extends Assembler
 			error (ERR_EXPECTED_X_OR_Y);
 			return (UNKN);
 		}			
-		if (arg.isAbsolute()) {
-			int addr = (int) arg.resolve (null, null);
-			
-			return (((addr & 0xffff0000) == 0) ? DPAG : ABSL);
-		}
-		else 
-			return (ABSL);
+		return ((arg.isAbsolute() && isByteAddress (arg.resolve (null, null))) ? DPAG : ABSL);
 	}
 
 	/**
