@@ -3431,9 +3431,12 @@ public final class As65 extends Assembler
 			loops.push (new Integer (index));
 			
 			if (getPass () == Pass.FIRST) {
-				loopAddr.add (getOrigin ());
+				loopAddr.add (getSection ().getOrigin ());
 				endAddr.add (null);
 			}
+			else
+				loopAddr.set (index, getSection ().getOrigin ());
+			
 			return (true);
 		}
 	};
@@ -3512,9 +3515,11 @@ public final class As65 extends Assembler
 			loops.push (new Integer (index));
 			
 			if (getPass () == Pass.FIRST) {
-				loopAddr.add (getOrigin ());
+				loopAddr.add (getSection ().getOrigin ());
 				endAddr.add (null);
 			}
+			else
+				loopAddr.set (index, getSection ().getOrigin ());
 			
 			token = nextRealToken ();
 
