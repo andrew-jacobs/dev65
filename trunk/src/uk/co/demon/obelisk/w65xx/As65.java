@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2011 Andrew John Jacobs.
+ * Copyright (C),2005-2012 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -3897,7 +3897,7 @@ public final class As65 extends Assembler
 			break;
 		
 		default:
-			if ((addr != null) && ((getLabel () != null) || (lineType == ':') || (byteCount > 0))) {
+			if (isActive () && (addr != null) && ((getLabel () != null) || (lineType == ':') || (byteCount > 0))) {
 				output.append (Hex.toHex (addr.resolve (null, null), 6));
 				output.append (addr.isAbsolute() ? "  " : "' ");
 	
