@@ -293,7 +293,7 @@ public abstract class Assembler extends Application
 				if (reader != null)
 					sources.push (new FileSource (filename, reader));
 				else
-					error (Error.ERR_FAILED_TO_FIND_FILE);
+					error (Error.ERR_FAILED_TO_FIND_FILE + "(" + filename +")");
 			}
 			else
 				error (Error.ERR_EXPECTED_QUOTED_FILENAME);
@@ -321,7 +321,7 @@ public abstract class Assembler extends Application
 					sources.push (new FileSource (filename, reader));
 				}
 				else
-					error (Error.ERR_FAILED_TO_FIND_FILE);
+					error (Error.ERR_FAILED_TO_FIND_FILE + "(" + filename +")");
 			}
 			else
 				error (Error.ERR_EXPECTED_QUOTED_FILENAME);
@@ -354,11 +354,11 @@ public abstract class Assembler extends Application
 						buffer.close ();
 					}
 					catch (IOException error) {
-						error (Error.ERR_INSERT_IO_ERROR);
+						error (Error.ERR_INSERT_IO_ERROR );
 					}
 				}
 				else
-					error (Error.ERR_FAILED_TO_FIND_FILE);
+					error (Error.ERR_FAILED_TO_FIND_FILE + "(" + filename +")");
 			}
 			else
 				error (Error.ERR_EXPECTED_QUOTED_FILENAME);
@@ -397,7 +397,6 @@ public abstract class Assembler extends Application
 			addr  = parseExpr ();
 			
 			if (pass == Pass.FIRST) {
-
 				if (label.getText().charAt (0) != '.') {
 					if (!variable.contains (label.getText ())) {
 						if (!symbols.containsKey (label.getText ()))
@@ -428,13 +427,11 @@ public abstract class Assembler extends Application
 			token = nextRealToken ();
 			addr  = parseExpr ();
 
-			if (label.getText().charAt (0) != '.') {
-				doSet (label.getText(), addr);
-			}	
-			else
-				error ("Variable symbols may not start with a '.'");
+			doSet (label.getText (), addr);
+			if (label.getText ().charAt (0) == '.')
+				notLocal.add (label.getText ());
 
-			return (false);
+			return (true);
 		}
 	};
 	
@@ -456,6 +453,47 @@ public abstract class Assembler extends Application
 				
 				for (int index = 0; index < value; ++index)
 					addByte (0);
+			}
+			else
+				error (Error.ERR_CONSTANT_EXPR);
+			
+			return (true);
+		}
+	};
+	
+	/**
+	 * An <CODE>Opcode</CODE> that handles .DCB directives
+	 */
+	protected final Token 		DCB	= new Opcode (KEYWORD, ".DCB")
+	{
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			Expr expr = parseExpr ();
+		
+			if (expr.isAbsolute ()) {
+				long	value = expr.resolve (null, null);	
+				
+				token = nextRealToken ();
+				if (token == COMMA) {
+					token = nextRealToken ();
+					expr = parseExpr ();
+					
+					if (expr.isAbsolute()) {
+						long fill = expr.resolve (null, null);
+						
+						for (int index = 0; index < value; ++index)
+							addByte ((int) fill);
+					}
+					else
+						error (Error.ERR_CONSTANT_EXPR);
+				}
+				else
+					for (int index = 0; index < value; ++index)
+						addByte (0);
 			}
 			else
 				error (Error.ERR_CONSTANT_EXPR);
@@ -714,6 +752,64 @@ public abstract class Assembler extends Application
 	};
 
 	/**
+	 * An <CODE>Opcode</CODE> that handles .IFDEF directives
+	 */
+	protected final Opcode 		IFDEF		= new Opcode (KEYWORD, ".IFDEF", true)
+	{
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean compile ()
+		{
+			if (isActive ()) {
+				token = nextRealToken ();
+				if (token.getKind () != SYMBOL) {
+					error ("Expected a symbol");
+					return (false);
+				}
+				
+				if (symbols.containsKey (token.getText ()))
+					status.push (Boolean.TRUE);
+				else
+					status.push (Boolean.FALSE);
+			}
+			else
+				status.push (Boolean.FALSE);
+			
+			return (false);	
+		}
+	};
+
+	/**
+	 * An <CODE>Opcode</CODE> that handles .IFNDEF directives
+	 */
+	protected final Opcode 		IFNDEF		= new Opcode (KEYWORD, ".IFNDEF", true)
+	{
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean compile ()
+		{
+			if (isActive ()) {
+				token = nextRealToken ();
+				if (token.getKind () != SYMBOL) {
+					error ("Expected a symbol");
+					return (false);
+				}
+				
+				if (symbols.containsKey (token.getText ()))
+					status.push (Boolean.FALSE);
+				else
+					status.push (Boolean.TRUE);
+			}
+			else
+				status.push (Boolean.FALSE);
+			
+			return (false);	
+		}
+	};
+
+	/**
 	 * An <CODE>Opcode</CODE> that handles .IF directives
 	 */
 	protected final Opcode 		ELSE		= new Opcode (KEYWORD, ".ELSE", true)
@@ -749,6 +845,52 @@ public abstract class Assembler extends Application
 			else
 				error (Error.ERR_NO_OPEN_IF);
 
+			return (false);
+		}
+	};
+
+	/**
+	 * An <CODE>Opcode</CODE> that handles .ERROR directives
+	 */
+	protected final Opcode 		ERROR		= new Opcode (KEYWORD, ".ERROR", true)
+	{
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean compile ()
+		{
+			if (isActive ()) {
+				token = nextRealToken ();
+				if (token.getKind () == STRING) {
+					error (token.getText ());
+				}
+				else
+					error (Error.ERR_EXPECTED_QUOTED_MESSAGE);
+			}
+			
+			return (false);
+		}
+	};
+
+	/**
+	 * An <CODE>Opcode</CODE> that handles .WARN directives
+	 */
+	protected final Opcode 		WARN		= new Opcode (KEYWORD, ".WARN", true)
+	{
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean compile ()
+		{
+			if (isActive ()) {
+				token = nextRealToken ();
+				if (token.getKind () == STRING) {
+					warning (token.getText ());
+				}
+				else
+					error (Error.ERR_EXPECTED_QUOTED_MESSAGE);
+			}
+			
 			return (false);
 		}
 	};
@@ -1420,7 +1562,8 @@ public abstract class Assembler extends Application
 		if (token != WS) {
 			label = token;
 			if (label.getKind () != SYMBOL)
-				if (pass == Pass.FIRST) warning (Error.WRN_LABEL_IS_A_RESERVED_WORD);
+				if (pass == Pass.FIRST)
+					warning (Error.WRN_LABEL_IS_A_RESERVED_WORD	+ " (" + label.getText() + ")");
 			
 			if ((token = nextToken ()) == COLON)
 				token = nextToken ();
@@ -1428,9 +1571,9 @@ public abstract class Assembler extends Application
 		
 		if (token == WS) token = nextRealToken ();
 		
-		// Map = to .EQU when used as an opcode
+		// Map = to .SET when used as an opcode
 		if (token == EQ)
-			token = EQU;
+			token = SET;
 		
 		// Compile directives and opcodes
 		if (token instanceof Opcode) {
@@ -1468,12 +1611,33 @@ public abstract class Assembler extends Application
 				if (opcode == MACRO) {
 					if (macroDepth++ == 0) {
 						opcode.compile ();
+						lineType = ' ';
 						return;
 					}
 				}
+				
 				if (opcode == REPEAT) {
 					if (repeatDepth++ == 0) {
 						opcode.compile ();
+						
+						if (label != null) {
+							if (origin != null) {
+								if (label.getText().charAt(0) == '.') {
+									if (lastLabel != null)
+										setLabel (lastLabel + label.getText(), origin);
+									else
+										error (Error.ERR_NO_GLOBAL);
+								}
+								else {
+									lastLabel = label.getText ();
+									setLabel (lastLabel, origin);
+								}
+							}
+							else
+								error (Error.ERR_NO_SECTION);
+
+							if (lineType == ' ') lineType = ':';
+						}
 						return;
 					}
 				}
@@ -1485,6 +1649,24 @@ public abstract class Assembler extends Application
 					return;
 				}
 	
+				// Handle the label in case the operand is affected
+				if (label != null) {
+					if (origin != null) {
+						if (label.getText().charAt(0) == '.') {
+							if (lastLabel != null)
+								setLabel (lastLabel + label.getText(), origin);
+							else
+								error (Error.ERR_NO_GLOBAL);
+						}
+						else {
+							lastLabel = label.getText ();
+							setLabel (lastLabel, origin);
+						}
+					}
+					else
+						error (Error.ERR_NO_SECTION);
+				}
+				
 				// Handle anything else
 				if (opcode.compile ()) {
 					if (memory.getByteCount () > 0) {
@@ -1493,28 +1675,7 @@ public abstract class Assembler extends Application
 						else
 							lineType = ':';
 					}
-					
-					if (label != null) {
-						if (origin != null) {
-							if (label.getText().charAt(0) == '.') {
-								if (lastLabel != null)
-									setLabel (lastLabel + label.getText(), origin);
-								else
-									error (Error.ERR_NO_GLOBAL);
-							}
-							else {
-								lastLabel = label.getText ();
-								setLabel (lastLabel, origin);
-							}
-						}
-						else
-							error (Error.ERR_NO_SECTION);
-
-						if (lineType == ' ') lineType = ':';
-					}
 				}
-				else
-					if (label != null) warning (Error.WRN_LABEL_IGNORED);
 			}
 			else
 				lineType = '-';
@@ -2037,6 +2198,11 @@ public abstract class Assembler extends Application
 	private HashSet<String>		globals		= new HashSet<String> ();
 	
 	/**
+	 * The set of symbols starting with '.' that are not local labels
+	 */
+	private HashSet<String>		notLocal	= new HashSet<String> ();
+	
+	/**
 	 * The set of symbol which have been imported.
 	 */
 	private HashSet<String>		externs		= new HashSet<String> ();
@@ -2115,7 +2281,7 @@ public abstract class Assembler extends Application
 		}
 		
 		endPass ();
-		
+
 		return (errors == 0);
 	}
 
@@ -2371,7 +2537,7 @@ public abstract class Assembler extends Application
 			token = nextRealToken ();
 		}
 		else if ((token.getKind () == SYMBOL) || (token.getKind () == KEYWORD)) {
-			if (token.getText ().charAt (0) == '.') {
+			if ((token.getText ().charAt (0) == '.') && !notLocal.contains(token.getText ())) {
 				if (lastLabel != null)
 					expr = (Expr) symbols.get (lastLabel + token.getText ());
 				else

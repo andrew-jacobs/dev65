@@ -26,6 +26,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.Stack;
 
+import uk.co.demon.obelisk.xapp.Option;
 import uk.co.demon.obelisk.xasm.Assembler;
 import uk.co.demon.obelisk.xasm.Error;
 import uk.co.demon.obelisk.xasm.ErrorHandler;
@@ -3663,7 +3664,10 @@ public final class As65 extends Assembler
 		super (new Module ("65XX", false));
 		
 		setMemoryModel (new MemoryModelByte (errorHandler));
-
+	}
+	
+	protected void startUp ()
+	{
 		// Directives
 		addToken (P6501);
 		addToken (P6502);
@@ -3680,6 +3684,7 @@ public final class As65 extends Assembler
 		addToken (WORD);
 		addToken (LONG);
 		addToken (SPACE);
+		addToken (DCB);
 		addToken (CODE);
 		addToken (DATA);
 		addToken (BSS);
@@ -3699,6 +3704,8 @@ public final class As65 extends Assembler
 		addToken (IFNABS);
 		addToken (IFREL);
 		addToken (IFNREL);
+		addToken (IFDEF);
+		addToken (IFNDEF);
 		addToken (INCLUDE);
 		addToken (APPEND);
 		addToken (INSERT);
@@ -3715,6 +3722,8 @@ public final class As65 extends Assembler
 		addToken (NOLIST);
 		addToken (PAGE);
 		addToken (TITLE);
+		addToken (ERROR);
+		addToken (WARN);
 
 		// Opcodes & Registers
 		addToken (A);
@@ -3849,24 +3858,28 @@ public final class As65 extends Assembler
 		addToken (Y);
 
 		// Structured Assembly
-		addToken (IF);
-		addToken (ELSE);
-		addToken (ENDIF);
-		addToken (REPEAT);
-		addToken (UNTIL);
-		addToken (FOREVER);
-		addToken (WHILE);
-		addToken (ENDW);
-		addToken (CONT);
-		addToken (BREAK);
-		addToken (EQ);
-		addToken (NE);		
-		addToken (CC);
-		addToken (CS);
-		addToken (PL);
-		addToken (MI);
-		addToken (VC);
-		addToken (VS);
+		if (!traditionalOption.isPresent()) {
+			addToken (IF);
+			addToken (ELSE);
+			addToken (ENDIF);
+			addToken (REPEAT);
+			addToken (UNTIL);
+			addToken (FOREVER);
+			addToken (WHILE);
+			addToken (ENDW);
+			addToken (CONT);
+			addToken (BREAK);
+			addToken (EQ);
+			addToken (NE);		
+			addToken (CC);
+			addToken (CS);
+			addToken (PL);
+			addToken (MI);
+			addToken (VC);
+			addToken (VS);
+		}
+		
+		super.startUp ();
 	}
 
 	/**
@@ -3891,6 +3904,15 @@ public final class As65 extends Assembler
 			output.append ("        ");
 			output.append (Hex.toHex (addr.resolve (null, null), 8));
 			output.append (addr.isAbsolute() ? "  " : "' ");
+			output.append ("        ");
+			output.append (lineType);
+			output.append (' ');
+			break;
+			
+		case ' ':
+			output.append ("        ");
+			output.append ("        ");
+			output.append ("  ");
 			output.append ("        ");
 			output.append (lineType);
 			output.append (' ');
@@ -3942,7 +3964,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler - V1.6 (2011-11-19)";
+		title 		= "Portable 65xx Assembler - V1.7 (2012-09-07)";
 	}
 	
 	/**
@@ -4949,6 +4971,12 @@ public final class As65 extends Assembler
 		addByte (Expr.shr (Expr.and (expr, BANK), SIXTEEN));
 	}
 		
+	/**
+	 * The <CODE>Option</CODE> instance use to detect <CODE>-traditional</CODE>
+	 */
+	private Option				traditionalOption
+		= new Option ("-traditional",	"Disables structured directives");
+
 	/**
 	 * A <CODE>Hashtable</CODE> of keyword tokens to speed up classification.
 	 */

@@ -73,6 +73,9 @@ public final class Error
 	public static final String	WRN_LABEL_IS_A_RESERVED_WORD
 		= "This label is a reserved word";
 	
+	public static final String	ERR_EXPECTED_QUOTED_MESSAGE
+		= "Expected quoted message string";
+
 	private Error ()
 	{ }
 }
