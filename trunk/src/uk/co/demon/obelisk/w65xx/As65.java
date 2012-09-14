@@ -3964,7 +3964,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler - V1.7 (2012-09-07)";
+		title 		= "Portable 65xx Assembler - V1.7.1 (2012-09-14)";
 	}
 	
 	/**
@@ -4020,6 +4020,7 @@ public final class As65 extends Assembler
 		// Handle characters
 		switch (ch) {
 		case '#':	return (HASH);
+		case '^':	return (BINARYXOR);
 		case '-':	return (MINUS);
 		case '+':	return (PLUS);
 		case '*':
