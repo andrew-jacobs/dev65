@@ -476,7 +476,6 @@ public abstract class Assembler extends Application
 			if (expr.isAbsolute ()) {
 				long	value = expr.resolve (null, null);	
 				
-				token = nextRealToken ();
 				if (token == COMMA) {
 					token = nextRealToken ();
 					expr = parseExpr ();
