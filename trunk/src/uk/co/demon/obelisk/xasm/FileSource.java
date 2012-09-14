@@ -23,8 +23,11 @@
 package uk.co.demon.obelisk.xasm;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 
 /**
  * The <CODE>FileSource</CODE> class implements a <CODE>Source</CODE> that
@@ -39,11 +42,13 @@ public final class FileSource implements Source
 	 * Constructs a <CODE>FileSource</CODE> instance.
 	 * 
 	 * @param 	fileName		The name of the source file.
-	 * @param 	reader			The <CODE>FileReader</CODE> attached to it.
+	 * @param 	stream			The <CODE>FileInputStream</CODE> attached to it.
 	 */
-	public FileSource (final String fileName, FileReader reader)
+	public FileSource (final String fileName, FileInputStream stream)
 	{
-		this.reader 	= new BufferedReader (reader);
+		this.reader 	= new BufferedReader (
+							new InputStreamReader (stream,
+								Charset.forName ("ISO-8859-1")));
 		this.fileName 	= fileName;
 		this.lineNumber = 0;
 	}
