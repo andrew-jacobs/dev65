@@ -969,7 +969,7 @@ public final class As65 extends Assembler
 			case ABSL:	genAbsl	(0x2C, arg); break;
 			case IMMD:
 				if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0)
-					genImmd (0x39, arg, bitsA);
+					genImmd (0x89, arg, bitsA);
 				else
 					error (ERR_MODE_NOT_SUPPORTED);
 				break;
