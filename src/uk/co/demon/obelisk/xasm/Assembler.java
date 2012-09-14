@@ -22,12 +22,11 @@
 
 package uk.co.demon.obelisk.xasm;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -288,10 +287,10 @@ public abstract class Assembler extends Application
 			token = nextRealToken ();
 			if (token.getKind () == STRING) {
 				String		filename = token.getText();
-				FileReader	reader 	 = findFile (filename, true);
+				FileInputStream	stream = findFile (filename, true);
 				
-				if (reader != null)
-					sources.push (new FileSource (filename, reader));
+				if (stream != null)
+					sources.push (new FileSource (filename, stream));
 				else
 					error (Error.ERR_FAILED_TO_FIND_FILE + "(" + filename +")");
 			}
@@ -314,11 +313,11 @@ public abstract class Assembler extends Application
 		{
 			if (token.getKind () == STRING) {
 				String		filename = token.getText();
-				FileReader	reader 	 = findFile (filename, false);
+				FileInputStream stream = findFile (filename, false);
 				
-				if (reader != null) {
+				if (stream != null) {
 					sources.pop ();
-					sources.push (new FileSource (filename, reader));
+					sources.push (new FileSource (filename, stream));
 				}
 				else
 					error (Error.ERR_FAILED_TO_FIND_FILE + "(" + filename +")");
@@ -342,10 +341,10 @@ public abstract class Assembler extends Application
 		{
 			if (token.getKind () == STRING) {
 				String		filename = token.getText();
-				FileReader	reader 	 = findFile (filename, false);
+				FileInputStream	stream = findFile (filename, false);
 				
-				if (reader != null) {
-					BufferedReader	buffer = new BufferedReader (reader);
+				if (stream != null) {
+					BufferedInputStream	buffer = new BufferedInputStream (stream);
 					
 					try {
 						for (int ch; (ch = buffer.read ()) != -1;)
@@ -2265,10 +2264,10 @@ public abstract class Assembler extends Application
 		
 		try {
 			if (pass == Pass.FINAL) {
-				listFile = new PrintWriter (new FileWriter (getListingFile (fileName)));
+				listFile = new PrintWriter (getListingFile (fileName), "ISO-8859-1");
 			}
 			
-			sources.push (new FileSource (fileName, new FileReader (fileName)));
+			sources.push (new FileSource (fileName, new FileInputStream (fileName)));
 			process ();
 		}
 		catch (FileNotFoundException error) {
@@ -2585,14 +2584,14 @@ public abstract class Assembler extends Application
 	 * 
 	 * @param 	filename		The required filename.
 	 * @param 	search			The search indicator.
-	 * @return	A <CODE>FileReader</CODE> attached to the file or <CODE>null</CODE>.
+	 * @return	A <CODE>FileInputStream</CODE> attached to the file or <CODE>null</CODE>.
 	 */
-	private FileReader findFile (final String filename, boolean search)
+	private FileInputStream findFile (final String filename, boolean search)
 	{
-		FileReader		reader	= null;
+		FileInputStream		stream	= null;
 		
 		try {
-			reader = new FileReader (filename);
+			stream = new FileInputStream (filename);
 		}
 		catch (FileNotFoundException error) {
 			if (search) {
@@ -2600,6 +2599,6 @@ public abstract class Assembler extends Application
 			}
 			error ("Could not find the specified file");
 		}
-		return (reader);
+		return (stream);
 	}
 }
