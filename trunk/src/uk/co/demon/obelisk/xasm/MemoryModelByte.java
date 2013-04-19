@@ -59,17 +59,21 @@ public class MemoryModelByte extends MemoryModel
 	 */
 	public void addByte (final Module module, Section section, final Expr expr)
 	{
-		if (expr.isRelative ()) {
-			if (section != null) {
-				section.addByte (expr);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
+		if (expr != null) {
+			if (expr.isRelative ()) {
+				if (section != null) {
+					section.addByte (expr);
+					if (byteCount < bytes.length)
+						bytes [byteCount++] = 0;
+				}
+				else
+					error (Error.ERR_NO_SECTION);
 			}
 			else
-				error (Error.ERR_NO_SECTION);
+				addByte (module, section, expr.resolve (null, null));
 		}
 		else
-			addByte (module, section, expr.resolve (null, null));
+			error (Error.ERR_INVALID_EXPRESSION);
 	}
 	
 	/**
@@ -77,19 +81,23 @@ public class MemoryModelByte extends MemoryModel
 	 */
 	public void addWord (final Module module, Section section, final Expr expr)
 	{
-		if (expr.isRelative ()) {
-			if (section != null) {
-				section.addWord (expr);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
+		if (expr != null) {
+			if (expr.isRelative ()) {
+				if (section != null) {
+					section.addWord (expr);
+					if (byteCount < bytes.length)
+						bytes [byteCount++] = 0;
+					if (byteCount < bytes.length)
+						bytes [byteCount++] = 0;
+				}
+				else
+					error (Error.ERR_NO_SECTION);
 			}
 			else
-				error (Error.ERR_NO_SECTION);
+				addWord (module, section, expr.resolve (null, null));
 		}
 		else
-			addWord (module, section, expr.resolve (null, null));
+			error (Error.ERR_INVALID_EXPRESSION);
 	}
 	
 	/**
@@ -97,23 +105,27 @@ public class MemoryModelByte extends MemoryModel
 	 */
 	public void addLong (final Module module, Section section, final Expr expr)
 	{
-		if (expr.isRelative ()) {
-			if (section != null) {
-				section.addLong (expr);
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
-				if (byteCount < bytes.length)
-					bytes [byteCount++] = 0;
+		if (expr != null) {
+			if (expr.isRelative ()) {
+				if (section != null) {
+					section.addLong (expr);
+					if (byteCount < bytes.length)
+						bytes [byteCount++] = 0;
+					if (byteCount < bytes.length)
+						bytes [byteCount++] = 0;
+					if (byteCount < bytes.length)
+						bytes [byteCount++] = 0;
+					if (byteCount < bytes.length)
+						bytes [byteCount++] = 0;
+				}
+				else
+					error (Error.ERR_NO_SECTION);
 			}
 			else
-				error (Error.ERR_NO_SECTION);
+				addLong (module, section, expr.resolve (null, null));
 		}
 		else
-			addLong (module, section, expr.resolve (null, null));
+			error (Error.ERR_INVALID_EXPRESSION);
 	}
 	
 	/**

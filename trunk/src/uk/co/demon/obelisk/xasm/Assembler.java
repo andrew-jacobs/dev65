@@ -1170,6 +1170,24 @@ public abstract class Assembler extends Application
 	};
 	
 	/**
+	 * An <CODE>ErrorHandler</CODE> instance that records errors and
+	 * warnings in the output listing.
+	 */
+	protected final ErrorHandler	errorHandler
+		= new ErrorHandler ()
+		{
+			public void error (final String message)
+			{
+				Assembler.this.error (message);
+			}
+			
+			public void warning (final String message)
+			{
+				Assembler.this.warning (message);
+			}				
+		};
+
+	/**
 	 * The current <CODE>Token</CODE> under consideration.
 	 */
 	protected Token				token;
@@ -2470,7 +2488,7 @@ public abstract class Assembler extends Application
 	
 	/**
 	 * Parse a unary expression
-	 * <PRE>{unary} := [ '-' | '+' | '~' | '!' | 'LO' | 'HI' | 'BANK' ] {value}</PRE>
+	 * <PRE>{unary} := ([ '-' | '+' | '~' | '!' | 'LO' | 'HI' | 'BANK' ] {unary}) | {value}</PRE>
 	 * 
 	 * @return	A compiled expression.	
 	 */
@@ -2478,31 +2496,31 @@ public abstract class Assembler extends Application
 	{
 		if (token == MINUS) {
 			token = nextRealToken ();
-			return (Expr.neg (parseValue ()));
+			return (Expr.neg (parseUnary ()));
 		}
 		else if (token == PLUS) {
 			token = nextRealToken ();
-			return (parseExpr ());
+			return (parseUnary ());
 		}
 		else if (token == COMPLEMENT) {
 			token = nextRealToken ();
-			return (Expr.cpl (parseValue ()));			
+			return (Expr.cpl (parseUnary ()));			
 		}
 		else if (token == LOGICALNOT) {
 			token = nextRealToken ();
-			return (Expr.lnot (parseValue ()));			
+			return (Expr.lnot (parseUnary ()));			
 		}
 		else if (token == LO) {
 			token = nextRealToken ();
-			return (Expr.and (parseValue (), MASK));
+			return (Expr.and (parseUnary (), MASK));
 		}
 		else if (token == HI) {
 			token = nextRealToken ();
-			return (Expr.and (Expr.shr (parseValue (), EIGHT), MASK));
+			return (Expr.and (Expr.shr (parseUnary (), EIGHT), MASK));
 		}
 		else if (token == BANK) {
 			token = nextRealToken ();
-			return (Expr.shr (parseValue (), SIXTEEN));
+			return (Expr.shr (parseUnary (), SIXTEEN));
 		}
 		
 		return (parseValue ());
