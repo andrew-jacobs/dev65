@@ -80,14 +80,16 @@ public final class MacroSource extends TextSource
 			}
 			
 			// Replace numbered arguments 0-9
-			for (int index = 0; index <= 9; ++index) {
-				String arg = "\\" + Integer.toString (index);
-				String val = "";
-				
-				if (index < values.size ())
-					val = values.elementAt (index);
-				
-				text = text.replace (arg, val);
+			if (text.indexOf ('\\') != -1) {
+				for (int index = 0; index <= 9; ++index) {
+					String arg = "\\" + Integer.toString (index);
+					String val = "";
+					
+					if (index < values.size ())
+						val = values.elementAt (index);
+					
+					text = text.replace (arg, val);
+				}
 			}
 		
 			line = new Line (line.getFileName(), line.getLineNumber (), text);

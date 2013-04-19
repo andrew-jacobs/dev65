@@ -23,16 +23,15 @@
 package uk.co.demon.obelisk.w65xx;
 
 import java.util.Hashtable;
-import java.util.Vector;
 import java.util.Stack;
+import java.util.Vector;
 
 import uk.co.demon.obelisk.xapp.Option;
 import uk.co.demon.obelisk.xasm.Assembler;
 import uk.co.demon.obelisk.xasm.Error;
-import uk.co.demon.obelisk.xasm.ErrorHandler;
 import uk.co.demon.obelisk.xasm.MemoryModelByte;
-import uk.co.demon.obelisk.xasm.Pass;
 import uk.co.demon.obelisk.xasm.Opcode;
+import uk.co.demon.obelisk.xasm.Pass;
 import uk.co.demon.obelisk.xasm.Token;
 import uk.co.demon.obelisk.xasm.TokenKind;
 import uk.co.demon.obelisk.xobj.Expr;
@@ -3638,24 +3637,6 @@ public final class As65 extends Assembler
 	};
 	
 	/**
-	 * An <CODE>ErrorHandler</CODE> instance that records errors and
-	 * warnings in the output listing.
-	 */
-	protected final ErrorHandler	errorHandler
-		= new ErrorHandler ()
-		{
-			public void error (final String message)
-			{
-				this.error (message);
-			}
-			
-			public void warning (final String message)
-			{
-				this.warning (message);
-			}				
-		};
-
-	/**
 	 * Constructs an <CODE>As65</CODE> instance and initialises the object
 	 * module.
 	 */
@@ -3964,7 +3945,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler - V1.7.1 (2012-09-14)";
+		title 		= "Portable 65xx Assembler - V1.7.2 (2012-12-04)";
 	}
 	
 	/**
@@ -4352,6 +4333,9 @@ public final class As65 extends Assembler
 	
 	private static final String ERR_EXPECTED_CLOSING_PARENTHESIS
 		= "Expected closing parenthesis";
+	
+	private static final String ERR_MISSING_EXPRESSION
+		= "Missing expression";
 
 	/**
 	 * Represents an invalid addressing mode.
@@ -4590,6 +4574,10 @@ public final class As65 extends Assembler
 		if (token == LT) {
 			token = nextRealToken ();
 			arg = parseExpr ();
+			
+			if (arg == null)
+				error (ERR_MISSING_EXPRESSION);
+			
 			if (token == COMMA) {
 				token = nextRealToken ();
 				if (token == X) {
@@ -4610,6 +4598,10 @@ public final class As65 extends Assembler
 		if (token == GT) {
 			token = nextRealToken ();
 			arg = parseExpr ();
+
+			if (arg == null)
+				error (ERR_MISSING_EXPRESSION);
+			
 			if (token == COMMA) {
 				token = nextRealToken ();
 				if (token == X) {
@@ -4626,6 +4618,10 @@ public final class As65 extends Assembler
 		if (token == LBRACKET) {
 			token = nextRealToken ();
 			arg = parseExpr ();
+
+			if (arg == null)
+				error (ERR_MISSING_EXPRESSION);
+			
 			if (token == RBRACKET) {
 				token = nextRealToken ();
 				if (token == COMMA) {
@@ -4647,6 +4643,10 @@ public final class As65 extends Assembler
 		if (token == LPAREN) {
 			token = nextRealToken ();
 			arg = parseExpr ();
+
+			if (arg == null)
+				error (ERR_MISSING_EXPRESSION);
+			
 			if (token == COMMA) {
 				token = nextRealToken ();
 				if (token == X) {
@@ -4700,6 +4700,10 @@ public final class As65 extends Assembler
 		if ((token == BINARYOR) || (token == LOGICALNOT)) {
 			token = nextRealToken ();
 			arg = parseExpr ();
+
+			if (arg == null)
+				error (ERR_MISSING_EXPRESSION);
+			
 			if (token == COMMA) {
 				token = nextRealToken ();
 				if (token == X) {
@@ -4718,6 +4722,10 @@ public final class As65 extends Assembler
 
 		// Handle .. ..,X ..,Y and ..,S
 		arg = parseExpr ();
+
+		if (arg == null)
+			error (ERR_MISSING_EXPRESSION);
+		
 		if (token == COMMA) {
 			token = nextRealToken ();
 			if (token == X) {
@@ -4777,8 +4785,14 @@ public final class As65 extends Assembler
 			
 			return (new Value (null, value));
 		}
-		else
-			return (parseExpr ());
+		else {
+			Expr	result = parseExpr ();
+			
+			if (result == null)
+				error (ERR_MISSING_EXPRESSION);
+
+			return (result);
+		}
 	}
 	
 	/**
