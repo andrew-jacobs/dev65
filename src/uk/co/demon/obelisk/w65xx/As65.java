@@ -3668,7 +3668,6 @@ public final class As65 extends Assembler
 		addToken (DCB);
 		addToken (CODE);
 		addToken (DATA);
-		addToken (BSS);
 		addToken (PAGE0);
 		addToken (ORG);
 		addToken (super.ELSE);
