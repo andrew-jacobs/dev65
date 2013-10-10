@@ -2037,6 +2037,8 @@ public final class As65 extends Assembler
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
 				switch (parseMode ()) {
+				case DPAG:
+				case ABSL:
 				case IMMD:	genImmd (0xF4, arg, 16);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2061,7 +2063,7 @@ public final class As65 extends Assembler
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
 				switch (parseMode ()) {
-				case IMMD:	genImmd (0xD4, arg, 8);	break;
+				case INDI:	genImmd (0xD4, arg, 8);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
 				}
@@ -2085,7 +2087,9 @@ public final class As65 extends Assembler
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
 				switch (parseMode ()) {
-				case IMMD:	genImmd (0x62, arg, 16);	break;
+				case DPAG:
+				case ABSL:
+						genRel (0x62, arg, true);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
 				}
