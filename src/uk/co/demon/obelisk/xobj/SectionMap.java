@@ -22,7 +22,9 @@
 
 package uk.co.demon.obelisk.xobj;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * A <CODE>SectionMap</CODE> holds the details of where <CODE>Section</CODE>
@@ -51,6 +53,22 @@ public final class SectionMap
 //		System.out.println ("Code:" + section);
 		
 		map.put (section, new java.lang.Long (addr));
+	}
+	
+	/**
+	 * Returns a vector of all the code sections.
+	 * 
+	 * @return	A vector of all the code sections.
+	 */
+	public Vector<Section> getSections ()
+	{
+		Vector<Section>	sections = new Vector<Section> ();
+		Enumeration<Section> cursor = map.keys ();
+		
+		while (cursor.hasMoreElements ())
+			sections.add (cursor.nextElement());
+		
+		return (sections);		
 	}
 	
 	/**

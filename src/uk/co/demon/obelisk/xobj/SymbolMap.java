@@ -59,6 +59,11 @@ public final class SymbolMap
 		return (map.get (name).longValue ());
 	}
 	
+	/**
+	 * Returns a vector containing all the symbol names in the map
+	 * 
+	 * @return	A vector of symbol names.
+	 */
 	public Vector<String> getSymbols ()
 	{
 		Vector<String>	symbols = new Vector<String> ();

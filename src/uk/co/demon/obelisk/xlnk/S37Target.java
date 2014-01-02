@@ -23,12 +23,12 @@
 package uk.co.demon.obelisk.xlnk;
 
 /**
- * A linker target format that creates Motorola S19 files.
+ * A linker target format that creates Motorola S37 files.
  * 
  * @author	Andrew Jacobs
  * @version	$Id$
  */
-class S19Target extends SRecordTarget
+class S37Target extends SRecordTarget
 {
 	/**
 	 * Constructs a <CODE>HexTarget</CODE> that will generate data for
@@ -37,9 +37,9 @@ class S19Target extends SRecordTarget
 	 * @param start			Start of data area.
 	 * @param end			End of data area.
 	 */
-	public S19Target (int start, int end)
+	public S37Target (int start, int end)
 	{
-		super (start, end, 16, 8);
+		super (start, end, 32, 8);
 	}
 		
 	/**
@@ -49,8 +49,8 @@ class S19Target extends SRecordTarget
 	 * @param start			Start of data area.
 	 * @param end			End of data area.
 	 */
-	public S19Target (long start, long end, int byteSize)
+	public S37Target (long start, long end, int byteSize)
 	{
-		super (start, end, 16, byteSize);
+		super (start, end, 32, byteSize);
 	}
 }
