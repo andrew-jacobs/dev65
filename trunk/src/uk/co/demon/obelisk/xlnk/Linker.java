@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2011 Andrew John Jacobs.
+ * Copyright (C),2005-2014 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -74,15 +74,19 @@ public abstract class Linker extends Application
 		
 		createAreas ();
 		
-		if (!hex.isPresent() && !bin.isPresent() && !s19.isPresent()) {
+		int 	count = 0;
+		if (hex.isPresent ()) ++count;
+		if (bin.isPresent ()) ++count;
+		if (s19.isPresent ()) ++count;
+		if (s28.isPresent ()) ++count;
+		if (s37.isPresent ()) ++count;
+		
+		if (count == 0) {
 			error ("No output format selected (-bin, -hex or -s19).");
 			setFinished (true);
 			return;
 		}
-
-		if ((hex.isPresent () && bin.isPresent ()) ||
-			(bin.isPresent () && s19.isPresent ()) ||
-			(s19.isPresent () && hex.isPresent ())) {
+		else if (count > 1) {
 			error ("Only one output format can be selected at a time.");
 			setFinished (true);
 		}
@@ -105,7 +109,11 @@ public abstract class Linker extends Application
 			else if (bin.isPresent ())
 				target = new BinTarget (lo, hi, byteSize);
 			else if (s19.isPresent ())
-				target = new S19Target (lo, hi, getAddrSize (), byteSize);
+				target = new S19Target (lo, hi, byteSize);
+			else if (s28.isPresent ())
+				target = new S28Target (lo, hi, byteSize);
+			else if (s37.isPresent ())
+				target = new S37Target (lo, hi, byteSize);
 		}
 		
 		if (getArguments ().length == 0) {
@@ -401,6 +409,18 @@ public abstract class Linker extends Application
 		= new Option ("-s19", "Generate Motorola S19 output");
 
 	/**
+	 * Option for specifying Motorola S28 output format.
+	 */
+	private Option			s28
+		= new Option ("-s28", "Generate Motorola S28 output");
+
+	/**
+	 * Option for specifying Motorola S37 output format.
+	 */
+	private Option			s37
+		= new Option ("-s37", "Generate Motorola S37 output");
+
+	/**
 	 * Option for specifying output file.
 	 */
 	private Option			output
@@ -688,7 +708,50 @@ public abstract class Linker extends Application
 				String symbol = (String) symbols [index];
 				writer.println (symbol + "  " + Hex.toHex (symbolMap.addressOf(symbol), 8));
 			}
+			
+			writer.println ("\n\nSections:\n");
+			
+			Object [] sections = sectionMap.getSections ().toArray ();
 
+			boolean		swapped;
+			do {
+				swapped = false;
+				
+				for (int index = 0; index < sections.length - 1; ++index) {
+					if (sectionMap.baseAddressOf ((Section) sections [index]) >
+						sectionMap.baseAddressOf ((Section) sections [index+1])) {
+							Object temp = sections [index];
+							sections [index] = sections [index+1];
+							sections [index+1] = temp;
+							
+							swapped = true;
+						}
+				}
+			} while (swapped);
+			
+			String	lastName	= "";
+			
+			for (int index = 0; index < sections.length; ++index) {
+				Section section = (Section) sections [index];
+				
+				if (!section.getName ().equals (lastName)) {
+					lastName = section.getName ();
+					
+					writer.print ((lastName + "                ").substring (0, 16) + ": ");
+				}
+				else
+					writer.print ("                  ");
+				
+				long	addr = sectionMap.baseAddressOf (section);
+				int		size = section.getSize ();
+				
+				writer.print (Hex.toHex (addr, 8));
+				writer.print (" - ");
+				writer.print (Hex.toHex (addr + size - 1, 8));
+				
+				writer.println ();
+			}
+			
 			writer.close ();
 		}
 		catch (Exception error) {
