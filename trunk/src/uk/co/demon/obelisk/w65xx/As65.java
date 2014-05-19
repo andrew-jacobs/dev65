@@ -638,6 +638,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -699,7 +700,7 @@ public final class As65 extends Assembler
 					error (ERR_MODE_NOT_SUPPORTED);
 				break;
 
-				default:
+			default:
 				error (ERR_ILLEGAL_ADDR);
 			}
 			return (true);
@@ -714,6 +715,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -790,6 +792,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -895,6 +898,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -917,6 +921,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -939,6 +944,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -961,6 +967,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1002,6 +1009,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1024,6 +1032,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1046,6 +1055,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1068,6 +1078,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
@@ -1094,6 +1105,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1114,6 +1126,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -1140,6 +1153,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1162,6 +1176,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1184,6 +1199,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1203,6 +1219,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1222,6 +1239,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1241,6 +1259,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1260,6 +1279,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1336,6 +1356,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -1361,6 +1382,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1382,6 +1404,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1403,6 +1426,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1432,6 +1456,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1451,6 +1476,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1470,6 +1496,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1546,6 +1573,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1575,6 +1603,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1594,6 +1623,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1613,6 +1643,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -1637,6 +1668,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1672,6 +1704,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -1697,6 +1730,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1725,6 +1759,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1801,6 +1836,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1827,6 +1863,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1850,6 +1887,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1874,6 +1912,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -1906,6 +1945,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -1938,6 +1978,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -1957,6 +1998,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2033,6 +2075,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -2059,6 +2102,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -2083,6 +2127,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -2109,6 +2154,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2128,6 +2174,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -2152,6 +2199,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -2176,6 +2224,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -2200,6 +2249,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2219,6 +2269,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
@@ -2243,6 +2294,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
@@ -2267,6 +2319,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2286,6 +2339,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -2310,6 +2364,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -2334,6 +2389,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2353,6 +2409,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
@@ -2377,6 +2434,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
@@ -2401,6 +2459,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -2465,6 +2524,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2489,6 +2549,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2513,6 +2574,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2532,6 +2594,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -2556,6 +2619,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2575,6 +2639,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2651,6 +2716,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2670,6 +2736,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2689,6 +2756,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2708,6 +2776,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -2772,6 +2841,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2847,6 +2917,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
@@ -2871,6 +2942,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2892,6 +2964,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2913,6 +2986,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
@@ -2940,6 +3014,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2959,6 +3034,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -2978,6 +3054,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -3002,6 +3079,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -3026,6 +3104,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -3050,6 +3129,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
@@ -3075,6 +3155,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
@@ -3100,6 +3181,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -3124,6 +3206,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -3143,6 +3226,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -3162,6 +3246,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -3181,6 +3266,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -3205,6 +3291,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			switch (parseMode ()) {
@@ -3224,6 +3311,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -3248,6 +3336,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
@@ -3272,6 +3361,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -3296,6 +3386,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -3320,6 +3411,7 @@ public final class As65 extends Assembler
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
@@ -3342,6 +3434,7 @@ public final class As65 extends Assembler
 	 */
 	protected final Opcode	IF		= new Opcode (KEYWORD, "IF")
 	{
+		@Override
 		public boolean compile ()
 		{
 			int index = ifIndex++;
@@ -3383,6 +3476,7 @@ public final class As65 extends Assembler
 	 */
 	protected final Opcode	ELSE	= new Opcode (KEYWORD, "ELSE")
 	{
+		@Override
 		public boolean compile ()
 		{
 			if (ifs.size () > 0) {
@@ -3408,6 +3502,7 @@ public final class As65 extends Assembler
 	 */
 	protected final Opcode	ENDIF	= new Opcode (KEYWORD, "ENDIF")
 	{
+		@Override
 		public boolean compile ()
 		{
 			if (ifs.size () > 0) {
@@ -3428,6 +3523,7 @@ public final class As65 extends Assembler
 	 */
 	protected final Opcode	REPEAT	= new Opcode (KEYWORD, "REPEAT")
 	{
+		@Override
 		public boolean compile ()
 		{
 			int index = loopIndex++;
@@ -3451,6 +3547,7 @@ public final class As65 extends Assembler
 	 */
 	protected final Opcode	UNTIL	= new Opcode (KEYWORD, "UNTIL")
 	{
+		@Override
 		public boolean compile ()
 		{
 			if (loops.size () > 0) {
@@ -3487,6 +3584,7 @@ public final class As65 extends Assembler
 	 */
 	protected final Opcode	FOREVER	= new Opcode (KEYWORD, "FOREVER")
 	{
+		@Override
 		public boolean compile ()
 		{
 			if (loops.size () > 0) {
@@ -3512,6 +3610,7 @@ public final class As65 extends Assembler
 	 */
 	protected final Opcode	WHILE	= new Opcode (KEYWORD, "WHILE")
 	{
+		@Override
 		public boolean compile ()
 		{
 			int index = loopIndex++;
@@ -3551,6 +3650,7 @@ public final class As65 extends Assembler
 	 */
 	protected final Opcode	ENDW	= new Opcode (KEYWORD, "ENDW")
 	{
+		@Override
 		public boolean compile ()
 		{
 			if (loops.size () > 0) {
@@ -3576,6 +3676,7 @@ public final class As65 extends Assembler
 	 */
 	protected final Opcode	CONT	= new Opcode (KEYWORD, "CONTINUE")
 	{
+		@Override
 		public boolean compile ()
 		{
 			if (loops.size () > 0) {
@@ -3611,6 +3712,7 @@ public final class As65 extends Assembler
 	 */
 	protected final Opcode	BREAK	= new Opcode (KEYWORD, "BREAK")
 	{
+		@Override
 		public boolean compile ()
 		{
 			if (loops.size () > 0) {
@@ -3934,8 +4036,6 @@ public final class As65 extends Assembler
 	{
 		super.startPass ();
 		
-		processor 	= M6502;
-		
 		P6502.compile ();
 		
 		dataBank	= 0;
@@ -3948,7 +4048,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler - V14.01.02";
+		title 		= "Portable 65xx Assembler [14.05.19]";
 	}
 	
 	/**
@@ -4962,8 +5062,11 @@ public final class As65 extends Assembler
 	{
 		Expr	offset 	= Expr.sub (target, Expr.add (getOrigin (), TWO));
 		
-		if (offset.isAbsolute ())
-			return (isByte ((int) offset.resolve (null, null)));
+		if (offset.isAbsolute ()) {
+			int	distance = (int) offset.resolve (null, null);
+			
+			return ((distance >= -128) && (distance <= 127));
+		}
  
 		return (false);	
 	}
