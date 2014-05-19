@@ -248,7 +248,7 @@ public abstract class Linker extends Application
 		
 		// Stage VII - Copy code to target fixing cross references
 		for (int index = 0; index < modules.size (); ++index)
-			fixUp ((Module) modules.elementAt (index));	
+			fixUp (modules.elementAt (index));	
 		
 		// Figure out output filenames
 		File		objectFile;
@@ -565,7 +565,7 @@ public abstract class Linker extends Application
 		if (expr instanceof Extern) {
 			String		name = ((Extern) expr).getName ();
 
-			if (!refs.containsKey (name))
+			if (!refs.containsKey (name) && !defs.containsKey (name))
 				refs.put (name, module);
 		}
 		else if (expr instanceof UnaryExpr)
@@ -699,14 +699,15 @@ public abstract class Linker extends Application
 		try {
 			PrintWriter		writer = new PrintWriter (file);
 			
-			writer.println ("Symbol Map\n");
+			writer.println ("Global Symbol Map\n");
 			
 			Object [] symbols = symbolMap.getSymbols ().toArray();
 			Arrays.sort (symbols);
 			
 			for (int index = 0; index < symbols.length; ++index) {
 				String symbol = (String) symbols [index];
-				writer.println (symbol + "  " + Hex.toHex (symbolMap.addressOf(symbol), 8));
+				writer.println (pad(symbol, 16) + "  " + Hex.toHex (symbolMap.addressOf(symbol), 8)
+						+ " in " + defs.get (symbol).getName ());
 			}
 			
 			writer.println ("\n\nSections:\n");
@@ -737,10 +738,10 @@ public abstract class Linker extends Application
 				if (!section.getName ().equals (lastName)) {
 					lastName = section.getName ();
 					
-					writer.print ((lastName + "                ").substring (0, 16) + ": ");
+					writer.print (pad (lastName, 16) + " : ");
 				}
 				else
-					writer.print ("                  ");
+					writer.print (pad ("", 19));
 				
 				long	addr = sectionMap.baseAddressOf (section);
 				int		size = section.getSize ();
@@ -748,6 +749,8 @@ public abstract class Linker extends Application
 				writer.print (Hex.toHex (addr, 8));
 				writer.print (" - ");
 				writer.print (Hex.toHex (addr + size - 1, 8));
+				writer.print (" in ");
+				writer.print (section.getModule().getName ());
 				
 				writer.println ();
 			}
@@ -757,5 +760,12 @@ public abstract class Linker extends Application
 		catch (Exception error) {
 			System.err.println ("Error: A serious error occurred while writing the map file");
 		}
+	}
+	
+	private final String pad (String str, int len)
+	{
+		final String spaces = "                                                                                              ";
+		
+		return  ((str + spaces).substring (0, len));
 	}
 }

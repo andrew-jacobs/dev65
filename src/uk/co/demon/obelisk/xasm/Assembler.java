@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -1487,6 +1488,8 @@ public abstract class Assembler extends Application
 	{
 		if (!assemble (Pass.FIRST, fileName)) return (false);
 		if (!assemble (Pass.INTERMEDIATE, fileName)) return (false);
+		if (!assemble (Pass.INTERMEDIATE, fileName)) return (false);
+		if (!assemble (Pass.INTERMEDIATE, fileName)) return (false);
 		if (!assemble (Pass.FINAL, fileName)) return (false);
 	
 		// Add globally define symbols to the object module. 
@@ -1528,20 +1531,59 @@ public abstract class Assembler extends Application
 		paginate ("Symbol Table");
 		paginate ("");
 		
-		Object [] keys = symbols.keySet().toArray();
+		// Sort by name
+		String [] keys = symbols.keySet().toArray (new String [0]);
 		Arrays.sort (keys);
 		
+		// Sort by value
+		String [] vals = keys.clone ();
+		Arrays.sort (vals, new Comparator<String> ()
+		{
+			@Override
+			public int compare (String arg0, String arg1)
+			{
+				long	lhs = symbols.get (arg0).resolve (null, null);
+				long	rhs = symbols.get (arg1).resolve (null, null);
+
+				if (lhs == rhs)
+					return (arg0.compareTo (arg1));
+				else
+					return ((lhs < rhs) ? -1 : +1);
+			}
+		});
+		
 		for (int index = 0; index < keys.length; ++index) {
-			String	name  = (String) keys [index];
-			Expr	expr  = (Expr) symbols.get (name);
-			long	value = expr.resolve (null, null);
+			String	lhs;
+			String 	rhs;
+			String	name;
+			Expr	expr;
+			long	value;
+			
+			// Format name side
+			name  = keys [index];
+			expr  = symbols.get (name);
+			value = expr.resolve (null, null);
 			
 			name = (name + "                                ").substring (0, 32);
 			
 			if (expr.isAbsolute ())
-				paginate (name + " " + Hex.toHex (value, 8));
+				lhs = name + " " + Hex.toHex (value, 8) + " ";
 			else
-				paginate (name + " " + Hex.toHex (value, 8) + "'");
+				lhs = name + " " + Hex.toHex (value, 8) + "'";
+			
+			// Format value side
+			name  = vals [index];
+			expr  = symbols.get (name);
+			value = expr.resolve (null, null);
+
+			name = (name + "                                ").substring (0, 32);
+			
+			if (expr.isAbsolute ())
+				rhs = name + " " + Hex.toHex (value, 8) + " ";
+			else
+				rhs = name + " " + Hex.toHex (value, 8) + "'";
+
+			paginate (lhs + " | " + rhs);
 		}
 		
 		if (listFile != null) {

@@ -68,6 +68,11 @@ public class Section
 		clear ();
 	}
 	
+	public Module getModule ()
+	{
+		return (module);
+	}
+	
 	/**
 	 * Provides access to the section name.
 	 * 

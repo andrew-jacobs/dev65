@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2013 Andrew John Jacobs.
+ * Copyright (C),2013-2014 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -26,10 +26,13 @@ import java.util.Hashtable;
 
 import uk.co.demon.obelisk.xasm.Assembler;
 import uk.co.demon.obelisk.xasm.MemoryModelByte;
+import uk.co.demon.obelisk.xasm.Opcode;
 import uk.co.demon.obelisk.xasm.Pass;
 import uk.co.demon.obelisk.xasm.Token;
+import uk.co.demon.obelisk.xobj.Expr;
 import uk.co.demon.obelisk.xobj.Hex;
 import uk.co.demon.obelisk.xobj.Module;
+import uk.co.demon.obelisk.xobj.Value;
 
 /**
  * The <CODE>As6800</CODE> provides the base <CODE>Assembler</CODE> with an
@@ -73,7 +76,1362 @@ public final class As6800 extends Assembler
 	 */
 	protected final Token 	X
 		= new Token (KEYWORD, "X");
+	
+	protected final Opcode ABA = new Opcode (KEYWORD, "ABA")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x1b);
+			else
+				error (ERR_ILLEGAL_ADDR);
 
+			return (true);
+		}
+	};
+	
+	protected final Opcode ADC = new Opcode (KEYWORD, "ADC")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				switch (parseMode ()) {
+				case IMMD:	genDirect ((acc == A) ? 0x89 : 0xc9, arg); break;
+				case DRCT:	genDirect ((acc == A) ? 0x99 : 0xd9, arg); break;
+				case EXTD:	genExtended ((acc == A) ? 0xb9 : 0xf9, arg); break;
+				case INDX:	genDirect ((acc == A) ? 0xa9 : 0xe9, arg); break;
+				default:
+					error (ERR_ILLEGAL_ADDR);
+				}
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode ADD = new Opcode (KEYWORD, "ADD")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				switch (parseMode ()) {
+				case IMMD:	genDirect ((acc == A) ? 0x8b : 0xcb, arg); break;
+				case DRCT:	genDirect ((acc == A) ? 0x9b : 0xdb, arg); break;
+				case EXTD:	genExtended ((acc == A) ? 0xbb : 0xfb, arg); break;
+				case INDX:	genDirect ((acc == A) ? 0xab : 0xeb, arg); break;
+				default:
+					error (ERR_ILLEGAL_ADDR);
+				}
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode AND = new Opcode (KEYWORD, "AND")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				switch (parseMode ()) {
+				case IMMD:	genDirect ((acc == A) ? 0x84 : 0xc4, arg); break;
+				case DRCT:	genDirect ((acc == A) ? 0x94 : 0xd4, arg); break;
+				case EXTD:	genExtended ((acc == A) ? 0xb4 : 0xf4, arg); break;
+				case INDX:	genDirect ((acc == A) ? 0xa4 : 0xe4, arg); break;
+				default:
+					error (ERR_ILLEGAL_ADDR);
+				}
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode ASL = new Opcode (KEYWORD, "ASL")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x48 : 0x58);
+				return (true);				
+			}
+			token = acc;
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:	genExtended (0x78, arg); break;
+			case INDX:	genDirect (0x68, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode ASR = new Opcode (KEYWORD, "ASR")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x47 : 0x57);
+				return (true);				
+			}
+			token = acc;
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:	genExtended (0x77, arg); break;
+			case INDX:	genDirect (0x67, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BCC = new Opcode (KEYWORD, "BCC")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x24, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BCS = new Opcode (KEYWORD, "BCS")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x25, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BEQ = new Opcode (KEYWORD, "BEQ")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x27, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BGE = new Opcode (KEYWORD, "BGE")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x2c, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BGT = new Opcode (KEYWORD, "BGT")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x2e, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BHI = new Opcode (KEYWORD, "BHI")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x22, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BIT = new Opcode (KEYWORD, "BIT")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				switch (parseMode ()) {
+				case IMMD:	genDirect ((acc == A) ? 0x85 : 0xc5, arg); break;
+				case DRCT:	genDirect ((acc == A) ? 0x95 : 0xd5, arg); break;
+				case EXTD:	genExtended ((acc == A) ? 0xb5 : 0xf5, arg); break;
+				case INDX:	genDirect ((acc == A) ? 0xa5 : 0xe5, arg); break;
+				default:
+					error (ERR_ILLEGAL_ADDR);
+				}
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BLE = new Opcode (KEYWORD, "BLE")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x2f, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BLS = new Opcode (KEYWORD, "BLS")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x23, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BLT = new Opcode (KEYWORD, "BLT")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x2d, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BMI = new Opcode (KEYWORD, "BMI")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x2b, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BNE = new Opcode (KEYWORD, "BNE")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x26, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BPL = new Opcode (KEYWORD, "BPL")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x2a, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BRA = new Opcode (KEYWORD, "BRA")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x20, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BSR = new Opcode (KEYWORD, "BSR")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x8d, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BVC = new Opcode (KEYWORD, "BVC")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x28, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode BVS = new Opcode (KEYWORD, "BVS")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genRelative (0x29, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode CBA = new Opcode (KEYWORD, "CBA")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x11);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode CLC = new Opcode (KEYWORD, "CLC")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x0c);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode CLI = new Opcode (KEYWORD, "CLI")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x0e);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode CLR = new Opcode (KEYWORD, "CLR")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x4f : 0x5f);
+				return (true);				
+			}
+			token = acc;
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:	genExtended (0x7f, arg); break;
+			case INDX:	genDirect (0x6f, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode CLV = new Opcode (KEYWORD, "CLV")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x0a);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode CMP = new Opcode (KEYWORD, "CMP")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				switch (parseMode ()) {
+				case IMMD:	genDirect ((acc == A) ? 0x81 : 0xc1, arg); break;
+				case DRCT:	genDirect ((acc == A) ? 0x91 : 0xd1, arg); break;
+				case EXTD:	genExtended ((acc == A) ? 0xb1 : 0xf1, arg); break;
+				case INDX:	genDirect ((acc == A) ? 0xa1 : 0xe1, arg); break;
+				default:
+					error (ERR_ILLEGAL_ADDR);
+				}
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode COM = new Opcode (KEYWORD, "COM")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x43 : 0x53);
+				return (true);				
+			}
+			token = acc;
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:	genExtended (0x73, arg); break;
+			case INDX:	genDirect (0x63, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode CPX = new Opcode (KEYWORD, "CPX")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case IMMD:	genExtended (0x8c, arg); break;
+			case DRCT:	genDirect (0x9c, arg); break;
+			case EXTD:  genExtended (0xbc, arg); break;
+			case INDX:	genDirect (0xac, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode DAA = new Opcode (KEYWORD, "DAA")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x19);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode DEC = new Opcode (KEYWORD, "DEC")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x4a : 0x5a);
+				return (true);				
+			}
+			token = acc;
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:	genExtended (0x7a, arg); break;
+			case INDX:	genDirect (0x6a, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode DES = new Opcode (KEYWORD, "DES")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x34);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode DEX = new Opcode (KEYWORD, "DEX")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x09);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode EOR = new Opcode (KEYWORD, "EOR")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				switch (parseMode ()) {
+				case IMMD:	genDirect ((acc == A) ? 0x88 : 0xc8, arg); break;
+				case DRCT:	genDirect ((acc == A) ? 0x98 : 0xd8, arg); break;
+				case EXTD:	genExtended ((acc == A) ? 0xb8 : 0xf8, arg); break;
+				case INDX:	genDirect ((acc == A) ? 0xa8 : 0xe8, arg); break;
+				default:
+					error (ERR_ILLEGAL_ADDR);
+				}
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode INC = new Opcode (KEYWORD, "INC")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x4c : 0x5c);
+				return (true);				
+			}
+			token = acc;
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:	genExtended (0x7c, arg); break;
+			case INDX:	genDirect (0x6c, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode INS = new Opcode (KEYWORD, "INS")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x31);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode INX = new Opcode (KEYWORD, "INX")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x08);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode JMP = new Opcode (KEYWORD, "JMP")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genExtended (0x7e, arg); break;
+			case INDX:	genDirect (0x6e, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode JSR = new Opcode (KEYWORD, "JSR")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:  genExtended (0xbd, arg); break;
+			case INDX:	genDirect (0xad, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode LDA = new Opcode (KEYWORD, "LDA")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				switch (parseMode ()) {
+				case IMMD:	genDirect ((acc == A) ? 0x86 : 0xc6, arg); break;
+				case DRCT:	genDirect ((acc == A) ? 0x96 : 0xd6, arg); break;
+				case EXTD:	genExtended ((acc == A) ? 0xb6 : 0xf6, arg); break;
+				case INDX:	genDirect ((acc == A) ? 0xa6 : 0xe6, arg); break;
+				default:
+					error (ERR_ILLEGAL_ADDR);
+				}
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode LDS = new Opcode (KEYWORD, "LDS")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case IMMD:	genExtended (0x8e, arg); break;
+			case DRCT:	genDirect (0x9e, arg); break;
+			case EXTD:  genExtended (0xbe, arg); break;
+			case INDX:	genDirect (0xae, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode LDX = new Opcode (KEYWORD, "LDX")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			switch (parseMode ()) {
+			case IMMD:	genExtended (0xce, arg); break;
+			case DRCT:	genDirect (0xde, arg); break;
+			case EXTD:  genExtended (0xfe, arg); break;
+			case INDX:	genDirect (0xee, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode LSR = new Opcode (KEYWORD, "LSR")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x44 : 0x54);
+				return (true);				
+			}
+			token = acc;
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:	genExtended (0x74, arg); break;
+			case INDX:	genDirect (0x64, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode NEG = new Opcode (KEYWORD, "NEG")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x40 : 0x50);
+				return (true);				
+			}
+			token = acc;
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:	genExtended (0x70, arg); break;
+			case INDX:	genDirect (0x60, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode NOP = new Opcode (KEYWORD, "NOP")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x01);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode ORA = new Opcode (KEYWORD, "ORA")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				switch (parseMode ()) {
+				case IMMD:	genDirect ((acc == A) ? 0x8a : 0xca, arg); break;
+				case DRCT:	genDirect ((acc == A) ? 0x9a : 0xda, arg); break;
+				case EXTD:	genExtended ((acc == A) ? 0xba : 0xfa, arg); break;
+				case INDX:	genDirect ((acc == A) ? 0xaa : 0xea, arg); break;
+				default:
+					error (ERR_ILLEGAL_ADDR);
+				}
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode PSH = new Opcode (KEYWORD, "PSH")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x36 : 0x37);
+			}
+			else {
+				token = acc;
+				error ("Expected A or B");
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode PUL = new Opcode (KEYWORD, "PUL")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x32 : 0x33);
+			}
+			else {
+				token = acc;
+				error ("Expected A or B");
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode ROL = new Opcode (KEYWORD, "ROL")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x49 : 0x59);
+				return (true);				
+			}
+			token = acc;
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:	genExtended (0x79, arg); break;
+			case INDX:	genDirect (0x69, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode ROR = new Opcode (KEYWORD, "ROR")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x46 : 0x56);
+				return (true);				
+			}
+			token = acc;
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:	genExtended (0x76, arg); break;
+			case INDX:	genDirect (0x66, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode RTI = new Opcode (KEYWORD, "RTI")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x3b);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode RTS = new Opcode (KEYWORD, "RTS")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x39);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode SBA = new Opcode (KEYWORD, "SBA")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x10);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode SBC = new Opcode (KEYWORD, "SBC")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				switch (parseMode ()) {
+				case IMMD:	genDirect ((acc == A) ? 0x82 : 0xc2, arg); break;
+				case DRCT:	genDirect ((acc == A) ? 0x92 : 0xd2, arg); break;
+				case EXTD:	genExtended ((acc == A) ? 0xb2 : 0xf2, arg); break;
+				case INDX:	genDirect ((acc == A) ? 0xa2 : 0xe2, arg); break;
+				default:
+					error (ERR_ILLEGAL_ADDR);
+				}
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode SEC = new Opcode (KEYWORD, "SEC")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x0d);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode SEI = new Opcode (KEYWORD, "SEI")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x0f);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode SEV = new Opcode (KEYWORD, "SEV")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x0b);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode STA = new Opcode (KEYWORD, "STA")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				switch (parseMode ()) {
+				case DRCT:	genDirect ((acc == A) ? 0x97 : 0xd7, arg); break;
+				case EXTD:	genExtended ((acc == A) ? 0xb7 : 0xf7, arg); break;
+				case INDX:	genDirect ((acc == A) ? 0xa7 : 0xe7, arg); break;
+				default:
+					error (ERR_ILLEGAL_ADDR);
+				}
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode STS = new Opcode (KEYWORD, "STS")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+
+			switch (parseMode ()) {
+			case DRCT:	genDirect (0x9f, arg); break;
+			case EXTD:	genExtended (0xbf, arg); break;
+			case INDX:	genDirect (0xaf, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode STX = new Opcode (KEYWORD, "STX")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+
+			switch (parseMode ()) {
+			case DRCT:	genDirect (0xd7, arg); break;
+			case EXTD:	genExtended (0xff, arg); break;
+			case INDX:	genDirect (0xef, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode SUB = new Opcode (KEYWORD, "SUB")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				switch (parseMode ()) {
+				case IMMD:	genDirect ((acc == A) ? 0x80 : 0xc0, arg); break;
+				case DRCT:	genDirect ((acc == A) ? 0x90 : 0xd0, arg); break;
+				case EXTD:	genExtended ((acc == A) ? 0xb0 : 0xf0, arg); break;
+				case INDX:	genDirect ((acc == A) ? 0xa0 : 0xe0, arg); break;
+				default:
+					error (ERR_ILLEGAL_ADDR);
+				}
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode SWI = new Opcode (KEYWORD, "SWI")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x3f);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode TAB = new Opcode (KEYWORD, "TAB")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x16);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode TAP = new Opcode (KEYWORD, "TAP")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x06);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode TBA = new Opcode (KEYWORD, "TBA")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x17);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode TPA = new Opcode (KEYWORD, "TPA")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x07);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode TST = new Opcode (KEYWORD, "TST")
+	{
+		@Override
+		public boolean compile ()
+		{
+			Token acc = nextRealToken ();
+			if ((acc == A) || (acc == B)) {
+				token = nextRealToken ();
+				
+				genInherent ((acc == A) ? 0x4d : 0x5d);
+				return (true);				
+			}
+			token = acc;
+			
+			switch (parseMode ()) {
+			case DRCT:
+			case EXTD:	genExtended (0x7d, arg); break;
+			case INDX:	genDirect (0x6d, arg); break;
+			default:
+				error (ERR_ILLEGAL_ADDR);
+			}
+			return (true);
+		}
+	};
+	
+	protected final Opcode TSX = new Opcode (KEYWORD, "TSX")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x30);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode TXS = new Opcode (KEYWORD, "TXS")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x35);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
+	protected final Opcode WAI = new Opcode (KEYWORD, "WAI")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == EOL)
+				genInherent (0x3e);
+			else
+				error (ERR_ILLEGAL_ADDR);
+
+			return (true);
+		}
+	};
+	
 	/**
 	 * Constructs an <CODE>As8080</CODE> instance and initialises the object
 	 * module.
@@ -128,11 +1486,83 @@ public final class As6800 extends Assembler
 		addToken (WORD);
 		
 		// Opcodes
+		addToken (ABA);
+		addToken (ADC);
+		addToken (ADD);
+		addToken (AND);
+		addToken (ASL);
+		addToken (ASR);
+		addToken (BCC);
+		addToken (BCS);
+		addToken (BEQ);
+		addToken (BGE);
+		addToken (BGT);
+		addToken (BHI);
+		addToken (BIT);
+		addToken (BLE);
+		addToken (BLS);
+		addToken (BLT);
+		addToken (BMI);
+		addToken (BNE);
+		addToken (BPL);
+		addToken (BRA);
+		addToken (BSR);
+		addToken (BVC);
+		addToken (BVS);
+		addToken (CBA);
+		addToken (CLC);
+		addToken (CLI);
+		addToken (CLR);
+		addToken (CLV);
+		addToken (CMP);
+		addToken (COM);
+		addToken (CPX);
+		addToken (DAA);
+		addToken (DEC);
+		addToken (DES);
+		addToken (DEX);
+		addToken (EOR);
+		addToken (INC);
+		addToken (INS);
+		addToken (INX);
+		addToken (JMP);
+		addToken (JSR);
+		addToken (LDA);
+		addToken (LDS);
+		addToken (LDX);
+		addToken (LSR);
+		addToken (NEG);
+		addToken (NOP);
+		addToken (ORA);
+		addToken (PSH);
+		addToken (PUL);
+		addToken (ROL);
+		addToken (ROR);
+		addToken (RTI);
+		addToken (RTS);
+		addToken (SBA);
+		addToken (SBC);
+		addToken (SEC);
+		addToken (SEI);
+		addToken (SEV);
+		addToken (STA);
+		addToken (STS);
+		addToken (STX);
+		addToken (SUB);
+		addToken (SWI);
+		addToken (TAB);
+		addToken (TAP);
+		addToken (TBA);
+		addToken (TPA);
+		addToken (TST);
+		addToken (TSX);
+		addToken (TXS);
+		addToken (WAI);
 
-		
 		// Registers
 		addToken (A);
 		addToken (B);
+		addToken (X);
 
 		super.startUp ();
 	}
@@ -142,7 +1572,7 @@ public final class As6800 extends Assembler
 	 */
 	protected boolean isSupportedPass (final Pass pass)
 	{
-		return (pass != Pass.INTERMEDIATE);
+		return (true);
 	}
 	
 	/**
@@ -152,7 +1582,7 @@ public final class As6800 extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable Motorola 6800 Assembler - V1.0.0 (2013-10-29)";
+		title = "Portable Motorola 6800 Assembler [14.04.15]";
 	}
 	
 	/**
@@ -225,8 +1655,20 @@ public final class As6800 extends Assembler
 	private static final String	ERR_STRING_TERM
 		= "Unterminated string constant";
 
+	private static final String	ERR_ILLEGAL_ADDR
+	= "Illegal addressing mode";
+
 	private static final String ERR_UNEXPECTED_TEXT
 		= "Unexpected text after instruction";
+
+	private static final String ERR_TEXT_TOO_LONG_FOR_IMMD
+	= "Text literal is too long to be used in an immediate expression";
+
+	private static final String ERR_MISSING_EXPRESSION
+	= "Missing expression";
+
+	private static final String ERR_EXPECTED_X
+	= "Expected X index";
 
 	/**
 	 * Represents an invalid addressing mode.
@@ -234,11 +1676,40 @@ public final class As6800 extends Assembler
 	private static final int	UNKN	= 0;
 
 	/**
-	 * Represents the inherent addressing mode.
-	 * <PRE>PHA</PRE>
+	 * Represents the immediate addressing mode.
 	 */
-	private static final int	INH		= 1;
+	private static final int	IMMD	= 1;
 
+	/**
+	 * Represents the direct page addressing mode.
+	 */
+	private static final int	DRCT	= 2;
+
+	/**
+	 * Represents the extended page addressing mode.
+	 */
+	private static final int	EXTD	= 3;
+
+	/**
+	 * Represents the indexed addressing mode.
+	 */
+	private static final int	INDX	= 4;
+
+	/**
+	 * A constant value used in calculations.
+	 */
+	private static final Value	ZERO		= new Value (null, 0);
+	
+	/**
+	 * A constant value used in relative address calculations.
+	 */
+	private static final Value	TWO			= new Value (null, 2);
+	
+	/**
+	 * A constant value used in bit shift calculations.
+	 */
+	private static final Value	EIGHT		= new Value (null, 8);
+	
 	/**
 	 * A <CODE>Hashtable</CODE> of keyword tokens to speed up classification.
 	 */
@@ -247,12 +1718,17 @@ public final class As6800 extends Assembler
 	/**
 	 * A <CODE>StringBuffer</CODE> used to format output.
 	 */
-	private StringBuffer			output 	= new StringBuffer ();
+	private StringBuffer		output 	= new StringBuffer ();
 	
 	/**
 	 * A <CODE>StringBuffer</CODE> used to build up new tokens.
 	 */
-	private StringBuffer			buffer	= new StringBuffer ();
+	private StringBuffer		buffer	= new StringBuffer ();
+	
+	/**
+	 * The argument.
+	 */
+	private Expr				arg;
 	
 	/**
 	 * Adds a token to the hash table indexed by its text in UPPER case.
@@ -272,8 +1748,8 @@ public final class As6800 extends Assembler
 	 */
 	private Token scanToken ()
 	{
-		int	value = 0;
-		
+		int				value = 0;
+
 		// Handle tail comments
 		if (peekChar () == ';') return (EOL);
 
@@ -288,15 +1764,23 @@ public final class As6800 extends Assembler
 				nextChar ();
 			return (WS);
 		}
-		
+
+		// Handle characters
 		switch (ch) {
+		case '#':	return (HASH);
 		case '^':	return (BINARYXOR);
 		case '-':	return (MINUS);
 		case '+':	return (PLUS);
-		case '*':	return (TIMES);
-		
+		case '*':
+			{
+				if (peekChar () == '=') {
+					nextChar ();
+					return (ORG);
+				}
+				return (TIMES);
+			}
+			
 		case '/':	return (DIVIDE);
-		case '%':	return (MODULO);
 
 		case ';':
 			{
@@ -304,15 +1788,73 @@ public final class As6800 extends Assembler
 				while (nextChar () != '\0') ;
 				return (EOL);
 			}
-			
+
+		case '%':
+			{
+				if (isBinary (peekChar ())) {
+					buffer.append ('%');
+					do {
+						ch = nextChar ();
+						buffer.append (ch);
+						value = (value << 1) + (ch - '0');
+					} while (isBinary (peekChar ()));
+					return (new Token (NUMBER, buffer.toString (), new Integer (value)));
+				}
+				else
+					return (MODULO);
+			}
+
+		case '@':
+			{
+				if (isOctal (peekChar ())) {
+					buffer.append ('@');
+					do {
+						ch = nextChar ();
+						buffer.append (ch);
+						
+						value = (value << 3) + (ch - '0');
+					} while (isOctal (peekChar ()));
+					return (new Token (NUMBER, buffer.toString (), new Integer (value)));
+				}
+				return (ORIGIN);
+			}
+
+		case '$':
+			{
+				if (isHexadecimal (peekChar ())) {
+					buffer.append ('$');
+					do {
+						ch = nextChar ();
+						buffer.append (ch);
+
+						value = value << 4;
+						if ((ch >= 'A') && (ch <= 'F'))
+							value += ch - 'A' + 10;
+						else if ((ch >= 'a') && (ch <= 'f'))
+							value += ch - 'a' + 10;
+						else
+							value += ch - '0';
+					} while (isHexadecimal (peekChar ()));
+					return (new Token (NUMBER, buffer.toString (), new Integer (value)));
+				}
+				return (ORIGIN);
+			}
+
+		case '.':
+			{
+				if (isAlphanumeric (peekChar ()))
+					break;
+				return (ORIGIN);
+			}
+
 		case '~':	return (COMPLEMENT);
 		case '=':	return (super.EQ);
-	
+
 		case '(':	return (LPAREN);
 		case ')':	return (RPAREN);
 		case ',':	return (COMMA);
 		case ':':	return (COLON);
-	
+
 		case '!':
 			{
 				if (peekChar () == '=') {
@@ -321,7 +1863,7 @@ public final class As6800 extends Assembler
 				}
 				return (LOGICALNOT);
 			}
-			
+
 		case '&':
 			{
 				if (peekChar () == '&') {
@@ -339,7 +1881,7 @@ public final class As6800 extends Assembler
 				}
 				return (BINARYOR);
 			}
-	
+
 		case '<':
 			{
 				switch (peekChar ()) {
@@ -348,7 +1890,7 @@ public final class As6800 extends Assembler
 				}
 				return (LT);
 			}
-	
+
 		case '>':
 			{
 				switch (peekChar ()) {
@@ -358,56 +1900,36 @@ public final class As6800 extends Assembler
 				return (GT);
 			}
 		}
-		
-		// Handle numbers and symbols
-		if ((ch == '.') || (ch == '_') || isAlphanumeric (ch)) {
+
+		// Handle numbers
+		if (isDecimal (ch)) {
+			value = ch - '0';
+			while (isDecimal (peekChar ())) {
+				ch = nextChar ();
+				buffer.append (ch);
+				value = value * 10 + (ch - '0');
+			}
+			return (new Token (NUMBER, buffer.toString (), new Integer (value)));
+		}
+
+		// Handle Symbols
+		if ((ch == '.') || (ch == '_') || isAlpha (ch)) {
 			buffer.append (ch);
 			ch = peekChar ();
-			while ((ch == '.') || (ch == '_') || isAlphanumeric (ch)) {
-				buffer.append (nextChar());
+			while ((ch == '_') || isAlphanumeric (ch)) {
+				buffer.append (nextChar ());
 				ch = peekChar ();
 			}
+			String symbol = buffer.toString ();
 			
-			String text = buffer.toString ();
-			
-			if (text.matches ("[0-1]+(b|B)")) {
-				for (int index = 0; index < text.length () - 1; ++index) {
-					value = value * 2 + (text.charAt (index) - '0');
-				}
-				return (new Token (NUMBER, text, new Integer (value)));
-			}
-			if (text.matches ("[0-7]+(o|O)")) {
-				for (int index = 0; index < text.length () - 1; ++index) {
-					value = value * 8 + (text.charAt (index) - '0');
-				}
-				return (new Token (NUMBER, text, new Integer (value)));				
-			}
-			if (text.matches ("[0-9]+")) {
-				for (int index = 0; index < text.length (); ++index) {
-					value = value * 10 + (text.charAt (index) - '0');
-				}
-				return (new Token (NUMBER, text, new Integer (value)));				
-			}
-			if (text.matches ("[0-9][0-9a-fA-f]*(h|H)")) {
-				for (int index = 0; index < text.length () - 1; ++index) {
-					ch = text.charAt (index);
-					if (('a' <= ch) && (ch <= 'f'))
-						value = value * 16 + (ch - 'a') + 10;
-					else if (('A' <= ch) && (ch <= 'F'))
-						value = value * 16 + (ch - 'A') + 10;
-					else
-						value = value * 16 + (ch - '0');
-				}
-				return (new Token (NUMBER, text, new Integer (value)));				
-			}
-			
-			Token	opcode = (Token) tokens.get (text.toUpperCase ());
+			Token	opcode = (Token) tokens.get (symbol.toUpperCase ());
 
-			if (opcode != null)	return (opcode);
-			
-			return (new Token (SYMBOL, text));
+			if (opcode != null)
+				return (opcode);
+			else
+				return (new Token (SYMBOL, symbol));
 		}
-		
+
 		// Character Literals
 		if (ch == '\'') {
 			ch = nextChar ();
@@ -505,5 +2027,152 @@ public final class As6800 extends Assembler
 		return (new Token (UNKNOWN, buffer.toString ()));
 	}
 	
+	private int parseMode ()
+	{
+		// Handle Immediate
+		if (token == HASH) {
+			token = nextRealToken ();
+			if (token == LT) {
+				token = nextRealToken ();
+				arg = parseImmd ();
+			}
+			else if (token == GT) {
+				token = nextRealToken ();
+				arg = Expr.shr (parseImmd (), EIGHT);
+			}
+			else
+				arg = parseImmd ();
+			
+			return (IMMD);
+		}
+		
+		// Handle X
+		if (token == X) {
+			token = nextRealToken ();
 
+			arg = ZERO;
+			return (INDX);
+		}
+		
+		// Handle ,X
+		if (token == COMMA) {
+			token = nextRealToken ();
+
+			arg = ZERO;
+			if (token == X)
+				token = nextRealToken ();
+			else
+				error (ERR_EXPECTED_X);
+			
+			return (INDX);
+		}
+		
+		
+		// Handle <..
+		if (token == LT) {
+			token = nextRealToken ();
+			arg = parseExpr ();
+			
+			if (arg == null)
+				error (ERR_MISSING_EXPRESSION);
+			
+			return (DRCT);
+		}
+		
+		// Handle >..
+		if (token == GT) {
+			token = nextRealToken ();
+			arg = parseExpr ();
+			
+			if (arg == null)
+				error (ERR_MISSING_EXPRESSION);
+			
+			return (EXTD);
+		}
+		
+		// Handle .. ..,X
+		arg = parseExpr ();
+
+		if (arg == null)
+			error (ERR_MISSING_EXPRESSION);
+		
+		if (token == COMMA) {
+			token = nextRealToken ();
+			if (token == X) {
+				token = nextRealToken ();				
+				return (INDX);
+			}
+
+			error (ERR_EXPECTED_X);
+			return (UNKN);
+		}
+		if (arg.isAbsolute()) {
+			int addr = (int) arg.resolve (null, null);
+			
+			return (((addr & 0xff00) == 0) ? DRCT : EXTD);
+		}
+		return (EXTD);
+	}
+	
+	/**
+	 * Parses the data value for an immediate addressing mode to allow short
+	 * string literals as well as numbers.
+	 * 
+	 * @return	An expression containing the immediate value.
+	 */
+	private Expr parseImmd ()
+	{
+		if (token.getKind () == STRING) {
+			String text = token.getText();
+			
+			if (text.length () > 4)
+				error (ERR_TEXT_TOO_LONG_FOR_IMMD);
+			
+			int		value = 0;
+			
+			for (int index = 0; index < text.length (); ++index)
+				value = (value << 8) | text.charAt (index);
+			
+			token = nextRealToken ();
+			
+			return (new Value (null, value));
+		}
+		else {
+			Expr	result = parseExpr ();
+			
+			if (result == null)
+				error (ERR_MISSING_EXPRESSION);
+
+			return (result);
+		}
+	}
+
+	private void genInherent (int opcode)
+	{
+		addByte (opcode);
+	}
+	
+	private void genDirect (int opcode, final Expr expr)
+	{
+		addByte (opcode);
+		addByte (expr);
+	}
+	private void genExtended (int opcode, final Expr expr)
+	{
+		addByte (opcode);
+		addWord (expr);
+	}
+
+	private void genRelative (int opcode, final Expr expr)
+	{
+		Expr			origin = getOrigin ();
+		
+		if (origin != null) {
+			addByte (opcode);
+			addByte (Expr.sub (expr, Expr.add (origin, TWO)));
+		}
+		else
+			error ("No active section");
+	}
+	
 }
