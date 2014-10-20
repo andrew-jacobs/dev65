@@ -20,29 +20,42 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package uk.co.demon.obelisk.xemu;
+package uk.co.demon.obelisk.scmp;
+
+import uk.co.demon.obelisk.xlnk.Linker;
 
 /**
- * Instances of the abstract <CODE>Array</CODE> class represent memory blocks.
- * 
- * @author	Andrew Jacobs
+ * The <CODE>LkScmp</CODE> provides access to the base <CODE>Linker</CODE> code
+ * for the National Semiconductor SC/MP suite.
+ *
+ * @author 	Andrew Jacobs
  * @version	$Id$
  */
-public abstract class Array
+public class LkScmp extends Linker
 {
 	/**
-	 * Read the data value at the indicated address.
+	 * Main program entry point.
 	 * 
-	 * @param	offset		The address to be read.
-	 * @return	The data value at the target address.
+	 * @param arguments		Command line arguments.
 	 */
-	public abstract int read (int offset);
-	
+	public static void main (String arguments [])
+	{
+		new LkScmp ().run (arguments);
+	}
+
 	/**
-	 * Write the data value at the indicated address.
-	 * 
-	 * @param 	offset		The address to be written.
-	 * @param 	value		The data value to be written.
+	 * Constructs a <CODE>Lk65</CODE> instance.
 	 */
-	public abstract void write (int offset, int value);
+	protected LkScmp ()
+	{
+		super (8);
+	}
+		
+	/**
+	 * {@inheritDoc}
+	 */
+	protected int getAddrSize ()
+	{
+		return (16);
+	}
 }

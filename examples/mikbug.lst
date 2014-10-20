@@ -1,5 +1,5 @@
 
-Portable Motorola 6800 Assembler - V1.0.0 (2014-04-15)
+Portable Motorola 6800 Assembler [14.04.15]
 
                             ; MIKBUG
                             ;
@@ -56,7 +56,7 @@ Portable Motorola 6800 Assembler - V1.0.0 (2014-04-15)
 00E042  8D31              :         BSR     OUTCH
         0000E044          = LOAD21  .EQU    *
 
-Portable Motorola 6800 Assembler - V1.0.0 (2014-04-15)
+Portable Motorola 6800 Assembler [14.04.15]
 
 00E044  7EE0E1            :         JMP     CONTRL
                                     
@@ -113,7 +113,7 @@ Portable Motorola 6800 Assembler - V1.0.0 (2014-04-15)
 00E08F  8D37              :         BSR     OUT4HS          ; Print address
 00E091  FEA00C            :         LDX     XHI
 
-Portable Motorola 6800 Assembler - V1.0.0 (2014-04-15)
+Portable Motorola 6800 Assembler [14.04.15]
 
 00E094  8D34              :         BSR     OUT2HS          ; Print data (old)
 00E096  FFA00C            :         STX     XHI             ; Save data address
@@ -170,7 +170,7 @@ Portable Motorola 6800 Assembler - V1.0.0 (2014-04-15)
                             C1
                             
 
-Portable Motorola 6800 Assembler - V1.0.0 (2014-04-15)
+Portable Motorola 6800 Assembler [14.04.15]
 
                             
                             OUTEEE
@@ -201,56 +201,56 @@ Portable Motorola 6800 Assembler - V1.0.0 (2014-04-15)
                                     .END
 
 
-Portable Motorola 6800 Assembler - V1.0.0 (2014-04-15)
+Portable Motorola 6800 Assembler [14.04.15]
 
 Symbol Table
 
-BADDR                            0000E047
-BEGA                             0000A002
-BYTE                             0000E055
-BYTECT                           0000A00B
-C1                               0000E0E1
-CHA51                            0000E087
-CHANGE                           0000E085
-CKSM                             0000A00A
-CONTRL                           0000E0E1
-ENDA                             0000A004
-IN1HG                            0000E0BE
-INCH                             0000E078
-INEEE                            0000E0E1
-INHEX                            0000E0AA
-IO                               0000E000
-IOV                              0000A000
-LOAD                             0000E008
-LOAD11                           0000E02F
-LOAD15                           0000E03B
-LOAD19                           0000E040
-LOAD21                           0000E041
-LOAD3                            0000E013
-MCL                              0000E0E1
-MCONT                            0000A011
-NIO                              0000A006
-OUT2H                            0000E0BF
-OUT2HA                           0000E0C1
-OUT2HS                           0000E0CA
-OUT4HS                           0000E0C8
-OUTCH                            0000E075
-OUTEEE                           0000E0E1
-OUTHL                            0000E067
-OUTHR                            0000E06B
-OUTS                             0000E0CC
-PDATA1                           0000E07E
-PDATA2                           0000E07B
-PIAD                             00008004
-PIADB                            00008006
-PIAS                             00008005
-PIASB                            00008007
-POWDWN                           0000E005
-SP                               0000A008
-STACK                            0000A042
-START                            0000E0C6
-TEMP                             0000A00E
-TW                               0000A00F
-XHI                              0000A00C
-XLOW                             0000A00D
-XTEMP                            0000A012
+BADDR                            0000E047  | PIAD                             00008004 
+BEGA                             0000A002  | PIAS                             00008005 
+BYTE                             0000E055  | PIADB                            00008006 
+BYTECT                           0000A00B  | PIASB                            00008007 
+C1                               0000E0E1  | IOV                              0000A000 
+CHA51                            0000E087  | BEGA                             0000A002 
+CHANGE                           0000E085  | ENDA                             0000A004 
+CKSM                             0000A00A  | NIO                              0000A006 
+CONTRL                           0000E0E1  | SP                               0000A008 
+ENDA                             0000A004  | CKSM                             0000A00A 
+IN1HG                            0000E0BE  | BYTECT                           0000A00B 
+INCH                             0000E078  | XHI                              0000A00C 
+INEEE                            0000E0E1  | XLOW                             0000A00D 
+INHEX                            0000E0AA  | TEMP                             0000A00E 
+IO                               0000E000  | TW                               0000A00F 
+IOV                              0000A000  | MCONT                            0000A011 
+LOAD                             0000E008  | XTEMP                            0000A012 
+LOAD11                           0000E02F  | STACK                            0000A042 
+LOAD15                           0000E03B  | IO                               0000E000 
+LOAD19                           0000E040  | POWDWN                           0000E005 
+LOAD21                           0000E041  | LOAD                             0000E008 
+LOAD3                            0000E013  | LOAD3                            0000E013 
+MCL                              0000E0E1  | LOAD11                           0000E02F 
+MCONT                            0000A011  | LOAD15                           0000E03B 
+NIO                              0000A006  | LOAD19                           0000E040 
+OUT2H                            0000E0BF  | LOAD21                           0000E041 
+OUT2HA                           0000E0C1  | BADDR                            0000E047 
+OUT2HS                           0000E0CA  | BYTE                             0000E055 
+OUT4HS                           0000E0C8  | OUTHL                            0000E067 
+OUTCH                            0000E075  | OUTHR                            0000E06B 
+OUTEEE                           0000E0E1  | OUTCH                            0000E075 
+OUTHL                            0000E067  | INCH                             0000E078 
+OUTHR                            0000E06B  | PDATA2                           0000E07B 
+OUTS                             0000E0CC  | PDATA1                           0000E07E 
+PDATA1                           0000E07E  | CHANGE                           0000E085 
+PDATA2                           0000E07B  | CHA51                            0000E087 
+PIAD                             00008004  | INHEX                            0000E0AA 
+PIADB                            00008006  | IN1HG                            0000E0BE 
+PIAS                             00008005  | OUT2H                            0000E0BF 
+PIASB                            00008007  | OUT2HA                           0000E0C1 
+POWDWN                           0000E005  | START                            0000E0C6 
+SP                               0000A008  | OUT4HS                           0000E0C8 
+STACK                            0000A042  | OUT2HS                           0000E0CA 
+START                            0000E0C6  | OUTS                             0000E0CC 
+TEMP                             0000A00E  | C1                               0000E0E1 
+TW                               0000A00F  | CONTRL                           0000E0E1 
+XHI                              0000A00C  | INEEE                            0000E0E1 
+XLOW                             0000A00D  | MCL                              0000E0E1 
+XTEMP                            0000A012  | OUTEEE                           0000E0E1 
