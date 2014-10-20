@@ -22,7 +22,7 @@
 
 package uk.co.demon.obelisk.xemu;
 
-public final class ByteArray extends Array
+public final class ByteArray
 {
 	/**
 	 * Construct an <CODE>Array</CODE> instance for a given size.
@@ -35,19 +35,15 @@ public final class ByteArray extends Array
 	}
 	
 	/**
-	 * {@inheritDoc}
 	 */
-	@Override
-	public int read (int offset)
+	public int get (int offset)
 	{
 		return (data [offset]);
 	}
 
 	/**
-	 * {@inheritDoc}
 	 */
-	@Override
-	public void write (int offset, int value)
+	public void set (int offset, int value)
 	{
 		data [offset] = (byte) value;
 	}

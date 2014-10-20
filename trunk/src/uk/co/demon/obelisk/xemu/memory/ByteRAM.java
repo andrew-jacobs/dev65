@@ -20,21 +20,42 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package uk.co.demon.obelisk.xemu;
+package uk.co.demon.obelisk.xemu.memory;
 
-import uk.co.demon.obelisk.xapp.Application;
+import uk.co.demon.obelisk.xemu.AddressRange;
+import uk.co.demon.obelisk.xemu.ByteArray;
 
-import java.util.Vector;
-
-public abstract class Emulator extends Application
+/**
+ * 
+ * @author 	Andrew Jacobs
+ * @version	$Id$
+ */
+public class ByteRAM extends AddressRange
 {
-	protected abstract int step ();
-	
-	protected abstract void trace ();
-	
-	protected AddressMap	memoryMap	= null;
-	
-	protected AddressMap	portMap		= null;
-	
-	protected Vector<Device> devices	= new Vector<Device> ();
+	public ByteRAM (int base, int size)
+	{
+		super (base, size);
+		
+		array = new ByteArray (size);
+	}
+
+	@Override
+	public int read (int address)
+	{
+		return (array.get (address - base));
+	}
+
+	@Override
+	public void write (int address, int value)
+	{
+		array.set (address - base, value);		
+	}
+
+	@Override
+	public void load (int address, int value)
+	{
+		array.set (address - base, value);		
+	}
+
+	private ByteArray array;
 }

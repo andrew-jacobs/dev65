@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2006 Andrew John Jacobs.
+ * Copyright (C),2006-2014 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -50,6 +50,10 @@ final class Area
 		for (int index = 0; index < pairs.length; ++index) {
 			String [] addrs = pairs [index].split ("-");
 			
+			if (addrs.length != 2) {
+				System.err.println ("Invalid address pair (" + pairs [index] + ")");
+				System.exit (1);
+			}
 			Region region = new Region (addrs [0], addrs [1]);
 		
 			boolean handled = false;

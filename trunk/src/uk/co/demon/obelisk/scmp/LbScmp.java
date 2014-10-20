@@ -20,21 +20,26 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package uk.co.demon.obelisk.xemu;
+package uk.co.demon.obelisk.scmp;
 
-import uk.co.demon.obelisk.xapp.Application;
+import uk.co.demon.obelisk.xlib.Librarian;
 
-import java.util.Vector;
-
-public abstract class Emulator extends Application
+/**
+ * The <CODE>LbScmp</CODE> provides access to the base <CODE>Librarian</CODE>
+ * code for the National Semiconductor SC/MP suite.
+ *
+ * @author 	Andrew Jacobs
+ * @version	$Id$
+ */
+public class LbScmp extends Librarian
 {
-	protected abstract int step ();
-	
-	protected abstract void trace ();
-	
-	protected AddressMap	memoryMap	= null;
-	
-	protected AddressMap	portMap		= null;
-	
-	protected Vector<Device> devices	= new Vector<Device> ();
+	/**
+	 * Main program entry point.
+	 * 
+	 * @param arguments		Command line arguments.
+	 */
+	public static void main (String arguments [])
+	{
+		new LbScmp ().run (arguments);
+	}
 }

@@ -27,8 +27,15 @@ import uk.co.demon.obelisk.xobj.Hex;
 
 public class Em65 extends Emulator
 {
-
-
+	public static void main (String [] args)
+	{
+		if (args.length != 2) {
+			System.err.println ("Usage: <config>.xml <app>.hex");
+		}
+		
+		// loadConfiguration (args [0]);
+		
+	}
 	
 	/**
 	 * The <CODE>CPU6502</CODE> implements opcodes and addressing modes common
@@ -914,7 +921,16 @@ public class Em65 extends Emulator
 		protected final Instruction RTI = new Instruction ("RTI")
 		{
 			public void execute ()
-			{}
+			{
+				setS (S + 1);
+				setP (read (0x0100 + S) & ~F_I);
+				setS (S + 1);
+				int lo = read (0x0100 + S);
+				setS (S + 1);
+				int hi = read (0x0100 + S);
+				
+				setPC ((hi << 8) | lo);
+			}
 		};
 		
 		protected final Instruction RTS = new Instruction ("RTS")
