@@ -62,7 +62,7 @@ public class AsScmp extends Assembler
 		public boolean compile ()
 		{
 			int		bits = 0;
-			Expr	expr = null;
+			Expr	expr = ZERO;
 			
 			token	= nextRealToken ();
 			
@@ -93,7 +93,7 @@ public class AsScmp extends Assembler
 				token = nextRealToken ();
 			}
 			else {
-				expr = parseImmd ();
+				expr = parseExpr ();
 				if (token == LPAREN) {
 					token = nextRealToken ();
 					if (token == P0)
@@ -175,7 +175,7 @@ public class AsScmp extends Assembler
 				token = nextRealToken ();
 			}
 			else {
-				expr = parseImmd ();
+				expr = parseExpr ();
 				if (token == LPAREN) {
 					token = nextRealToken ();
 					if (token == P0)
@@ -250,7 +250,7 @@ public class AsScmp extends Assembler
 			if (token != EOL)
 				error (ERR_UNEXPECTED_TEXT);
 			
-			addByte (opcode);
+			addByte (opcode | bits);
 			return (true);
 		}
 		
@@ -682,6 +682,9 @@ public class AsScmp extends Assembler
 		addToken (P1);
 		addToken (P2);
 		addToken (P3);
+		
+		addToken (LO);
+		addToken (HI);
 
 		super.startUp ();
 	}
@@ -874,6 +877,14 @@ public class AsScmp extends Assembler
 		case ',':	return (COMMA);
 		case ':':	return (COLON);
 	
+		case '$':	return (ORIGIN);
+		case '.':
+		{
+			if (isAlphanumeric (peekChar ()))
+				break;
+			return (ORIGIN);
+		}
+
 		case '!':
 			{
 				if (peekChar () == '=') {
@@ -1167,9 +1178,11 @@ public class AsScmp extends Assembler
 	private boolean isByte (Expr expr)
 	{
 		if (expr.isAbsolute ()) {
-			long value = expr.resolve (null, null) & 0xffffffffffffff80L;
+			if (getPass() != Pass.FIRST) {
+				long value = expr.resolve (null, null) & 0xffffffffffffff80L;
 			
-			return ((value == 0x0000000000000000L) || (value == 0xffffffffffffff80L));
+				return ((value == 0x0000000000000000L) || (value == 0xffffffffffffff80L));
+			}
 		}
 		return (true);
 	}

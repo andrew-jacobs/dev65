@@ -1053,7 +1053,7 @@ public abstract class Assembler extends Application
 			token = nextRealToken ();
 			Expr expr = parseExpr ();
 			
-			if (expr.isAbsolute ()) {
+			if ((expr != null) && expr.isAbsolute ()) {
 				section = section.setOrigin (expr.resolve (null, null));
 			}
 			else
