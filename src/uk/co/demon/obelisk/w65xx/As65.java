@@ -4010,8 +4010,14 @@ public final class As65 extends Assembler
 				output.append (addr.isAbsolute() ? "  " : "' ");
 	
 				for (int index = 0; index < 8; ++index) {
-					if (index < byteCount)
-						output.append (Hex.toHex (memory.getByte (index), 2));
+					if (index < byteCount) {
+						int code = memory.getByte (index);
+						
+						if (code >= 0)
+							output.append (Hex.toHex (code, 2));
+						else
+							output.append ("??");
+					}
 					else
 						output.append ("  ");
 				}
@@ -4048,7 +4054,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [14.05.19]";
+		title 		= "Portable 65xx Assembler [14.10]";
 	}
 	
 	/**

@@ -1582,7 +1582,7 @@ public final class As6800 extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable Motorola 6800 Assembler [14.04.15]";
+		title = "Portable Motorola 6800 Assembler [14.10]";
 	}
 	
 	/**
@@ -1627,8 +1627,14 @@ public final class As6800 extends Assembler
 				output.append (addr.isAbsolute() ? "  " : "' ");
 	
 				for (int index = 0; index < 8; ++index) {
-					if (index < byteCount)
-						output.append (Hex.toHex (memory.getByte (index), 2));
+					if (index < byteCount) {
+						int code = memory.getByte (index);
+						
+						if (code >= 0)
+							output.append (Hex.toHex (code, 2));
+						else
+							output.append ("??");
+					}
 					else
 						output.append ("  ");
 				}

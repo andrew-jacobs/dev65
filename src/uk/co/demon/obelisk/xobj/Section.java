@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2011 Andrew John Jacobs.
+ * Copyright (C),2011-2014 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -281,7 +281,8 @@ public class Section
 			
 			buffer.append ("<section name='" + name + "'");
 			if (!relative)
-				buffer.append (" addr='" + Hex.toHex (start, 8) + "' size='" + size + "'");
+				buffer.append (" addr='" + Hex.toHex (start, 8) + "'");
+			buffer.append (" size='" + size + "'");
 			buffer.append (">");
 			for (int index = 0; index < parts.size (); ++index)
 				buffer.append (parts.elementAt (index).toString ());
