@@ -694,7 +694,7 @@ public class AsScmp extends Assembler
 	 */
 	protected boolean isSupportedPass (final Pass pass)
 	{
-		return (pass != Pass.INTERMEDIATE);
+		return (true); //pass != Pass.INTERMEDIATE);
 	}
 	
 	/**
@@ -704,7 +704,7 @@ public class AsScmp extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable National Semiconductor SC/MP Assembler - V1.0.0 (2014-10-20)";
+		title = "Portable National Semiconductor SC/MP Assembler [14.10]";
 	}
 	
 	/**
@@ -749,8 +749,14 @@ public class AsScmp extends Assembler
 				output.append (addr.isAbsolute() ? "  " : "' ");
 	
 				for (int index = 0; index < 8; ++index) {
-					if (index < byteCount)
-						output.append (Hex.toHex (memory.getByte (index), 2));
+					if (index < byteCount) {
+						int code = memory.getByte (index);
+						
+						if (code >= 0)
+							output.append (Hex.toHex (code, 2));
+						else
+							output.append ("??");
+					}
 					else
 						output.append ("  ");
 				}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2013 Andrew John Jacobs.
+ * Copyright (C),2013-2014 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -1103,7 +1103,7 @@ public final class As8080 extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable Intel 8080/8085 Assembler - V1.0.0 (2013-09-16)";
+		title = "Portable Intel 8080/8085 Assembler [14.10]";
 	}
 	
 	/**
@@ -1148,8 +1148,14 @@ public final class As8080 extends Assembler
 				output.append (addr.isAbsolute() ? "  " : "' ");
 	
 				for (int index = 0; index < 8; ++index) {
-					if (index < byteCount)
-						output.append (Hex.toHex (memory.getByte (index), 2));
+					if (index < byteCount) {
+						int code = memory.getByte (index);
+						
+						if (code >= 0)
+							output.append (Hex.toHex (code, 2));
+						else
+							output.append ("??");
+					}
 					else
 						output.append ("  ");
 				}

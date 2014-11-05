@@ -270,6 +270,12 @@ public abstract class Assembler extends Application
 		= new Token (KEYWORD, "HI");
 	
 	/**
+	 * A <CODE>Token</CODE> representing the LEN function.
+	 */
+	protected final Token 		LEN
+		= new Token (KEYWORD, "LEN");
+	
+	/**
 	 * A <CODE>Token</CODE> representing the BANK function.
 	 */
 	protected final Token 		BANK

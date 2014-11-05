@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2011 Andrew John Jacobs.
+ * Copyright (C),2011-2014 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -64,7 +64,7 @@ public class MemoryModelByte extends MemoryModel
 				if (section != null) {
 					section.addByte (expr);
 					if (byteCount < bytes.length)
-						bytes [byteCount++] = 0;
+						bytes [byteCount++] = -1;
 				}
 				else
 					error (Error.ERR_NO_SECTION);
@@ -86,9 +86,9 @@ public class MemoryModelByte extends MemoryModel
 				if (section != null) {
 					section.addWord (expr);
 					if (byteCount < bytes.length)
-						bytes [byteCount++] = 0;
+						bytes [byteCount++] = -1;
 					if (byteCount < bytes.length)
-						bytes [byteCount++] = 0;
+						bytes [byteCount++] = -1;
 				}
 				else
 					error (Error.ERR_NO_SECTION);
@@ -110,13 +110,13 @@ public class MemoryModelByte extends MemoryModel
 				if (section != null) {
 					section.addLong (expr);
 					if (byteCount < bytes.length)
-						bytes [byteCount++] = 0;
+						bytes [byteCount++] = -1;
 					if (byteCount < bytes.length)
-						bytes [byteCount++] = 0;
+						bytes [byteCount++] = -1;
 					if (byteCount < bytes.length)
-						bytes [byteCount++] = 0;
+						bytes [byteCount++] = -1;
 					if (byteCount < bytes.length)
-						bytes [byteCount++] = 0;
+						bytes [byteCount++] = -1;
 				}
 				else
 					error (Error.ERR_NO_SECTION);
@@ -136,7 +136,7 @@ public class MemoryModelByte extends MemoryModel
 		if (section != null) {
 			section.addByte (value);
 			if (byteCount < bytes.length)
-				bytes [byteCount++] = (byte)(value & 0xff);
+				bytes [byteCount++] = (int)(value & 0xff);
 		}
 		else
 			error (Error.ERR_NO_SECTION);
@@ -151,15 +151,15 @@ public class MemoryModelByte extends MemoryModel
 			section.addWord (value);
 			if (module.isBigEndian()) {
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 8) & 0xff);
+					bytes [byteCount++] = (int)((value >> 8) & 0xff);
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 0) & 0xff);				
+					bytes [byteCount++] = (int)((value >> 0) & 0xff);				
 			}
 			else {
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 0) & 0xff);
+					bytes [byteCount++] = (int)((value >> 0) & 0xff);
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 8) & 0xff);
+					bytes [byteCount++] = (int)((value >> 8) & 0xff);
 			}
 		}
 		else
@@ -175,23 +175,23 @@ public class MemoryModelByte extends MemoryModel
 			section.addLong (value);
 			if (module.isBigEndian()) {
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 24) & 0xff);
+					bytes [byteCount++] = (int)((value >> 24) & 0xff);
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 16) & 0xff);				
+					bytes [byteCount++] = (int)((value >> 16) & 0xff);				
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 8) & 0xff);
+					bytes [byteCount++] = (int)((value >> 8) & 0xff);
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 0) & 0xff);				
+					bytes [byteCount++] = (int)((value >> 0) & 0xff);				
 			}
 			else {
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 0) & 0xff);
+					bytes [byteCount++] = (int)((value >> 0) & 0xff);
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 8) & 0xff);
+					bytes [byteCount++] = (int)((value >> 8) & 0xff);
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 16) & 0xff);
+					bytes [byteCount++] = (int)((value >> 16) & 0xff);
 				if (byteCount < bytes.length)
-					bytes [byteCount++] = (byte)((value >> 24) & 0xff);				
+					bytes [byteCount++] = (int)((value >> 24) & 0xff);				
 			}
 		}
 		else
@@ -201,5 +201,5 @@ public class MemoryModelByte extends MemoryModel
 	/**
 	 * Captured data used to generate the listing.
 	 */
-	protected byte []		bytes = new byte [9];
+	protected int []		bytes = new int [9];
 }
