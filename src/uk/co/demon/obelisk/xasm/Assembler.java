@@ -634,6 +634,11 @@ public abstract class Assembler extends Application
 				
 				Expr	expr = parseExpr ();
 			
+				if (expr == null) {
+					error (Error.ERR_INVALID_EXPRESSION);
+					return (false);
+				}
+				
 				if (expr.isAbsolute ()) {
 					boolean state = expr.resolve (null, null) != 0;
 					status.push ((isActive () && state) ? Boolean.TRUE : Boolean.FALSE);
@@ -663,6 +668,11 @@ public abstract class Assembler extends Application
 				
 				Expr	expr = parseExpr ();
 			
+				if (expr == null) {
+					error (Error.ERR_INVALID_EXPRESSION);
+					return (false);
+				}
+				
 				if (expr.isAbsolute ())
 					status.push (Boolean.TRUE);
 				else
@@ -690,6 +700,11 @@ public abstract class Assembler extends Application
 				
 				Expr	expr = parseExpr ();
 			
+				if (expr == null) {
+					error (Error.ERR_INVALID_EXPRESSION);
+					return (false);
+				}
+				
 				if (expr.isAbsolute ())
 					status.push (Boolean.FALSE);
 				else
@@ -717,6 +732,11 @@ public abstract class Assembler extends Application
 				
 				Expr	expr = parseExpr ();
 			
+				if (expr == null) {
+					error (Error.ERR_INVALID_EXPRESSION);
+					return (false);
+				}
+				
 				if (expr.isRelative ())
 					status.push (Boolean.TRUE);
 				else
@@ -743,6 +763,11 @@ public abstract class Assembler extends Application
 				token = nextRealToken ();
 				
 				Expr	expr = parseExpr ();
+				
+				if (expr == null) {
+					error (Error.ERR_INVALID_EXPRESSION);
+					return (false);
+				}
 			
 				if (expr.isRelative ())
 					status.push (Boolean.FALSE);
