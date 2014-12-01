@@ -67,7 +67,7 @@ public class AsScmp extends Assembler
 			token	= nextRealToken ();
 			
 			if (token == AT) {
-				bits |= 0x40;
+				bits |= 0x04;
 				token = nextRealToken ();
 			}
 			
