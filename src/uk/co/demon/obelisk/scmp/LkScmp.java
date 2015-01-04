@@ -44,7 +44,7 @@ public class LkScmp extends Linker
 	}
 
 	/**
-	 * Constructs a <CODE>Lk65</CODE> instance.
+	 * Constructs a <CODE>LkScmp</CODE> instance.
 	 */
 	protected LkScmp ()
 	{
