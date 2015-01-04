@@ -5146,21 +5146,6 @@ public final class As65 extends Assembler
 	}
 	
 	/**
-	 * Determines if a value can be represented by a byte.
-	 * 
-	 * @param value			The value to be tested.
-	 * @return <CODE>true</CODE> if the value is a byte, <CODE>false</CODE> otherwise.
-	 */
-	private boolean isByte (int value)
-	{
-		switch (value & 0xffffff00) {
-		case 0x00000000:	return (true);
-		case 0xffffff00:	return (true);
-		default:			return (false);
-		}
-	}
-
-	/**
 	 * Determines if an address can be represented by a byte.
 	 * 
 	 * @param value			The value to be tested.
