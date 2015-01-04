@@ -64,7 +64,7 @@ public class AsScmp extends Assembler
 			int		bits = 0;
 			Expr	expr = ZERO;
 			
-			token	= nextRealToken ();
+			token = nextRealToken ();
 			
 			if (token == AT) {
 				bits |= 0x04;
