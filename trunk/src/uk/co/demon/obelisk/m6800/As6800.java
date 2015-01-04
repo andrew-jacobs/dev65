@@ -111,6 +111,9 @@ public final class As6800 extends Assembler
 					error (ERR_ILLEGAL_ADDR);
 				}
 			}
+			else
+				error (ERR_MISSING_A_OR_B);
+			
 			return (true);
 		}
 	};
@@ -864,6 +867,9 @@ public final class As6800 extends Assembler
 					error (ERR_ILLEGAL_ADDR);
 				}
 			}
+			else
+				error (ERR_MISSING_A_OR_B);
+			
 			return (true);
 		}
 	};
@@ -1007,7 +1013,7 @@ public final class As6800 extends Assembler
 			}
 			else {
 				token = acc;
-				error ("Expected A or B");
+				error (ERR_MISSING_A_OR_B);
 			}
 			return (true);
 		}
@@ -1026,7 +1032,7 @@ public final class As6800 extends Assembler
 			}
 			else {
 				token = acc;
-				error ("Expected A or B");
+				error (ERR_MISSING_A_OR_B);
 			}
 			return (true);
 		}
@@ -1148,6 +1154,9 @@ public final class As6800 extends Assembler
 					error (ERR_ILLEGAL_ADDR);
 				}
 			}
+			else
+				error (ERR_MISSING_A_OR_B);
+
 			return (true);
 		}
 	};
@@ -1217,6 +1226,9 @@ public final class As6800 extends Assembler
 					error (ERR_ILLEGAL_ADDR);
 				}
 			}
+			else
+				error (ERR_MISSING_A_OR_B);
+
 			return (true);
 		}
 	};
@@ -1275,6 +1287,9 @@ public final class As6800 extends Assembler
 					error (ERR_ILLEGAL_ADDR);
 				}
 			}
+			else
+				error (ERR_MISSING_A_OR_B);
+
 			return (true);
 		}
 	};
@@ -1582,7 +1597,7 @@ public final class As6800 extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable Motorola 6800 Assembler [14.10]";
+		title = "Portable Motorola 6800 Assembler [15.01]";
 	}
 	
 	/**
@@ -1652,9 +1667,6 @@ public final class As6800 extends Assembler
 		return (output.toString ());
 	}
 
-	private static final String	ERR_SYNTAX
-		= "Syntax error";
-
 	private static final String	ERR_CHAR_TERM
 		= "Unterminated character constant";
 
@@ -1662,20 +1674,20 @@ public final class As6800 extends Assembler
 		= "Unterminated string constant";
 
 	private static final String	ERR_ILLEGAL_ADDR
-	= "Illegal addressing mode";
-
-	private static final String ERR_UNEXPECTED_TEXT
-		= "Unexpected text after instruction";
+		= "Illegal addressing mode";
 
 	private static final String ERR_TEXT_TOO_LONG_FOR_IMMD
-	= "Text literal is too long to be used in an immediate expression";
+		= "Text literal is too long to be used in an immediate expression";
 
 	private static final String ERR_MISSING_EXPRESSION
-	= "Missing expression";
+		= "Missing expression";
 
 	private static final String ERR_EXPECTED_X
-	= "Expected X index";
+		= "Expected X index";
 
+	private static final String ERR_MISSING_A_OR_B
+		= "Missing A or B accumulator";
+	
 	/**
 	 * Represents an invalid addressing mode.
 	 */

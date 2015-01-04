@@ -44,7 +44,7 @@ public final class Lk6800 extends Linker
 	}
 
 	/**
-	 * Constructs a <CODE>Lk65</CODE> instance.
+	 * Constructs a <CODE>Lk6800</CODE> instance.
 	 */
 	protected Lk6800 ()
 	{
