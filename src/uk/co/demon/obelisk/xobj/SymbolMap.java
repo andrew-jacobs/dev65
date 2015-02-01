@@ -22,9 +22,9 @@
 
 package uk.co.demon.obelisk.xobj;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.Vector;
-import java.util.Enumeration;
 
 /**
  * A <CODE>SymbolMap</CODE> holds the details of where symbols have been
@@ -67,10 +67,10 @@ public final class SymbolMap
 	public Vector<String> getSymbols ()
 	{
 		Vector<String>	symbols = new Vector<String> ();
-		Enumeration<String>	cursor 	= map.keys ();
+		Set<String>	keySet = map.keySet ();
 		
-		while (cursor.hasMoreElements ())
-			symbols.add (cursor.nextElement());
+		for (String key : keySet)
+			symbols.add (key);
 		
 		return (symbols);
 	}
@@ -78,6 +78,6 @@ public final class SymbolMap
 	/**
 	 * A map of symbol name to address as an Integer.
 	 */
-	private Hashtable<String, java.lang.Long> map
-		= new Hashtable<String, java.lang.Long> (); 
+	private HashMap<String, java.lang.Long> map
+		= new HashMap<String, java.lang.Long> (); 
 }

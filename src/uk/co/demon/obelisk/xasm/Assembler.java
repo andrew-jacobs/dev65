@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2011 Andrew John Jacobs.
+ * Copyright (C),2005-2015 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -33,7 +33,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.Vector;
@@ -932,7 +932,7 @@ public abstract class Assembler extends Application
 	{
 		public boolean compile ()
 		{
-			if ((macroName = label.getText ()) != null) {
+			if ((label != null) && ((macroName = label.getText ()) != null)) {
 				Vector<String>	arguments	= new Vector<String> ();
 			
 				for (;;) {
@@ -955,6 +955,9 @@ public abstract class Assembler extends Application
 				
 				savedLines = new MacroSource (arguments);
 			}
+			else
+				error ("No macro name has been specified");
+			
 			return (false);
 		}
 	};
@@ -1325,7 +1328,6 @@ public abstract class Assembler extends Application
 	{
 		listing   = true;
 		title     = "";
-		pageCount = 1;
 		lineCount = 0;
 		throwPage = false;
 		
@@ -1448,7 +1450,6 @@ public abstract class Assembler extends Application
 			
 			if ((throwPage) || (++lineCount == (linesPerPage - 3))) {
 				listFile.print ('\f');
-				++pageCount;
 				lineCount = 0;
 				throwPage = false;
 			}
@@ -2163,11 +2164,6 @@ public abstract class Assembler extends Application
 	private boolean				listing;
 	
 	/**
-	 * The current output page number
-	 */
-	private int					pageCount;
-	
-	/**
 	 * The current output line count
 	 */
 	private int					lineCount;
@@ -2274,7 +2270,7 @@ public abstract class Assembler extends Application
 	/**
 	 * The set of all symbols defined in this module.
 	 */
-	private Hashtable<String, Expr> symbols	= new Hashtable<String, Expr> ();
+	private HashMap<String, Expr> symbols	= new HashMap<String, Expr> ();
 	
 	/**
 	 * The subset of symbols that may be redefined.
@@ -2299,7 +2295,7 @@ public abstract class Assembler extends Application
 	/**
 	 * The set of defined macros.
 	 */
-	private Hashtable<String, TextSource>	macros = new Hashtable<String, TextSource> ();
+	private HashMap<String, TextSource>	macros = new HashMap<String, TextSource> ();
 	
 	/**
 	 * The name of the current macro
@@ -2659,7 +2655,7 @@ public abstract class Assembler extends Application
 		for (int index = 0; index < text.length; ++index) {
 			if (text [index] == '\t') {
 				do {
-					buffer.append (' ');
+					buffer.append (" ");
 				} while (buffer.length () % tabSize != 0);
 			}
 			else
