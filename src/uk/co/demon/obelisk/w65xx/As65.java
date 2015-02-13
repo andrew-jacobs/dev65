@@ -3810,6 +3810,9 @@ public final class As65 extends Assembler
 		addToken (TITLE);
 		addToken (ERROR);
 		addToken (WARN);
+		
+		// Functions
+		addToken (STRLEN);
 
 		// Opcodes & Registers
 		addToken (A);

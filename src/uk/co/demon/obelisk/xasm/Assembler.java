@@ -270,10 +270,10 @@ public abstract class Assembler extends Application
 		= new Token (KEYWORD, "HI");
 	
 	/**
-	 * A <CODE>Token</CODE> representing the LEN function.
+	 * A <CODE>Token</CODE> representing the STRLEN function.
 	 */
-	protected final Token 		LEN
-		= new Token (KEYWORD, "LEN");
+	protected final Token 		STRLEN
+		= new Token (KEYWORD, "STRLEN");
 	
 	/**
 	 * A <CODE>Token</CODE> representing the BANK function.
@@ -2590,6 +2590,29 @@ public abstract class Assembler extends Application
 		else if (token == BANK) {
 			token = nextRealToken ();
 			return (Expr.shr (parseUnary (), SIXTEEN));
+		}
+		else if (token == STRLEN){
+			token = nextRealToken ();
+			if (token != LPAREN) {
+				error ("Expected open parenthesis");
+				return (null);
+			}
+			
+			token = nextRealToken();
+			if ((token == null) || (token.getKind() != STRING)) {
+				error ("Expected string value in STRLEN");
+				return (null);
+			}
+			Value value = new Value(null, token.getText().length());
+			
+			token = nextRealToken ();
+			if (token != RPAREN) {
+				error ("Expected close parenthesis");
+				return (null);
+			}
+			token = nextRealToken ();
+			
+			return (value);
 		}
 		
 		return (parseValue ());
