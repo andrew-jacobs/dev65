@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2014 Andrew John Jacobs.
+ * Copyright (C),2014-2015 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -73,19 +73,16 @@ public class AsScmp extends Assembler
 			
 			if (token == LPAREN) {
 				token = nextRealToken ();
-				if (token == P0)
-					bits |= 0x00;
-				else if (token == P1)
-					bits |= 0x01;
-				else if (token == P2)
-					bits |= 0x02;
-				else if (token == P3)
-					bits |= 0x03;
+				Expr reg = parseExpr ();
+				long ptr;
+				
+				if ((reg != null) && reg.isAbsolute () && ((ptr = reg.resolve ()) >= 0) && (ptr <= 3))
+					bits |= (int) ptr;
 				else {
 					error (ERR_POINTER_REGISTER);
 					return (true);
 				}
-				token = nextRealToken ();
+				
 				if (token != RPAREN) {
 					error (ERR_SYNTAX);
 					return (true);
@@ -96,19 +93,16 @@ public class AsScmp extends Assembler
 				expr = parseExpr ();
 				if (token == LPAREN) {
 					token = nextRealToken ();
-					if (token == P0)
-						bits |= 0x00;
-					else if (token == P1)
-						bits |= 0x01;
-					else if (token == P2)
-						bits |= 0x02;
-					else if (token == P3)
-						bits |= 0x03;
+					Expr reg = parseExpr ();
+					long ptr;
+					
+					if ((reg != null) && reg.isAbsolute () && ((ptr = reg.resolve ()) >= 0) && (ptr <= 3))
+						bits |= (int) ptr;
 					else {
 						error (ERR_POINTER_REGISTER);
 						return (true);
 					}
-					token = nextRealToken ();
+
 					if (token != RPAREN) {
 						error (ERR_SYNTAX);
 						return (true);
@@ -155,19 +149,16 @@ public class AsScmp extends Assembler
 			
 			if (token == LPAREN) {
 				token = nextRealToken ();
-				if (token == P0)
-					bits |= 0x00;
-				else if (token == P1)
-					bits |= 0x01;
-				else if (token == P2)
-					bits |= 0x02;
-				else if (token == P3)
-					bits |= 0x03;
+				Expr reg = parseExpr ();
+				long ptr;
+				
+				if ((reg != null) && reg.isAbsolute () && ((ptr = reg.resolve ()) >= 0) && (ptr <= 3))
+					bits |= (int) ptr;
 				else {
 					error (ERR_POINTER_REGISTER);
 					return (true);
 				}
-				token = nextRealToken ();
+
 				if (token != RPAREN) {
 					error (ERR_SYNTAX);
 					return (true);
@@ -178,19 +169,16 @@ public class AsScmp extends Assembler
 				expr = parseExpr ();
 				if (token == LPAREN) {
 					token = nextRealToken ();
-					if (token == P0)
-						bits |= 0x00;
-					else if (token == P1)
-						bits |= 0x01;
-					else if (token == P2)
-						bits |= 0x02;
-					else if (token == P3)
-						bits |= 0x03;
+					Expr reg = parseExpr ();
+					long ptr;
+					
+					if ((reg != null) && reg.isAbsolute () && ((ptr = reg.resolve ()) >= 0) && (ptr <= 3))
+						bits |= (int) ptr;
 					else {
 						error (ERR_POINTER_REGISTER);
 						return (true);
 					}
-					token = nextRealToken ();
+
 					if (token != RPAREN) {
 						error (ERR_SYNTAX);
 						return (true);
@@ -233,20 +221,16 @@ public class AsScmp extends Assembler
 			int		bits = 0;
 			
 			token	= nextRealToken ();
-			if (token == P0)
-				bits |= 0x00;
-			else if (token == P1)
-				bits |= 0x01;
-			else if (token == P2)
-				bits |= 0x02;
-			else if (token == P3)
-				bits |= 0x03;
+			Expr reg = parseExpr ();
+			long ptr;
+			
+			if ((reg != null) && reg.isAbsolute () && ((ptr = reg.resolve ()) >= 0) && (ptr <= 3))
+				bits |= (int) ptr;
 			else {
 				error (ERR_POINTER_REGISTER);
 				return (true);
 			}
 			
-			token	= nextRealToken ();
 			if (token != EOL)
 				error (ERR_UNEXPECTED_TEXT);
 			
@@ -330,30 +314,6 @@ public class AsScmp extends Assembler
 	protected final Token 	AT
 		= new Token (KEYWORD, "@");
 	
-	/**
-	 * A <CODE>Token</CODE> representing the P0 register.
-	 */
-	protected final Token 	P0
-		= new Token (KEYWORD, "P0");
-
-	/**
-	 * A <CODE>Token</CODE> representing the P1 register.
-	 */
-	protected final Token 	P1
-		= new Token (KEYWORD, "P1");
-
-	/**
-	 * A <CODE>Token</CODE> representing the P2 register.
-	 */
-	protected final Token 	P2
-		= new Token (KEYWORD, "P2");
-
-	/**
-	 * A <CODE>Token</CODE> representing the P3 register.
-	 */
-	protected final Token 	P3
-		= new Token (KEYWORD, "P3");
-
 	/**
 	 * An <CODE>Opcode</CODE> that handles the ADD instruction.
 	 */
@@ -677,14 +637,10 @@ public class AsScmp extends Assembler
 		addToken (XRE);
 		addToken (XRI);
 
-		// Registers
-		addToken (P0);
-		addToken (P1);
-		addToken (P2);
-		addToken (P3);
-		
+		// Functions
 		addToken (LO);
 		addToken (HI);
+		addToken (STRLEN);
 
 		super.startUp ();
 	}
@@ -694,7 +650,7 @@ public class AsScmp extends Assembler
 	 */
 	protected boolean isSupportedPass (final Pass pass)
 	{
-		return (true); //pass != Pass.INTERMEDIATE);
+		return (true);
 	}
 	
 	/**
@@ -704,7 +660,7 @@ public class AsScmp extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable National Semiconductor SC/MP Assembler [14.11]";
+		title = "Portable National Semiconductor SC/MP Assembler [15.02]";
 	}
 	
 	/**

@@ -1597,7 +1597,7 @@ public final class As6800 extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable Motorola 6800 Assembler [15.01]";
+		title = "Portable Motorola 6800 Assembler [15.02]";
 	}
 	
 	/**
@@ -2140,29 +2140,32 @@ public final class As6800 extends Assembler
 	 */
 	private Expr parseImmd ()
 	{
-		if (token.getKind () == STRING) {
-			String text = token.getText();
-			
-			if (text.length () > 4)
-				error (ERR_TEXT_TOO_LONG_FOR_IMMD);
-			
-			int		value = 0;
-			
-			for (int index = 0; index < text.length (); ++index)
-				value = (value << 8) | text.charAt (index);
-			
-			token = nextRealToken ();
-			
-			return (new Value (null, value));
+		if (token != null) {
+			if (token.getKind () == STRING) {
+				String text = token.getText();
+				
+				if (text.length () > 4)
+					error (ERR_TEXT_TOO_LONG_FOR_IMMD);
+				
+				int		value = 0;
+				
+				for (int index = 0; index < text.length (); ++index)
+					value = (value << 8) | text.charAt (index);
+				
+				token = nextRealToken ();
+				
+				return (new Value (null, value));
+			}
+			else {
+				Expr	result = parseExpr ();
+				
+				if (result == null)
+					error (ERR_MISSING_EXPRESSION);
+	
+				return (result);
+			}
 		}
-		else {
-			Expr	result = parseExpr ();
-			
-			if (result == null)
-				error (ERR_MISSING_EXPRESSION);
-
-			return (result);
-		}
+		return (null);
 	}
 
 	private void genInherent (int opcode)

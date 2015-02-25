@@ -29,7 +29,6 @@ import uk.co.demon.obelisk.xasm.MemoryModelByte;
 import uk.co.demon.obelisk.xasm.Opcode;
 import uk.co.demon.obelisk.xasm.Pass;
 import uk.co.demon.obelisk.xasm.Token;
-import uk.co.demon.obelisk.xasm.TokenKind;
 import uk.co.demon.obelisk.xobj.Expr;
 import uk.co.demon.obelisk.xobj.Hex;
 import uk.co.demon.obelisk.xobj.Module;
@@ -57,9 +56,9 @@ public final class As8080 extends Assembler
 	
 	protected class ImpliedOpcode extends Opcode
 	{
-		public ImpliedOpcode (TokenKind kind, String text, int opcode)
+		public ImpliedOpcode (String text, int opcode)
 		{
-			super (kind, text);
+			super (KEYWORD, text);
 			
 			this.opcode = opcode;
 		}
@@ -82,9 +81,9 @@ public final class As8080 extends Assembler
 			
 	protected class RegisterOpcode extends Opcode
 	{
-		public RegisterOpcode (TokenKind kind, String text, int opcode, int shift)
+		public RegisterOpcode (String text, int opcode, int shift)
 		{
-			super (kind, text);
+			super (KEYWORD, text);
 			
 			this.opcode = opcode;
 			this.shift = shift;
@@ -121,9 +120,9 @@ public final class As8080 extends Assembler
 			
 	protected class RegisterPairSPOpcode extends Opcode
 	{
-		public RegisterPairSPOpcode (TokenKind kind, String text, int opcode)
+		public RegisterPairSPOpcode (String text, int opcode)
 		{
-			super (kind, text);
+			super (KEYWORD, text);
 			
 			this.opcode = opcode;
 		}
@@ -153,9 +152,9 @@ public final class As8080 extends Assembler
 
 	protected class RegisterPairPSWOpcode extends Opcode
 	{
-		public RegisterPairPSWOpcode (TokenKind kind, String text, int opcode)
+		public RegisterPairPSWOpcode (String text, int opcode)
 		{
-			super (kind, text);
+			super (KEYWORD, text);
 			
 			this.opcode = opcode;
 		}
@@ -185,9 +184,9 @@ public final class As8080 extends Assembler
 
 	protected class ImmediateOpcode extends Opcode
 	{
-		public ImmediateOpcode (TokenKind kind, String text, int opcode)
+		public ImmediateOpcode (String text, int opcode)
 		{
-			super (kind, text);
+			super (KEYWORD, text);
 			
 			this.opcode = opcode;
 		}
@@ -216,9 +215,9 @@ public final class As8080 extends Assembler
 
 	protected class ImmediatePairOpcode extends Opcode
 	{
-		public ImmediatePairOpcode (TokenKind kind, String text, int opcode)
+		public ImmediatePairOpcode (String text, int opcode)
 		{
-			super (kind, text);
+			super (KEYWORD, text);
 			
 			this.opcode = opcode;
 		}
@@ -411,9 +410,9 @@ public final class As8080 extends Assembler
 
 	protected class AccumulatorIndirectOpcode extends Opcode
 	{
-		public AccumulatorIndirectOpcode (TokenKind kind, String text, int opcode)
+		public AccumulatorIndirectOpcode (String text, int opcode)
 		{
-			super (kind, text);
+			super (KEYWORD, text);
 			
 			this.opcode = opcode;
 		}
@@ -445,9 +444,9 @@ public final class As8080 extends Assembler
 	
 	protected class AddressOpcode extends Opcode
 	{
-		public AddressOpcode (TokenKind kind, String text, int opcode)
+		public AddressOpcode (String text, int opcode)
 		{
-			super (kind, text);
+			super (KEYWORD, text);
 			
 			this.opcode = opcode;
 		}
@@ -548,212 +547,212 @@ public final class As8080 extends Assembler
 	/**
 	 * An <CODE>Opcode</CODE> that handles the ACI instruction.
 	 */
-	protected final Opcode 	ACI		= new ImmediateOpcode (KEYWORD, "ACI", 0xce);
+	protected final Opcode 	ACI		= new ImmediateOpcode ("ACI", 0xce);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the ADC instruction.
 	 */
-	protected final Opcode 	ADC		= new RegisterOpcode (KEYWORD, "ADC", 0x88, 0);
+	protected final Opcode 	ADC		= new RegisterOpcode ("ADC", 0x88, 0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the ADD instruction.
 	 */
-	protected final Opcode 	ADD		= new RegisterOpcode (KEYWORD, "ADD", 0x80, 0);
+	protected final Opcode 	ADD		= new RegisterOpcode ("ADD", 0x80, 0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the ADI instruction.
 	 */
-	protected final Opcode 	ADI		= new ImmediateOpcode (KEYWORD, "ADI", 0xc6);
+	protected final Opcode 	ADI		= new ImmediateOpcode ("ADI", 0xc6);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the ANA instruction.
 	 */
-	protected final Opcode 	ANA		= new RegisterOpcode (KEYWORD, "ANA", 0xa0, 0);
+	protected final Opcode 	ANA		= new RegisterOpcode ("ANA", 0xa0, 0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the ANI instruction.
 	 */
-	protected final Opcode 	ANI		= new ImmediateOpcode (KEYWORD, "ANI", 0xe6);
+	protected final Opcode 	ANI		= new ImmediateOpcode ("ANI", 0xe6);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CALL instruction.
 	 */
-	protected final Opcode 	CALL	= new AddressOpcode (KEYWORD, "CALL", 0xcd);
+	protected final Opcode 	CALL	= new AddressOpcode ("CALL", 0xcd);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CC instruction.
 	 */
-	protected final Opcode 	CC		= new AddressOpcode (KEYWORD, "CC", 0xdc);
+	protected final Opcode 	CC		= new AddressOpcode ("CC", 0xdc);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CM instruction.
 	 */
-	protected final Opcode 	CM		= new AddressOpcode (KEYWORD, "CM", 0xfc);
+	protected final Opcode 	CM		= new AddressOpcode ("CM", 0xfc);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CMA instruction.
 	 */
-	protected final Opcode 	CMA		= new ImpliedOpcode (KEYWORD, "CMA", 0x2f);
+	protected final Opcode 	CMA		= new ImpliedOpcode ("CMA", 0x2f);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CMC instruction.
 	 */
-	protected final Opcode 	CMC		= new ImpliedOpcode (KEYWORD, "CMC", 0x3f);
+	protected final Opcode 	CMC		= new ImpliedOpcode ("CMC", 0x3f);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CMP instruction.
 	 */
-	protected final Opcode 	CMP		= new RegisterOpcode (KEYWORD, "CMP", 0xb8, 0);
+	protected final Opcode 	CMP		= new RegisterOpcode ("CMP", 0xb8, 0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CNC instruction.
 	 */
-	protected final Opcode 	CNC		= new AddressOpcode (KEYWORD, "CNC", 0xd4);
+	protected final Opcode 	CNC		= new AddressOpcode ("CNC", 0xd4);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CNZ instruction.
 	 */
-	protected final Opcode 	CNZ		= new AddressOpcode (KEYWORD, "CNZ", 0xc4);
+	protected final Opcode 	CNZ		= new AddressOpcode ("CNZ", 0xc4);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CP instruction.
 	 */
-	protected final Opcode 	CP		= new AddressOpcode (KEYWORD, "CP", 0xf4);
+	protected final Opcode 	CP		= new AddressOpcode ("CP", 0xf4);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CPE instruction.
 	 */
-	protected final Opcode 	CPE		= new AddressOpcode (KEYWORD, "CPE", 0xec);
+	protected final Opcode 	CPE		= new AddressOpcode ("CPE", 0xec);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CPI instruction.
 	 */
-	protected final Opcode 	CPI		= new ImmediateOpcode (KEYWORD, "CPI", 0xfe);
+	protected final Opcode 	CPI		= new ImmediateOpcode ("CPI", 0xfe);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CPO instruction.
 	 */
-	protected final Opcode 	CPO		= new AddressOpcode (KEYWORD, "CPO", 0xe4);
+	protected final Opcode 	CPO		= new AddressOpcode ("CPO", 0xe4);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CZ instruction.
 	 */
-	protected final Opcode 	CZ		= new AddressOpcode (KEYWORD, "CZ", 0xcc);
+	protected final Opcode 	CZ		= new AddressOpcode ("CZ", 0xcc);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the DAA instruction.
 	 */
-	protected final Opcode 	DAA		= new ImpliedOpcode (KEYWORD, "DAA", 0x27);
+	protected final Opcode 	DAA		= new ImpliedOpcode ("DAA", 0x27);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the DAD instruction.
 	 */
-	protected final Opcode 	DAD		= new RegisterPairSPOpcode (KEYWORD, "DAD", 0x09);
+	protected final Opcode 	DAD		= new RegisterPairSPOpcode ("DAD", 0x09);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the DCR instruction.
 	 */
-	protected final Opcode 	DCR		= new RegisterOpcode (KEYWORD, "DCR", 0x05, 3);
+	protected final Opcode 	DCR		= new RegisterOpcode ("DCR", 0x05, 3);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the DCX instruction.
 	 */
-	protected final Opcode 	DCX		= new RegisterPairSPOpcode (KEYWORD, "DCX", 0x0b);
+	protected final Opcode 	DCX		= new RegisterPairSPOpcode ("DCX", 0x0b);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the DI instruction.
 	 */
-	protected final Opcode 	DI		= new ImpliedOpcode (KEYWORD, "DI", 0xf3);
+	protected final Opcode 	DI		= new ImpliedOpcode ("DI", 0xf3);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the EI instruction.
 	 */
-	protected final Opcode 	EI		= new ImpliedOpcode (KEYWORD, "EI", 0xfb);
+	protected final Opcode 	EI		= new ImpliedOpcode ("EI", 0xfb);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the HLT instruction.
 	 */
-	protected final Opcode 	HLT		= new ImpliedOpcode (KEYWORD, "HLT", 0x76);
+	protected final Opcode 	HLT		= new ImpliedOpcode ("HLT", 0x76);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the IN instruction.
 	 */
-	protected final Opcode 	IN		= new ImmediateOpcode (KEYWORD, "IN", 0xdd);
+	protected final Opcode 	IN		= new ImmediateOpcode ("IN", 0xdd);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the INR instruction.
 	 */
-	protected final Opcode 	INR		= new RegisterOpcode (KEYWORD, "INR", 0x04, 3);
+	protected final Opcode 	INR		= new RegisterOpcode ("INR", 0x04, 3);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the INX instruction.
 	 */
-	protected final Opcode 	INX		= new RegisterPairSPOpcode (KEYWORD, "INX", 0x03);
+	protected final Opcode 	INX		= new RegisterPairSPOpcode ("INX", 0x03);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the JC instruction.
 	 */
-	protected final Opcode 	JC		= new AddressOpcode (KEYWORD, "JC", 0xda);
+	protected final Opcode 	JC		= new AddressOpcode ("JC", 0xda);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the JM instruction.
 	 */
-	protected final Opcode 	JM		= new AddressOpcode (KEYWORD, "JM", 0xfa);
+	protected final Opcode 	JM		= new AddressOpcode ("JM", 0xfa);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the JMP instruction.
 	 */
-	protected final Opcode 	JMP		= new AddressOpcode (KEYWORD, "JMP", 0xc3);
+	protected final Opcode 	JMP		= new AddressOpcode ("JMP", 0xc3);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the JNC instruction.
 	 */
-	protected final Opcode 	JNC		= new AddressOpcode (KEYWORD, "JNC", 0xd2);
+	protected final Opcode 	JNC		= new AddressOpcode ("JNC", 0xd2);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the JNZ instruction.
 	 */
-	protected final Opcode 	JNZ		= new AddressOpcode (KEYWORD, "JNZ", 0xc2);
+	protected final Opcode 	JNZ		= new AddressOpcode ("JNZ", 0xc2);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the JP instruction.
 	 */
-	protected final Opcode 	JP		= new AddressOpcode (KEYWORD, "JP", 0xf2);
+	protected final Opcode 	JP		= new AddressOpcode ("JP", 0xf2);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the JPE instruction.
 	 */
-	protected final Opcode 	JPE		= new AddressOpcode (KEYWORD, "JPE", 0xea);
+	protected final Opcode 	JPE		= new AddressOpcode ("JPE", 0xea);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the JPO instruction.
 	 */
-	protected final Opcode 	JPO		= new AddressOpcode (KEYWORD, "JPO", 0xe2);
+	protected final Opcode 	JPO		= new AddressOpcode ("JPO", 0xe2);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the JZ instruction.
 	 */
-	protected final Opcode 	JZ		= new AddressOpcode (KEYWORD, "JZ", 0xca);
+	protected final Opcode 	JZ		= new AddressOpcode ("JZ", 0xca);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the LDA instruction.
 	 */
-	protected final Opcode 	LDA		= new AddressOpcode (KEYWORD, "LDA", 0x3a);
+	protected final Opcode 	LDA		= new AddressOpcode ("LDA", 0x3a);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the LDAX instruction.
 	 */
-	protected final Opcode 	LDAX	= new AccumulatorIndirectOpcode (KEYWORD, "LDAX", 0x0a);
+	protected final Opcode 	LDAX	= new AccumulatorIndirectOpcode ("LDAX", 0x0a);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the LHLD instruction.
 	 */
-	protected final Opcode 	LHLD	= new AddressOpcode (KEYWORD, "LHLD", 0x2a);
+	protected final Opcode 	LHLD	= new AddressOpcode ("LHLD", 0x2a);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the LXI instruction.
 	 */
-	protected final Opcode 	LXI		= new ImmediatePairOpcode (KEYWORD, "LXI", 0x01);
+	protected final Opcode 	LXI		= new ImmediatePairOpcode ("LXI", 0x01);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the MOV instruction.
@@ -768,102 +767,102 @@ public final class As8080 extends Assembler
 	/**
 	 * An <CODE>Opcode</CODE> that handles the NOP instruction.
 	 */
-	protected final Opcode 	NOP		= new ImpliedOpcode (KEYWORD, "NOP", 0x00);
+	protected final Opcode 	NOP		= new ImpliedOpcode ("NOP", 0x00);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the ORA instruction.
 	 */
-	protected final Opcode 	ORA		= new RegisterOpcode (KEYWORD, "ORA", 0xb0, 0);
+	protected final Opcode 	ORA		= new RegisterOpcode ("ORA", 0xb0, 0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the ORI instruction.
 	 */
-	protected final Opcode 	ORI		= new ImmediateOpcode (KEYWORD, "ORI", 0xf6);
+	protected final Opcode 	ORI		= new ImmediateOpcode ("ORI", 0xf6);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the OUT instruction.
 	 */
-	protected final Opcode 	OUT		= new ImmediateOpcode (KEYWORD, "OUT", 0xd3);
+	protected final Opcode 	OUT		= new ImmediateOpcode ("OUT", 0xd3);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the PCHL instruction.
 	 */
-	protected final Opcode 	PCHL	= new ImpliedOpcode (KEYWORD, "PCHL", 0xe9);
+	protected final Opcode 	PCHL	= new ImpliedOpcode ("PCHL", 0xe9);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the POP instruction.
 	 */
-	protected final Opcode 	POP		= new RegisterPairPSWOpcode (KEYWORD, "POP", 0xc1);
+	protected final Opcode 	POP		= new RegisterPairPSWOpcode ("POP", 0xc1);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the PUSH instruction.
 	 */
-	protected final Opcode 	PUSH	= new RegisterPairPSWOpcode (KEYWORD, "PUSH", 0xc5);
+	protected final Opcode 	PUSH	= new RegisterPairPSWOpcode ("PUSH", 0xc5);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RAL instruction.
 	 */
-	protected final Opcode 	RAL		= new ImpliedOpcode (KEYWORD, "RAL", 0x17);
+	protected final Opcode 	RAL		= new ImpliedOpcode ("RAL", 0x17);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RAR instruction.
 	 */
-	protected final Opcode 	RAR		= new ImpliedOpcode (KEYWORD, "RAR", 0x1f);
+	protected final Opcode 	RAR		= new ImpliedOpcode ("RAR", 0x1f);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RC instruction.
 	 */
-	protected final Opcode 	RC		= new ImpliedOpcode (KEYWORD, "RC", 0xd8);
+	protected final Opcode 	RC		= new ImpliedOpcode ("RC", 0xd8);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the CMA instruction.
 	 */
-	protected final Opcode 	RET		= new ImpliedOpcode (KEYWORD, "RET", 0xc9);
+	protected final Opcode 	RET		= new ImpliedOpcode ("RET", 0xc9);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RIM instruction.
 	 */
-	protected final Opcode 	RIM		= new ImpliedOpcode (KEYWORD, "RIM", 0x20);
+	protected final Opcode 	RIM		= new ImpliedOpcode ("RIM", 0x20);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RLC instruction.
 	 */
-	protected final Opcode 	RLC		= new ImpliedOpcode (KEYWORD, "RLC", 0x07);
+	protected final Opcode 	RLC		= new ImpliedOpcode ("RLC", 0x07);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RM instruction.
 	 */
-	protected final Opcode 	RM		= new ImpliedOpcode (KEYWORD, "RM", 0xf8);
+	protected final Opcode 	RM		= new ImpliedOpcode ("RM", 0xf8);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RNC instruction.
 	 */
-	protected final Opcode 	RNC		= new ImpliedOpcode (KEYWORD, "RNC", 0xd0);
+	protected final Opcode 	RNC		= new ImpliedOpcode ("RNC", 0xd0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RNZ instruction.
 	 */
-	protected final Opcode 	RNZ		= new ImpliedOpcode (KEYWORD, "RNZ", 0xc0);
+	protected final Opcode 	RNZ		= new ImpliedOpcode ("RNZ", 0xc0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RP instruction.
 	 */
-	protected final Opcode 	RP		= new ImpliedOpcode (KEYWORD, "RP", 0xf0);
+	protected final Opcode 	RP		= new ImpliedOpcode ("RP", 0xf0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RPE instruction.
 	 */
-	protected final Opcode 	RPE		= new ImpliedOpcode (KEYWORD, "RPE", 0xe8);
+	protected final Opcode 	RPE		= new ImpliedOpcode ("RPE", 0xe8);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RPO instruction.
 	 */
-	protected final Opcode 	RPO		= new ImpliedOpcode (KEYWORD, "RPO", 0xe0);
+	protected final Opcode 	RPO		= new ImpliedOpcode ("RPO", 0xe0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RRC instruction.
 	 */
-	protected final Opcode 	RRC		= new ImpliedOpcode (KEYWORD, "RRC", 0x0f);
+	protected final Opcode 	RRC		= new ImpliedOpcode ("RRC", 0x0f);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RST instruction.
@@ -873,77 +872,77 @@ public final class As8080 extends Assembler
 	/**
 	 * An <CODE>Opcode</CODE> that handles the RZ instruction.
 	 */
-	protected final Opcode 	RZ		= new ImpliedOpcode (KEYWORD, "RZ", 0xc8);
+	protected final Opcode 	RZ		= new ImpliedOpcode ("RZ", 0xc8);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the SBB instruction.
 	 */
-	protected final Opcode 	SBB		= new RegisterOpcode (KEYWORD, "SBB", 0x98, 0);
+	protected final Opcode 	SBB		= new RegisterOpcode ("SBB", 0x98, 0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the SBI instruction.
 	 */
-	protected final Opcode 	SBI		= new ImmediateOpcode (KEYWORD, "SBI", 0xde);
+	protected final Opcode 	SBI		= new ImmediateOpcode ("SBI", 0xde);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the SHLD instruction.
 	 */
-	protected final Opcode 	SHLD	= new AddressOpcode (KEYWORD, "SHLD", 0x22);
+	protected final Opcode 	SHLD	= new AddressOpcode ("SHLD", 0x22);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the SIM instruction.
 	 */
-	protected final Opcode 	SIM		= new ImpliedOpcode (KEYWORD, "SIM", 0x30);
+	protected final Opcode 	SIM		= new ImpliedOpcode ("SIM", 0x30);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the SPHL instruction.
 	 */
-	protected final Opcode 	SPHL	= new ImpliedOpcode (KEYWORD, "SPHL", 0xf9);
+	protected final Opcode 	SPHL	= new ImpliedOpcode ("SPHL", 0xf9);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the STA instruction.
 	 */
-	protected final Opcode 	STA		= new AddressOpcode (KEYWORD, "STA", 0x32);
+	protected final Opcode 	STA		= new AddressOpcode ("STA", 0x32);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the STAX instruction.
 	 */
-	protected final Opcode 	STAX	= new AccumulatorIndirectOpcode (KEYWORD, "STAX", 0x02);
+	protected final Opcode 	STAX	= new AccumulatorIndirectOpcode ("STAX", 0x02);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the STC instruction.
 	 */
-	protected final Opcode 	STC	= new ImpliedOpcode (KEYWORD, "STC", 0x37);
+	protected final Opcode 	STC	= new ImpliedOpcode ("STC", 0x37);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the SUB instruction.
 	 */
-	protected final Opcode 	SUB		= new RegisterOpcode (KEYWORD, "SUB", 0x90, 0);
+	protected final Opcode 	SUB		= new RegisterOpcode ("SUB", 0x90, 0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the SUI instruction.
 	 */
-	protected final Opcode 	SUI		= new ImmediateOpcode (KEYWORD, "SUI", 0xd6);
+	protected final Opcode 	SUI		= new ImmediateOpcode ("SUI", 0xd6);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the XCHG instruction.
 	 */
-	protected final Opcode 	XCHG	= new ImpliedOpcode (KEYWORD, "XCHG", 0xeb);
+	protected final Opcode 	XCHG	= new ImpliedOpcode ("XCHG", 0xeb);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the XRA instruction.
 	 */
-	protected final Opcode 	XRA		= new RegisterOpcode (KEYWORD, "XRA", 0xa8, 0);
+	protected final Opcode 	XRA		= new RegisterOpcode ("XRA", 0xa8, 0);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the XRI instruction.
 	 */
-	protected final Opcode 	XRI		= new ImmediateOpcode (KEYWORD, "XRI", 0xee);
+	protected final Opcode 	XRI		= new ImmediateOpcode ("XRI", 0xee);
 	
 	/**
 	 * An <CODE>Opcode</CODE> that handles the XTHL instruction.
 	 */
-	protected final Opcode 	XTHL	= new ImpliedOpcode (KEYWORD, "XTHL", 0xe3);
+	protected final Opcode 	XTHL	= new ImpliedOpcode ("XTHL", 0xe3);
 	
 	/**
 	 * {@inheritDoc}
@@ -1091,6 +1090,7 @@ public final class As8080 extends Assembler
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected boolean isSupportedPass (final Pass pass)
 	{
 		return (pass != Pass.INTERMEDIATE);
@@ -1099,16 +1099,18 @@ public final class As8080 extends Assembler
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void startPass ()
 	{
 		super.startPass ();
 		
-		title = "Portable Intel 8080/8085 Assembler [14.10]";
+		title = "Portable Intel 8080/8085 Assembler [15.02]";
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected Token readToken ()
 	{
 		return (scanToken ());
@@ -1117,6 +1119,7 @@ public final class As8080 extends Assembler
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected String formatListing ()
 	{
 		int			byteCount = memory.getByteCount ();
@@ -1474,28 +1477,31 @@ public final class As8080 extends Assembler
 	 */
 	private Expr parseImmd ()
 	{
-		if (token.getKind () == STRING) {
-			String text = token.getText();
-			
-			if (text.length () > 4)
-				error (ERR_TEXT_TOO_LONG_FOR_IMMD);
-			
-			int		value = 0;
-			
-			for (int index = 0; index < text.length (); ++index)
-				value = (value << 8) | text.charAt (index);
-			
-			token = nextRealToken ();
-			
-			return (new Value (null, value));
+		if (token != null) {
+			if (token.getKind () == STRING) {
+				String text = token.getText();
+				
+				if (text.length () > 4)
+					error (ERR_TEXT_TOO_LONG_FOR_IMMD);
+				
+				int		value = 0;
+				
+				for (int index = 0; index < text.length (); ++index)
+					value = (value << 8) | text.charAt (index);
+				
+				token = nextRealToken ();
+				
+				return (new Value (null, value));
+			}
+			else {
+				Expr	result = parseExpr ();
+				
+				if (result == null)
+					error (ERR_MISSING_EXPRESSION);
+	
+				return (result);
+			}
 		}
-		else {
-			Expr	result = parseExpr ();
-			
-			if (result == null)
-				error (ERR_MISSING_EXPRESSION);
-
-			return (result);
-		}
+		return (null);
 	}
 }
