@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2011 Andrew John Jacobs.
+ * Copyright (C),2005-2015 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -417,9 +417,19 @@ public abstract class Expr
 	 * 
 	 * @param 	sections		A structure showing where sections have been placed.
 	 * @param 	symbols			A structure showing where symbols are located.
-	 * @return	The target value of the symbol.
+	 * @return	The target value of the expression.
 	 */
 	public abstract long resolve (SectionMap sections, SymbolMap symbols);
+	
+	/**
+	 * Calculates the real value of an expression assuming it is an absolute value.
+	 * 
+	 * @return 	The target value of the expression.
+	 */
+	public long resolve ()
+	{
+		return (resolve (null, null));
+	}
 	
 	/**
 	 * A constant <CODE>Value</CODE> representing a true state.
