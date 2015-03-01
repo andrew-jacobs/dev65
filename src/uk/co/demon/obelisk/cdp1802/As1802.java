@@ -150,27 +150,298 @@ public final class As1802 extends Assembler
 		private final int opcode;
 	}
 	
+	protected class ShortBranchOpcode extends Opcode
+	{
+		public ShortBranchOpcode (String text, int opcode)
+		{
+			super (KEYWORD, text);
+			
+			this.opcode = opcode;
+		}
+		
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean compile ()
+		{
+			token	= nextRealToken ();
+			Expr expr = parseImmd ();
+			Expr origin = getOrigin ();
+			
+			if (expr != null) {
+				addByte (opcode);
+				addByte (expr);
+				
+				if (getPass () == Pass.FINAL) {
+					expr = Expr.and (Expr.xor (origin, expr), HIGH_BYTES);
+					if (expr.isAbsolute ()) {
+						if (expr.resolve () != 0)
+							error ("Invalid short branch. Target address on different page");
+					}
+					else {
+						// Assert branch to same page in object code.
+					}
+				}
+			}
+
+			if (token != EOL)
+				error (ERR_UNEXPECTED_TEXT);
+			
+			return (true);
+		}
+		
+		private final int opcode;
+	}
+	
+	protected class LongBranchOpcode extends Opcode
+	{
+		public LongBranchOpcode (String text, int opcode)
+		{
+			super (KEYWORD, text);
+			
+			this.opcode = opcode;
+		}
+		
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean compile ()
+		{
+			token	= nextRealToken ();
+			Expr expr = parseImmd ();
+			
+			if (expr != null) {
+				addByte (opcode);
+				addWord (expr);
+			}
+
+			if (token != EOL)
+				error (ERR_UNEXPECTED_TEXT);
+			
+			return (true);
+		}
+		
+		private final int opcode;
+	}
+
+	protected class IOOpcode extends Opcode
+	{
+		public IOOpcode (String text, int opcode)
+		{
+			super (KEYWORD, text);
+			
+			this.opcode = opcode;
+		}
+		
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean compile ()
+		{
+			token	= nextRealToken ();
+			Expr expr = parseExpr ();
+			long reg;
+			
+			if ((expr != null) && expr.isAbsolute () && ((reg = expr.resolve ()) >= 0) && (reg <= 7)) {
+				addByte (opcode | (int) reg);
+				token	= nextRealToken ();
+			}
+			else
+				error ("Expected a port value 0-7");
+			
+			if (token != EOL)
+				error (ERR_UNEXPECTED_TEXT);
+			
+			return (true);
+		}
+		
+		private final int opcode;
+	}
+	
 	/**
 	 * Constructs an <CODE>As1802</CODE> instance and initialises the object
 	 * module.
 	 */
 	protected As1802 ()
 	{
-		super (new Module ("1802", false));
+		super (new Module ("1802", true));
 		
 		setMemoryModel (new MemoryModelByte (errorHandler));
 	}
 	
-	protected final Opcode	LDA = new RegisterOpcode ("LDA", 0x40, false);
-	
-	protected final Opcode	LDI = new ImmediateOpcode ("LDI", 0xf8);
+	protected final Opcode	ADD  = new ImpliedOpcode ("ADD", 0xf4);
 
-	protected final Opcode	LDN = new RegisterOpcode ("LDN", 0x00, true);
+	protected final Opcode	ADI  = new ImmediateOpcode ("ADI", 0xfc);
 	
-	protected final Opcode	LDX = new ImpliedOpcode ("LDX", 0xf0);
+	protected final Opcode	ADC  = new ImpliedOpcode ("ADC", 0xf4);
+
+	protected final Opcode	ADCI = new ImmediateOpcode ("ADCI", 0x7c);
+	
+	protected final Opcode	AND  = new ImpliedOpcode ("AND", 0xf2);
+
+	protected final Opcode	ANI  = new ImmediateOpcode ("ANI", 0xfa);
+	
+	protected final Opcode	B1   = new ShortBranchOpcode ("B1", 0x34);
+	
+	protected final Opcode	B2   = new ShortBranchOpcode ("B2", 0x35);
+	
+	protected final Opcode	B3   = new ShortBranchOpcode ("B3", 0x36);
+	
+	protected final Opcode	B4   = new ShortBranchOpcode ("B4", 0x37);
+	
+	protected final Opcode	BDF  = new ShortBranchOpcode ("BDF", 0x33);
+	
+	protected final Opcode	BGE  = new ShortBranchOpcode ("BGE", 0x33);
+	
+	protected final Opcode	BL   = new ShortBranchOpcode ("BL", 0x3b);
+	
+	protected final Opcode	BM   = new ShortBranchOpcode ("BM", 0x3b);
+	
+	protected final Opcode	BN1  = new ShortBranchOpcode ("BN1", 0x3c);
+	
+	protected final Opcode	BN2  = new ShortBranchOpcode ("BN2", 0x3d);
+	
+	protected final Opcode	BN3  = new ShortBranchOpcode ("BN3", 0x3e);
+	
+	protected final Opcode	BN4  = new ShortBranchOpcode ("BN4", 0x3f);
+	
+	protected final Opcode	BNF  = new ShortBranchOpcode ("BNF", 0x3b);
+	
+	protected final Opcode	BNQ  = new ShortBranchOpcode ("BNQ", 0x39);
+	
+	protected final Opcode	BNZ  = new ShortBranchOpcode ("BNZ", 0x3a);
+	
+	protected final Opcode	BPZ  = new ShortBranchOpcode ("BPZ", 0x33);
+	
+	protected final Opcode	BQ   = new ShortBranchOpcode ("BQ", 0x39);
+	
+	protected final Opcode	BR   = new ShortBranchOpcode ("BR", 0x30);
+	
+	protected final Opcode	BZ   = new ShortBranchOpcode ("BZ", 0x33);
+	
+	protected final Opcode	DIS  = new ImpliedOpcode ("DIS", 0x71);
+	
+	protected final Opcode 	DEC  = new RegisterOpcode ("DEC", 0x20, false);
+	
+	protected final Opcode	IDL  = new ImpliedOpcode ("IDL", 0x00);
+	
+	protected final Opcode	INC  = new RegisterOpcode ("INC", 0x10, false);
+	
+	protected final Opcode 	INP  = new IOOpcode ("INP", 0x60);
+	
+	protected final Opcode	IRX  = new ImpliedOpcode ("IRX", 0x60);
+	
+	protected final Opcode	GHI  = new RegisterOpcode ("GHI", 0x90, false);
+	
+	protected final Opcode	GLO  = new RegisterOpcode ("GLO", 0x80, false);
+	
+	protected final Opcode	LBDF = new LongBranchOpcode ("LBDF", 0xc3);
+
+	protected final Opcode	LBR	 = new LongBranchOpcode ("LBR", 0xc0);
+
+	protected final Opcode	LBZ	 = new LongBranchOpcode ("LBZ", 0xc2);
+
+	protected final Opcode	LBNF = new LongBranchOpcode ("LBNF", 0xcb);
+
+	protected final Opcode	LBNQ = new LongBranchOpcode ("LBNQ", 0xc9);
+
+	protected final Opcode	LBNZ = new LongBranchOpcode ("LBNZ", 0xca);
+
+	protected final Opcode	LBQ	 = new LongBranchOpcode ("LBQ", 0xc1);
+
+	protected final Opcode	LDA  = new RegisterOpcode ("LDA", 0x40, false);
+	
+	protected final Opcode	LDI  = new ImmediateOpcode ("LDI", 0xf8);
+
+	protected final Opcode	LDN  = new RegisterOpcode ("LDN", 0x00, true);
+	
+	protected final Opcode	LDX  = new ImpliedOpcode ("LDX", 0xf0);
 
 	protected final Opcode	LDXA = new ImpliedOpcode ("LDXA", 0x72);
 	
+	protected final Opcode	LSIE = new ImpliedOpcode ("LSIE", 0xcc);
+
+	protected final Opcode	LSDF = new ImpliedOpcode ("LSDF", 0xcf);
+
+	protected final Opcode	LSKP = new ImpliedOpcode ("LSKP", 0xc8);
+
+	protected final Opcode	LSNF = new ImpliedOpcode ("LSNF", 0xc7);
+
+	protected final Opcode	LSQ = new ImpliedOpcode ("LSQ", 0xcd);
+
+	protected final Opcode	LSNQ = new ImpliedOpcode ("LSNQ", 0xc5);
+
+	protected final Opcode	LSNZ = new ImpliedOpcode ("LSNZ", 0xc6);
+
+	protected final Opcode	LSZ = new ImpliedOpcode ("LSZ", 0xce);
+
+	protected final Opcode	MARK = new ImpliedOpcode ("MARK", 0x79);
+	
+	protected final Opcode	NBR  = new ShortBranchOpcode ("NBR", 0x38);
+	
+	protected final Opcode	NLBR = new LongBranchOpcode ("NLBR", 0xc8);
+
+	protected final Opcode	NOP  = new ImpliedOpcode ("NOP", 0xc4);
+	
+	protected final Opcode	OR   = new ImpliedOpcode ("OR", 0xf1);
+
+	protected final Opcode	ORI  = new ImmediateOpcode ("ORI", 0xf9);
+
+	protected final Opcode 	OUT  = new IOOpcode ("OUT", 0x68);
+	
+	protected final Opcode	PHI  = new RegisterOpcode ("PHI", 0xb0, false);
+	
+	protected final Opcode	PLO  = new RegisterOpcode ("PLO", 0xa0, false);
+
+	protected final Opcode	REQ  = new ImpliedOpcode ("REQ", 0x70);
+	
+	protected final Opcode	RET  = new ImpliedOpcode ("RET", 0x60);
+	
+	protected final Opcode	RSHL = new ImpliedOpcode ("RSHL", 0x7e);
+	
+	protected final Opcode	RSHR = new ImpliedOpcode ("RSHR", 0x76);
+	
+	protected final Opcode	SAV  = new ImpliedOpcode ("SAV", 0x78);
+	
+	protected final Opcode	SD   = new ImpliedOpcode ("SD", 0xf5);
+
+	protected final Opcode	SDB  = new ImpliedOpcode ("SDB", 0x75);
+
+	protected final Opcode	SDBI = new ImmediateOpcode ("SDBI", 0x7d);
+	
+	protected final Opcode	SDI  = new ImmediateOpcode ("SDI", 0xfd);
+	
+	protected final Opcode	SEP  = new RegisterOpcode ("SEP", 0xd0, false);
+
+	protected final Opcode	SEQ  = new ImpliedOpcode ("SEQ", 0x7b);
+	
+	protected final Opcode	SEX  = new RegisterOpcode ("SEX", 0xe0, false);
+
+	protected final Opcode	SHL  = new ImpliedOpcode ("SHL", 0xfe);
+
+	protected final Opcode	SHLC = new ImpliedOpcode ("SHLC", 0x7e);
+
+	protected final Opcode	SHR  = new ImpliedOpcode ("SHR", 0xf6);
+
+	protected final Opcode	SHRC = new ImpliedOpcode ("SHRC", 0x76);
+
+	protected final Opcode	SKP  = new ImpliedOpcode ("SKP", 0x38);
+
+	protected final Opcode	SM   = new ImpliedOpcode ("SM", 0xf7);
+
+	protected final Opcode	SMB  = new ImpliedOpcode ("SMB", 0x77);
+	
+	protected final Opcode	SMBI = new ImmediateOpcode ("SMBI", 0x7f);
+	
+	protected final Opcode	SMI  = new ImmediateOpcode ("SMI", 0xff);
+	
+	protected final Opcode 	STR  = new RegisterOpcode ("STR", 0x50, false);
+
+	protected final Opcode	STXD = new ImpliedOpcode ("STXD", 0x73);
+
+	protected final Opcode	XOR  = new ImpliedOpcode ("XOR", 0xf3);
+
+	protected final Opcode	XRI  = new ImmediateOpcode ("XRI", 0xfb);
 
 	/**
 	 * {@inheritDoc}
@@ -218,9 +489,92 @@ public final class As1802 extends Assembler
 		addToken (WORD);
 		
 		// Opcodes
+		addToken (ADC);
+		addToken (ADCI);
+		addToken (ADD);
+		addToken (ADI);
+		addToken (AND);
+		addToken (ANI);
+		addToken (B1);
+		addToken (B2);
+		addToken (B3);
+		addToken (B4);
+		addToken (BDF);
+		addToken (BGE);
+		addToken (BL);
+		addToken (BM);
+		addToken (BN1);
+		addToken (BN2);
+		addToken (BN3);
+		addToken (BN4);
+		addToken (BNF);
+		addToken (BNQ);
+		addToken (BNZ);
+		addToken (BPZ);
+		addToken (BQ);
+		addToken (BR);
+		addToken (BZ);
+		addToken (DEC);
+		addToken (DIS);
+		addToken (IDL);
+		addToken (INC);
+		addToken (INP);
+		addToken (IRX);
+		addToken (GHI);
+		addToken (GLO);
+		addToken (LBDF);
+		addToken (LBR);
+		addToken (LBNF);
+		addToken (LBNQ);
+		addToken (LBNZ);
+		addToken (LBQ);
+		addToken (LBZ);
 		addToken (LDA);
 		addToken (LDI);
 		addToken (LDN);
+		addToken (LDX);
+		addToken (LDXA);
+		addToken (LSIE);
+		addToken (LSDF);
+		addToken (LSKP);
+		addToken (LSNF);
+		addToken (LSNQ);
+		addToken (LSNZ);
+		addToken (LSQ);
+		addToken (LSZ);
+		addToken (MARK);
+		addToken (NBR);
+		addToken (NLBR);
+		addToken (NOP);
+		addToken (OR);
+		addToken (ORI);
+		addToken (OUT);
+		addToken (PHI);
+		addToken (PLO);
+		addToken (REQ);
+		addToken (RET);
+		addToken (RSHL);
+		addToken (RSHR);
+		addToken (SAV);
+		addToken (SD);
+		addToken (SDB);
+		addToken (SDBI);
+		addToken (SDI);
+		addToken (SEP);
+		addToken (SEQ);
+		addToken (SEX);
+		addToken (SM);
+		addToken (SMB);
+		addToken (SMBI);
+		addToken (SMI);
+		addToken (SHL);
+		addToken (SHR);
+		addToken (SHLC);
+		addToken (SHRC);
+		addToken (STR);
+		addToken (STXD);
+		addToken (XOR);
+		addToken (XRI);
 		
 		// Functions
 		addToken (HI);
@@ -244,7 +598,7 @@ public final class As1802 extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable RCA CDP 1802 Assembler [15.02]";
+		title = "Portable RCA CDP 1802 Assembler [15.03]";
 	}
 	
 	/**
@@ -315,6 +669,8 @@ public final class As1802 extends Assembler
 	{
 		return (scanToken ());
 	}
+	
+	private static final Value HIGH_BYTES = new Value (null, 0xffffff00);
 	
 	private static final String	ERR_SYNTAX
 		= "Syntax error";
