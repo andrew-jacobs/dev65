@@ -403,18 +403,22 @@ public abstract class Assembler extends Application
 			addr  = parseExpr ();
 			
 			if (pass == Pass.FIRST) {
-				if (label.getText().charAt (0) != '.') {
-					if (!variable.contains (label.getText ())) {
-						if (!symbols.containsKey (label.getText ()))
-							symbols.put (label.getText (), addr);
+				if (label != null) {
+					if (label.getText().charAt (0) != '.') {
+						if (!variable.contains (label.getText ())) {
+							if (!symbols.containsKey (label.getText ()))
+								symbols.put (label.getText (), addr);
+							else
+								error (Error.ERR_LABEL_REDEFINED);
+						}
 						else
-							error (Error.ERR_LABEL_REDEFINED);
+							error ("Symbol has already been defined with .SET");
 					}
 					else
-						error ("Symbol has already been defined with .SET");
+						error ("Equate symbols may not start with a '.'");
 				}
 				else
-					error ("Equate symbols may not start with a '.'");
+					error ("No symbol name defined for .EQU");
 			}			
 			return (false);
 		}
@@ -433,9 +437,13 @@ public abstract class Assembler extends Application
 			token = nextRealToken ();
 			addr  = parseExpr ();
 
-			doSet (label.getText (), addr);
-			if (label.getText ().charAt (0) == '.')
-				notLocal.add (label.getText ());
+			if (label != null) {
+				doSet (label.getText (), addr);
+				if (label.getText ().charAt (0) == '.')
+					notLocal.add (label.getText ());
+			}
+			else
+				error ("No symbol name defined for .SET");
 
 			return (true);
 		}
