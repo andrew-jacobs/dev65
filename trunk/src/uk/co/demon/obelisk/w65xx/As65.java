@@ -1648,7 +1648,10 @@ public final class As65 extends Assembler
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
 				switch (parseMode ()) {
-				case INDI:	genAbsl (0xDC, arg);	break;
+				case DPAG:
+				case ABSL:
+				case ALNG:	genLong (0x5C, arg); break;
+				case INDI:	genIndi (0xDC, arg, true);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
 				}
