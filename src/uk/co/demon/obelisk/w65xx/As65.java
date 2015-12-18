@@ -904,6 +904,7 @@ public final class As65 extends Assembler
 			switch (parseMode ()) {
 			case DPAG:
 			case ABSL:
+			case ALNG:
 				genRel (0x90, arg, false);
 				break;
 			default:
@@ -927,6 +928,7 @@ public final class As65 extends Assembler
 			switch (parseMode ()) {
 			case DPAG:
 			case ABSL:
+			case ALNG:
 				genRel (0xB0, arg, false);
 				break;
 			default:
@@ -950,6 +952,7 @@ public final class As65 extends Assembler
 			switch (parseMode ()) {
 			case DPAG:
 			case ABSL:
+			case ALNG:
 				genRel (0xF0, arg, false);
 				break;
 			default:
@@ -1015,6 +1018,7 @@ public final class As65 extends Assembler
 			switch (parseMode ()) {
 			case DPAG:
 			case ABSL:
+			case ALNG:
 				genRel (0x30, arg, false);
 				break;
 			default:
@@ -1038,6 +1042,7 @@ public final class As65 extends Assembler
 			switch (parseMode ()) {
 			case DPAG:
 			case ABSL:
+			case ALNG:
 				genRel (0xD0, arg, false);
 				break;
 			default:
@@ -1061,6 +1066,7 @@ public final class As65 extends Assembler
 			switch (parseMode ()) {
 			case DPAG:
 			case ABSL:
+			case ALNG:
 				genRel (0x10, arg, false);
 				break;
 			default:
@@ -1085,6 +1091,7 @@ public final class As65 extends Assembler
 				switch (parseMode ()) {
 				case DPAG:
 				case ABSL:
+				case ALNG:
 					genRel (0x80, arg, false);
 					break;
 				default:
@@ -1133,6 +1140,7 @@ public final class As65 extends Assembler
 				switch (parseMode ()) {
 				case DPAG:
 				case ABSL:
+				case ALNG:
 					genRel (0x82, arg, true);
 					break;
 				default:
@@ -1159,6 +1167,7 @@ public final class As65 extends Assembler
 			switch (parseMode ()) {
 			case DPAG:
 			case ABSL:
+			case ALNG:
 				genRel (0x50, arg, false);
 				break;
 			default:
@@ -1182,6 +1191,7 @@ public final class As65 extends Assembler
 			switch (parseMode ()) {
 			case DPAG:
 			case ABSL:
+			case ALNG:
 				genRel (0x70, arg, false);
 				break;
 			default:
@@ -4060,7 +4070,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [15.02]";
+		title 		= "Portable 65xx Assembler [15.12]";
 	}
 	
 	/**
