@@ -980,8 +980,12 @@ public abstract class Assembler extends Application
 		 */
 		public boolean compile ()
 		{
-			macros.put (macroName, savedLines);
-			savedLines = null;
+			if (savedLines != null) {
+				macros.put (macroName, savedLines);
+				savedLines = null;
+			}
+			else
+				error (".ENDM without a preceding .MACRO");
 			
 			return (false);
 		}
@@ -1031,8 +1035,13 @@ public abstract class Assembler extends Application
 	{
 		public boolean compile ()
 		{
-			sources.push (savedLines);
-			savedLines = null;
+			if (savedLines != null) {
+				sources.push (savedLines);
+				savedLines = null;
+			}
+			else
+				error (".ENDR without preceding .REPEAT");
+			
 			return (false);
 		}
 	};
