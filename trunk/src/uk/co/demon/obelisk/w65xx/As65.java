@@ -5055,7 +5055,10 @@ public final class As65 extends Assembler
 			if (condition == VC) genRel (0x70, skipOver, false);
 			if (condition == VS) genRel (0x50, skipOver, false);
 						
-			genAbsl (0x4C, target);
+			if ((processor & (M65816 | M65832)) != 0)
+				genRel (0x82, target, true);
+			else
+				genAbsl (0x4C, target);
 		}
 	}
 	
@@ -5069,8 +5072,12 @@ public final class As65 extends Assembler
 	{
 		if (hasShortBranch () && isShortDistance (target))
 			genRel (0x80, target, false);
-		else
-			genAbsl (0x4C, target);
+		else {
+			if ((processor & (M65816 | M65832)) != 0)
+				genRel (0x82, target, true);
+			else
+				genAbsl (0x4C, target);
+		}
 	}
 	
 	/**
