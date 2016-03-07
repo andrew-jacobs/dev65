@@ -15,8 +15,12 @@ public class Project extends DataFile
 		return ("untitled.prj");
 	}
 	
+	@SuppressWarnings("unused")
 	private Vector<String> 	sourceFiles;
+	@SuppressWarnings("unused")
 	private Vector<String> 	libraryFiles;
+	@SuppressWarnings("unused")
 	private Vector<String> 	assemblerOptions;
+	@SuppressWarnings("unused")
 	private Vector<String>	linkerOptions;
 }

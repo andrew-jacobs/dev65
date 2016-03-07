@@ -98,11 +98,14 @@ public class W6551 extends AddressRange implements Device
 	}
 	
 	private byte		dataIn;
+	@SuppressWarnings("unused")
 	private byte		dataOut;
 	private byte		status;
 	private byte		command;
 	private byte		control;
 	
+	@SuppressWarnings("unused")
 	private boolean		txEmpty;
+	@SuppressWarnings("unused")
 	private boolean		rxFull;
 }
