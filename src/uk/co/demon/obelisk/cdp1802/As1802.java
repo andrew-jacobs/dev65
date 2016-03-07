@@ -671,10 +671,7 @@ public final class As1802 extends Assembler
 	}
 	
 	private static final Value HIGH_BYTES = new Value (null, 0xffffff00);
-	
-	private static final String	ERR_SYNTAX
-		= "Syntax error";
-	
+		
 	private static final String ERR_REGISTER_ZERO
 		= "This opcode cannot be used with register zero";
 

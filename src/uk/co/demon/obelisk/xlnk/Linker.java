@@ -82,7 +82,7 @@ public abstract class Linker extends Application
 		if (s37.isPresent ()) ++count;
 		
 		if (count == 0) {
-			error ("No output format selected (-bin, -hex or -s19).");
+			error ("No output format selected (-bin, -hex, -s19, -s28 or -s37).");
 			setFinished (true);
 			return;
 		}

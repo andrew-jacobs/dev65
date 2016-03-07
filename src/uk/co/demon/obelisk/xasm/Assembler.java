@@ -2282,6 +2282,7 @@ public abstract class Assembler extends Application
 	/**
 	 * The number of warnings seen during the current pass.
 	 */
+	@SuppressWarnings("unused")
 	private int					warnings;
 	
 	/**
