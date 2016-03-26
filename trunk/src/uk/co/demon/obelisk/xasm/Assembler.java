@@ -402,24 +402,26 @@ public abstract class Assembler extends Application
 			token = nextRealToken ();
 			addr  = parseExpr ();
 			
-			if (pass == Pass.FIRST) {
-				if (label != null) {
-					if (label.getText().charAt (0) != '.') {
-						if (!variable.contains (label.getText ())) {
-							if (!symbols.containsKey (label.getText ()))
-								symbols.put (label.getText (), addr);
-							else
-								error (Error.ERR_LABEL_REDEFINED);
-						}
-						else
-							error ("Symbol has already been defined with .SET");
+			if (label != null) {
+				if (pass == Pass.FIRST) {
+					if (variable.contains (label.getText())) {
+						error ("Symbol has already been defined with .SET");
+						return (false);
 					}
-					else
-						error ("Equate symbols may not start with a '.'");
+					if (symbols.containsKey(label.getText())) {
+						error (Error.ERR_LABEL_REDEFINED);
+						return (false);
+					}
+					
+					if (label.getText ().charAt (0) == '.')
+						notLocal.add (label.getText ());				
 				}
-				else
-					error ("No symbol name defined for .EQU");
-			}			
+				
+				symbols.put(label.getText(), addr);
+			}
+			else
+				error ("No symbol name defined for .EQU");
+					
 			return (false);
 		}
 	};
@@ -438,14 +440,24 @@ public abstract class Assembler extends Application
 			addr  = parseExpr ();
 
 			if (label != null) {
-				doSet (label.getText (), addr);
-				if (label.getText ().charAt (0) == '.')
-					notLocal.add (label.getText ());
+				if (pass == Pass.FIRST) {
+					if (symbols.containsKey(label.getText()) && !variable.contains (label.getText())) {
+						error ("Symbol has already been defined with .EQU");
+						return (false);
+					}
+					
+					if (label.getText ().charAt (0) == '.')
+						notLocal.add (label.getText ());				
+
+					variable.add(label.getText ());
+				}
+				
+				symbols.put(label.getText(), addr);
 			}
 			else
 				error ("No symbol name defined for .SET");
 
-			return (true);
+			return (false);
 		}
 	};
 	
@@ -2123,7 +2135,6 @@ public abstract class Assembler extends Application
 				((ch >= 'A') && (ch <= 'Z')) ||
 				((ch >= 'a') && (ch <= 'z')));
 	}
-	
 	
 	/**
 	 * Sets the value of an symbol to the given expression value.
