@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2011 Andrew John Jacobs.
+ * Copyright (C),2005-2016 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -161,7 +161,7 @@ public final class Parser
 					Expr	rhs = (Expr) stack.pop ();
 					Expr	lhs = (Expr) stack.pop ();
 				
-					stack.push (new BinaryExpr.Add (lhs, rhs));
+					stack.push (new BinaryExpr.And (lhs, rhs));
 					return;
 				}
 				break;
