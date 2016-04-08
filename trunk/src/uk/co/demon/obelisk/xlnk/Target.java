@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2011 Andrew John Jacobs.
+ * Copyright (C),2005-2016 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -30,7 +30,7 @@ import java.io.File;
  * @author	Andrew Jacobs
  * @version	$Id$
  */
-public abstract class Target
+abstract class Target
 {
 	/**
 	 * Stores the given byte value at the indicated address.
@@ -47,15 +47,28 @@ public abstract class Target
 	 */
 	public abstract void writeTo (File file);
 	
+	/**
+	 * Constructs a <CODE>Target</CODE> with a given byte size.
+	 * 
+	 * @param	byteSize	The size of a byte in bits.
+	 */
 	protected Target (int byteSize)
 	{
 		this.byteSize = byteSize;
 	}
 	
+	/**
+	 * Returns the target's byte size (in bits).
+	 * 
+	 * @return	The byte size (in bits).
+	 */
 	protected int getByteSize ()
 	{
 		return (byteSize);
 	}
 	
+	/**
+	 * The number of bits in a byte, normally 8.
+	 */
 	private final int byteSize;
 }

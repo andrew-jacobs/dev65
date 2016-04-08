@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2006 Andrew John Jacobs.
+ * Copyright (C),2006-2016 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -32,7 +32,7 @@ import java.io.FileOutputStream;
  * @author 	Andrew Jacobs
  * @version	$Id$
  */
-public class BinTarget extends CachedTarget
+class BinTarget extends CachedTarget
 {
 	/**
 	 * Constructs a <CODE>BinTarget</CODE> that will contain code for the
