@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2006-2011 Andrew John Jacobs.
+ * Copyright (C),2006-2016 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -75,6 +75,7 @@ abstract class CachedTarget extends Target
 	 * 
 	 * @param 	start			The start address of the output code.
 	 * @param 	end				The end address of the output code.
+	 * @param	byteSize		The size of a byte in bits.
 	 */
 	protected CachedTarget (long start, long end, int byteSize)
 	{

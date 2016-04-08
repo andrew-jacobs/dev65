@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2014 Andrew John Jacobs.
+ * Copyright (C),2005-2016 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -164,8 +164,9 @@ abstract class SRecordTarget extends CachedTarget
 	 * Constructs a <CODE>HexTarget</CODE> that will generate data for
 	 * the indicated address range.
 	 * 
-	 * @param start			Start of data area.
-	 * @param end			End of data area.
+	 * @param 	start			Start of data area.
+	 * @param 	end				End of data area.
+	 * @param	addrSize		The size of the address in bits.
 	 */
 	protected SRecordTarget (int start, int end, int addrSize)
 	{
@@ -176,8 +177,10 @@ abstract class SRecordTarget extends CachedTarget
 	 * Constructs a <CODE>HexTarget</CODE> that will generate data for
 	 * the indicated address range.
 	 * 
-	 * @param start			Start of data area.
-	 * @param end			End of data area.
+	 * @param 	start			Start of data area.
+	 * @param 	end				End of data area.
+	 * @param	addrSize		The size of the address in bits.
+	 * @param	byteSize		The size of a byte in bits.
 	 */
 	protected SRecordTarget (long start, long end, int addrSize, int byteSize)
 	{
