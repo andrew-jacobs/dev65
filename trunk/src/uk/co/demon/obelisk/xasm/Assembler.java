@@ -2470,11 +2470,11 @@ public abstract class Assembler extends Application
 		while ((token == EQ) || (token == NE)) {
 			if (token == EQ) {
 				token = nextRealToken ();
-				expr = Expr.eq (expr, parseEquality ());
+				expr = Expr.eq (expr, parseInequality ());
 			}
 			else {
 				token = nextRealToken ();
-				expr = Expr.ne (expr, parseEquality ());
+				expr = Expr.ne (expr, parseInequality ());
 			}
 		}
 		return (expr);
