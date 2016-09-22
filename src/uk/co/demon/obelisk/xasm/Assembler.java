@@ -1872,7 +1872,7 @@ public abstract class Assembler extends Application
 			if (lineType == ' ') lineType = ':';
 		}
 	
-		error (Error.ERR_UNKNOWN_OPCODE);
+		if (isActive ()) error (Error.ERR_UNKNOWN_OPCODE);
 	}
 
 	/**

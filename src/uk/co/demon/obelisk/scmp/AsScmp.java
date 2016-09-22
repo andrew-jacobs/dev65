@@ -660,7 +660,7 @@ public class AsScmp extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable National Semiconductor SC/MP Assembler [15.02]";
+		title = "Portable National Semiconductor SC/MP Assembler [16.09]";
 	}
 	
 	/**

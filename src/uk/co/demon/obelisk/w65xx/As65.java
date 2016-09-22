@@ -96,6 +96,21 @@ public final class As65 extends Assembler
 		= M6501 | M6502 | M65C02 | M65SC02 | M65816 | M65832;
 
 	/**
+	 * Indicates that address mode is being parsed for bank 0.
+	 */
+	protected static final int		BANK0 = 0;
+	
+	/**
+	 * Indicates that address mode is being parsed for the current data back.
+	 */
+	protected static final int		DBANK = 1;
+	
+	/**
+	 * Indicates that address mode is being parsed for the current program bank.
+	 */
+	protected static final int		PBANK = 2;
+	
+	/**
 	 * An <CODE>Opcode</CODE> that handles .6501 directives.
 	 */
 	protected final Opcode	P6501		= new Opcode (KEYWORD, ".6501")
@@ -641,7 +656,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0x69, arg, bitsA);	break;
 			case DPAG:	genDpag (0x65, arg);	break;
 			case ABSL:	genAbsl (0x6D, arg);	break;
@@ -718,7 +733,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0x29, arg, bitsA);	break;
 			case DPAG:	genDpag (0x25, arg);	break;
 			case ABSL:	genAbsl (0x2D, arg);	break;
@@ -795,7 +810,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:
 			case ACCM:	genImpl (0x0A);	break;
 			case DPAG:	genDpag (0x06, arg);	break;
@@ -901,7 +916,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (PBANK)) {
 			case DPAG:
 			case ABSL:
 			case ALNG:
@@ -925,7 +940,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (PBANK)) {
 			case DPAG:
 			case ABSL:
 			case ALNG:
@@ -949,7 +964,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (PBANK)) {
 			case DPAG:
 			case ABSL:
 			case ALNG:
@@ -973,7 +988,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case DPAG:	genDpag (0x24, arg); break;
 			case ABSL:	genAbsl	(0x2C, arg); break;
 			case IMMD:
@@ -1015,7 +1030,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (PBANK)) {
 			case DPAG:
 			case ABSL:
 			case ALNG:
@@ -1039,7 +1054,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (PBANK)) {
 			case DPAG:
 			case ABSL:
 			case ALNG:
@@ -1063,7 +1078,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (PBANK)) {
 			case DPAG:
 			case ABSL:
 			case ALNG:
@@ -1088,7 +1103,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (PBANK)) {
 				case DPAG:
 				case ABSL:
 				case ALNG:
@@ -1115,7 +1130,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0x00, arg, 8);	break;
 			case IMPL:	genImpl (0x00);	break;
 			default:
@@ -1137,7 +1152,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (PBANK)) {
 				case DPAG:
 				case ABSL:
 				case ALNG:
@@ -1164,7 +1179,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (PBANK)) {
 			case DPAG:
 			case ABSL:
 			case ALNG:
@@ -1188,7 +1203,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (PBANK)) {
 			case DPAG:
 			case ABSL:
 			case ALNG:
@@ -1212,7 +1227,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x18);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -1232,7 +1247,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0xD8);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -1252,7 +1267,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x58);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -1272,7 +1287,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0xB8);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -1292,7 +1307,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0xC9, arg, bitsA);	break;
 			case DPAG:	genDpag (0xC5, arg);	break;
 			case ABSL:	genAbsl (0xCD, arg);	break;
@@ -1370,7 +1385,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMMD:	genImmd (0x02, arg, 8);	break;
 				case IMPL:	genImpl (0x02);	break;
 				default:
@@ -1395,7 +1410,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0xE0, arg, bitsI);	break;
 			case DPAG:	genDpag (0xE4, arg);	break;
 			case ABSL:	genAbsl (0xEC, arg);	break;
@@ -1417,7 +1432,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0xC0, arg, bitsI);	break;
 			case DPAG:	genDpag (0xC4, arg);	break;
 			case ABSL:	genAbsl (0xCC, arg);	break;
@@ -1439,7 +1454,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case DPAG:	genDpag (0xC6, arg);	break;
 			case ABSL:	genAbsl (0xCE, arg);	break;
 			case DPGX:	genDpag (0xD6, arg);	break;
@@ -1469,7 +1484,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0xCA);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -1489,7 +1504,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x88);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -1509,7 +1524,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0x49, arg, bitsA);	break;
 			case DPAG:	genDpag (0x45, arg);	break;
 			case ABSL:	genAbsl (0x4D, arg);	break;
@@ -1586,7 +1601,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case DPAG:	genDpag (0xE6, arg);	break;
 			case ABSL:	genAbsl (0xEE, arg);	break;
 			case DPGX:	genDpag (0xF6, arg);	break;
@@ -1616,7 +1631,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0xE8);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -1636,7 +1651,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0xC8);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -1657,7 +1672,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (PBANK)) {
 				case DPAG:
 				case ABSL:
 				case ALNG:	genLong (0x5C, arg); break;
@@ -1684,7 +1699,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (PBANK)) {
 			case DPAG:
 			case ABSL:	genAbsl (0x4C, arg);	break;
 			case INDI:	genIndi	(0x6C, arg, true);	break;
@@ -1721,7 +1736,8 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (PBANK)) {
+				case DPAG:
 				case ABSL:
 				case ALNG:	genLong (0x22, arg);	break;
 				default:
@@ -1746,7 +1762,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (PBANK)) {
 			case DPAG:
 			case ABSL:	genAbsl (0x20, arg);	break;
 			
@@ -1775,7 +1791,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0xA9, arg, bitsA);	break;
 			case DPAG:	genDpag (0xA5, arg);	break;
 			case ABSL:	genAbsl (0xAD, arg);	break;
@@ -1852,7 +1868,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0xA2, arg, bitsI);	break;
 			case DPAG:	genDpag (0xA6, arg);	break;
 			case ABSL:	genAbsl (0xAE, arg);	break;
@@ -1879,7 +1895,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0xA0, arg, bitsI);	break;
 			case DPAG:	genDpag (0xA4, arg);	break;
 			case ABSL:	genAbsl (0xAC, arg);	break;
@@ -1903,7 +1919,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:
 			case ACCM:	genImpl (0x4A);	break;
 			case DPAG:	genDpag (0x46, arg);	break;
@@ -1994,7 +2010,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0xEA);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -2014,7 +2030,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0x09, arg, bitsA);	break;
 			case DPAG:	genDpag (0x05, arg);	break;
 			case ABSL:	genAbsl (0x0D, arg);	break;
@@ -2092,7 +2108,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case DPAG:
 				case ABSL:
 				case IMMD:	genImmd (0xF4, arg, 16);	break;
@@ -2119,7 +2135,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case INDI:	genImmd (0xD4, arg, 8);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2144,7 +2160,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (PBANK)) {
 				case DPAG:
 				case ABSL:
 						genRel (0x62, arg, true);	break;
@@ -2170,7 +2186,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x48);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -2191,7 +2207,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x8B);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2216,7 +2232,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x0B);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2241,7 +2257,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x4B);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2265,7 +2281,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x08);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -2286,7 +2302,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0xDA);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2311,7 +2327,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x5A);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2335,7 +2351,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x68);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -2356,7 +2372,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0xAB);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2381,7 +2397,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x2B);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2405,7 +2421,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x28);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -2426,7 +2442,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0xFA);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2451,7 +2467,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x7A);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2476,7 +2492,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMMD:	genImmd (0xC2, arg, 8);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2540,7 +2556,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:
 			case ACCM:	genImpl (0x2A);	break;
 			case DPAG:	genDpag (0x26, arg);	break;
@@ -2565,7 +2581,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:
 			case ACCM:	genImpl (0x6A);	break;
 			case DPAG:	genDpag (0x66, arg);	break;
@@ -2590,7 +2606,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x40);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -2611,7 +2627,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x46B);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2635,7 +2651,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x60);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -2655,7 +2671,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMMD:	genImmd (0xE9, arg, bitsA);	break;
 			case DPAG:	genDpag (0xE5, arg);	break;
 			case ABSL:	genAbsl (0xED, arg);	break;
@@ -2732,7 +2748,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x38);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -2752,7 +2768,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0xF8);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -2772,7 +2788,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x78);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -2793,7 +2809,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMMD:	genImmd (0xE2, arg, 8);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2857,7 +2873,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case DPAG:	genDpag (0x85, arg);	break;
 			case ABSL:	genAbsl (0x8D, arg);	break;
 			case DPGX:	genDpag (0x95, arg);	break;
@@ -2934,7 +2950,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0xDB);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -2958,7 +2974,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case DPAG:	genDpag (0x86, arg);	break;
 			case ABSL:	genAbsl (0x8E, arg);	break;
 			case DPGY:	genDpag (0x96, arg);	break;
@@ -2980,7 +2996,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case DPAG:	genDpag (0x84, arg);	break;
 			case ABSL:	genAbsl (0x8C, arg);	break;
 			case DPGX:	genDpag (0x94, arg);	break;
@@ -3003,7 +3019,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case DPAG:	genDpag (0x64, arg);	break;
 				case ABSL:	genAbsl (0x9C, arg);	break;
 				case DPGX:	genDpag (0x74, arg);	break;
@@ -3030,7 +3046,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0xAA);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -3050,7 +3066,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0xA8);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -3071,7 +3087,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x5B);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -3096,7 +3112,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x1B);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -3121,7 +3137,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x7B);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -3146,7 +3162,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case DPAG:	genDpag (0x14, arg);	break;
 				case ABSL:	genAbsl (0x1C, arg);	break;
 				default:
@@ -3172,7 +3188,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case DPAG:	genDpag (0x04, arg);	break;
 				case ABSL:	genAbsl (0x0C, arg);	break;
 				default:
@@ -3198,7 +3214,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x3B);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -3222,7 +3238,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0xBA);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -3242,7 +3258,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x8A);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -3262,7 +3278,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x9A);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -3283,7 +3299,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0x9B);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -3307,7 +3323,7 @@ public final class As65 extends Assembler
 		@Override
 		public boolean compile ()
 		{
-			switch (parseMode ()) {
+			switch (parseMode (DBANK)) {
 			case IMPL:	genImpl (0x98);	break;
 			default:
 				error (ERR_ILLEGAL_ADDR);
@@ -3328,7 +3344,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0xBB);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -3353,7 +3369,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0xCB);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -3378,11 +3394,13 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
+				case IMMD:	genImmd (0x42, arg, 8);	break;
 				case IMPL:	genImpl (0x42);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
 				}
+				return (true);
 			}
 			else
 				error (ERR_OPCODE_NOT_SUPPORTED);
@@ -3403,7 +3421,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0xEB);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -3428,7 +3446,7 @@ public final class As65 extends Assembler
 		public boolean compile ()
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
-				switch (parseMode ()) {
+				switch (parseMode (DBANK)) {
 				case IMPL:	genImpl (0xFB);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
@@ -3924,6 +3942,9 @@ public final class As65 extends Assembler
 		
 		// Functions
 		addToken (STRLEN);
+		addToken (HI);
+		addToken (LO);
+		addToken (super.BANK);
 
 		// Opcodes & Registers
 		addToken (A);
@@ -4101,7 +4122,7 @@ public final class As65 extends Assembler
 		
 		switch (lineType) {
 		case '=':
-			output.append ("        ");
+			output.append ("         ");
 			output.append (Hex.toHex (addr.resolve (null, null), 8));
 			output.append (addr.isAbsolute() ? "  " : "' ");
 			output.append ("        ");
@@ -4110,7 +4131,7 @@ public final class As65 extends Assembler
 			break;
 			
 		case ' ':
-			output.append ("        ");
+			output.append ("         ");
 			output.append ("        ");
 			output.append ("  ");
 			output.append ("        ");
@@ -4120,7 +4141,10 @@ public final class As65 extends Assembler
 		
 		default:
 			if (isActive () && (addr != null) && ((getLabel () != null) || (lineType == ':') || (byteCount > 0))) {
-				output.append (Hex.toHex (addr.resolve (null, null), 6));
+				long value = addr.resolve ();
+				output.append (Hex.toHex(value >> 16, 2));
+				output.append (":");
+				output.append (Hex.toHex (value, 4));
 				output.append (addr.isAbsolute() ? "  " : "' ");
 	
 				for (int index = 0; index < 8; ++index) {
@@ -4140,7 +4164,7 @@ public final class As65 extends Assembler
 				output.append (' ');
 			}
 			else {
-				output.append ("                          ");
+				output.append ("                           ");
 				output.append (lineType);
 				output.append (' ');
 			}
@@ -4168,7 +4192,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [16.05]";
+		title 		= "Portable 65xx Assembler [16.06]";
 	}
 	
 	/**
@@ -4764,7 +4788,7 @@ public final class As65 extends Assembler
 	 *
 	 * @return	The addressing mode.
 	 */
-	private int parseMode ()
+	private int parseMode (int targetBank)
 	{
 		token = nextRealToken ();
 
@@ -4972,14 +4996,23 @@ public final class As65 extends Assembler
 			return (UNKN);
 		}
 		if (arg.isAbsolute()) {
-			int addr = (int) arg.resolve (null, null);
+			long addr = arg.resolve ();
 			
 			if ((processor & (M65816 | M65832)) != 0) {
 				if ((addr & 0xff0000) == 0) {
 					return ((((addr - directPage) & 0xffff00) == 0) ? DPAG : ABSL);
 				}
-				else
-					return ((((addr & 0xff0000 & addr) >> 16) == dataBank) ? ABSL : ALNG);
+				else {
+					if (targetBank == PBANK) {
+						Expr			origin = getOrigin ();
+						
+						if (origin.isAbsolute())
+							return ((((origin.resolve () ^ addr) & 0xff0000) == 0) ? ABSL : ALNG);
+						return (ALNG);
+					}
+
+					return ((((addr & 0xff0000) >> 16) == dataBank) ? ABSL : ALNG);
+				}
 			}			
 			else
 				return (((addr & 0xff00) == 0) ? DPAG : ABSL);

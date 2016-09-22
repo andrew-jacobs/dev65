@@ -23,7 +23,8 @@ public class FrameWindow extends DesktopFrame
 		menuBar.add (fileMenu);
 		menuBar.add (editMenu);
 		menuBar.add (viewMenu);
-		menuBar.add (toolsMenu);
+		menuBar.add (buildMenu);
+		menuBar.add (debugMenu);
 		menuBar.add (windowMenu);
 		menuBar.add (helpMenu);
 		
@@ -67,14 +68,13 @@ public class FrameWindow extends DesktopFrame
 		editSelectAll.setEnabled (false);
 		
 		// Construct View menu
-		viewMenu.add (viewCalendar);
-		viewMenu.add (viewXmlText);
-		viewMenu.add (viewXmlTree);
+//		viewMenu.add (viewCalendar);
+//		viewMenu.add (viewXmlText);
+//		viewMenu.add (viewXmlTree);
 
-		// Construct Tools menu
-		toolsMenu.add (toolsReformat);
-		toolsMenu.add (toolsValidate);
-		toolsMenu.add (toolsConvert);
+		// Construct Build menu
+		
+		// Construct Debug menu
 
 		// Construct Windows menu
 		windowMenu.add (windowCascade);
@@ -107,23 +107,8 @@ public class FrameWindow extends DesktopFrame
 		toolBar.addSeparator ();
 		toolBar.add (undoButton);
 		toolBar.add (redoButton);
-		toolBar.addSeparator ();
-		
-		toolBar.add (reformatButton);
-		toolBar.add (validateButton);
-		toolBar.addSeparator ();
-		toolBar.add (batchValidateButton);
-		toolBar.add (batchConvertButton);
-		toolBar.addSeparator ();
-			
-		toolBar.add (connectButton);
-		toolBar.add (disconnectButton);
-		toolBar.addSeparator ();
-		toolBar.add (messagesButton);
-		
-		connectButton.setEnabled (false);
-		disconnectButton.setEnabled (false);
-		
+//		toolBar.addSeparator ();
+				
 		newButton.setEnabled (false);
 		saveButton.setEnabled (false);
 		saveAsButton.setEnabled (false);
@@ -135,13 +120,11 @@ public class FrameWindow extends DesktopFrame
 		pasteButton.setEnabled (false);
 		deleteButton.setEnabled (false);
 		
-		viewXmlText.setEnabled (false);
-		viewXmlTree.setEnabled (false);
+		//viewXmlText.setEnabled (false);
+		//viewXmlTree.setEnabled (false);
 		
-		toolsReformat.setEnabled (false);
-		toolsValidate.setEnabled (false);
-		
-		messagesButton.setEnabled (false);
+		//toolsReformat.setEnabled (false);
+		//toolsValidate.setEnabled (false);
 		
 		contentPanel.add (BorderLayout.NORTH, toolBar);
 			
@@ -219,26 +202,29 @@ public class FrameWindow extends DesktopFrame
 	protected JMenu				viewMenu
 		= createMenu ("view");
 	
-	protected JMenuItem			viewCalendar
-		= createItem ("viewCalendar");
+//	protected JMenuItem			viewCalendar
+//		= createItem ("viewCalendar");
+//	
+//	protected JMenuItem			viewXmlText
+//		= createItem ("viewXmlText");
+//	
+//	protected JMenuItem			viewXmlTree
+//		= createItem ("viewXmlTree");
 	
-	protected JMenuItem			viewXmlText
-		= createItem ("viewXmlText");
+	protected JMenu				buildMenu
+		= createMenu ("build");
 	
-	protected JMenuItem			viewXmlTree
-		= createItem ("viewXmlTree");
+	protected JMenu				debugMenu
+		= createMenu ("debug");
 	
-	protected JMenu				toolsMenu
-		= createMenu ("tools");
-	
-	protected JMenuItem			toolsReformat
-		= createItem ("toolsReformat");
-	
-	protected JMenuItem			toolsValidate
-		= createItem ("toolsValidate");
-	
-	protected JMenu 			toolsConvert
-		= createMenu ("toolsConvert");
+//	protected JMenuItem			toolsReformat
+//		= createItem ("toolsReformat");
+//	
+//	protected JMenuItem			toolsValidate
+//		= createItem ("toolsValidate");
+//	
+//	protected JMenu 			toolsConvert
+//		= createMenu ("toolsConvert");
 	
 	protected JMenuItem			windowCascade
 		= createItem ("windowCascade");
@@ -290,28 +276,7 @@ public class FrameWindow extends DesktopFrame
 	
 	protected JButton			redoButton
 		= createButton ("redoButton");
-	
-	protected JButton			reformatButton
-		= createButton ("reformatButton");
-	
-	protected JButton			validateButton
-		= createButton ("validateButton");
-	
-	protected JButton			batchValidateButton
-		= createButton ("batchValidateButton");
-	
-	protected JButton			batchConvertButton
-		= createButton ("batchConvertButton");
-	
-	protected JButton			connectButton
-		= createButton ("connectButton");
-	
-	protected JButton			disconnectButton
-		= createButton ("disconnectButton");
-	
-	protected JButton			messagesButton
-		= createButton ("messagesButton");
-	
+		
 	protected JFileChooser		chooser
 		= new JFileChooser ();
 }
