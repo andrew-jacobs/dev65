@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2014 Andrew John Jacobs.
+ * Copyright (C),2005-2016 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -54,7 +54,6 @@ import uk.co.demon.obelisk.xobj.Word;
  * linker customised by derived classes to match specific processors.
  *
  * @author 	Andrew Jacobs
- * @version	$Id$
  */
 public abstract class Linker extends Application
 {
@@ -76,13 +75,15 @@ public abstract class Linker extends Application
 		
 		int 	count = 0;
 		if (hex.isPresent ()) ++count;
+		if (ihx.isPresent ()) ++count;
 		if (bin.isPresent ()) ++count;
 		if (s19.isPresent ()) ++count;
 		if (s28.isPresent ()) ++count;
 		if (s37.isPresent ()) ++count;
+		if (dmp.isPresent ()) ++count;
 		
 		if (count == 0) {
-			error ("No output format selected (-bin, -hex, -s19, -s28 or -s37).");
+			error ("No output format selected (-bin, -hex, -ihx, -s19, -dmp, -s28 or -s37).");
 			setFinished (true);
 			return;
 		}
@@ -106,6 +107,8 @@ public abstract class Linker extends Application
 			
 			if (hex.isPresent ())
 				target = new HexTarget (lo, hi, byteSize);
+			else if (ihx.isPresent ())
+				target = new IntelHexTarget (lo, hi, byteSize);
 			else if (bin.isPresent ())
 				target = new BinTarget (lo, hi, byteSize);
 			else if (s19.isPresent ())
@@ -114,6 +117,8 @@ public abstract class Linker extends Application
 				target = new S28Target (lo, hi, byteSize);
 			else if (s37.isPresent ())
 				target = new S37Target (lo, hi, byteSize);
+			else if (dmp.isPresent ())
+				target = new DumpTarget (lo, hi, byteSize);
 		}
 		
 		if (getArguments ().length == 0) {
@@ -397,6 +402,12 @@ public abstract class Linker extends Application
 		= new Option ("-hex", "Generate HEX output");
 
 	/**
+	 * Option for specifying Intel hex output format.
+	 */
+	private Option			ihx
+		= new Option ("-ihx", "Generate Intel HEX output");
+
+	/**
 	 * Option for specifying binary output format.
 	 */
 	private Option			bin
@@ -419,6 +430,12 @@ public abstract class Linker extends Application
 	 */
 	private Option			s37
 		= new Option ("-s37", "Generate Motorola S37 output");
+
+	/**
+	 * Option for specifying Dump HEX output format.
+	 */
+	private Option			dmp
+		= new Option ("-dmp", "Generate Dump HEX output");
 
 	/**
 	 * Option for specifying output file.
