@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2014-2015 Andrew John Jacobs.
+ * Copyright (C),2014-2016 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -39,7 +39,6 @@ import uk.co.demon.obelisk.xobj.Value;
  * understanding of RCA CDP 1802 assembler conventions.
  *
  * @author 	Andrew Jacobs
- * @version	$Id$
  */
 public final class As1802 extends Assembler
 {
@@ -317,7 +316,7 @@ public final class As1802 extends Assembler
 	
 	protected final Opcode	BR   = new ShortBranchOpcode ("BR", 0x30);
 	
-	protected final Opcode	BZ   = new ShortBranchOpcode ("BZ", 0x33);
+	protected final Opcode	BZ   = new ShortBranchOpcode ("BZ", 0x32);
 	
 	protected final Opcode	DIS  = new ImpliedOpcode ("DIS", 0x71);
 	
@@ -327,7 +326,7 @@ public final class As1802 extends Assembler
 	
 	protected final Opcode	INC  = new RegisterOpcode ("INC", 0x10, false);
 	
-	protected final Opcode 	INP  = new IOOpcode ("INP", 0x60);
+	protected final Opcode 	INP  = new IOOpcode ("INP", 0x68);
 	
 	protected final Opcode	IRX  = new ImpliedOpcode ("IRX", 0x60);
 	
@@ -387,7 +386,7 @@ public final class As1802 extends Assembler
 
 	protected final Opcode	ORI  = new ImmediateOpcode ("ORI", 0xf9);
 
-	protected final Opcode 	OUT  = new IOOpcode ("OUT", 0x68);
+	protected final Opcode 	OUT  = new IOOpcode ("OUT", 0x60);
 	
 	protected final Opcode	PHI  = new RegisterOpcode ("PHI", 0xb0, false);
 	
@@ -598,7 +597,7 @@ public final class As1802 extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable RCA CDP 1802 Assembler [15.03]";
+		title = "Portable RCA CDP 1802 Assembler [16.09]";
 	}
 	
 	/**
