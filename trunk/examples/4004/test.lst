@@ -1,0 +1,76 @@
+
+Portable Intel 4004 Assembler [16.10]
+
+                            
+                                            .code
+                                            .org    0
+                            
+000000  00                :                 nop
+000001  1415              :                 jcn     A0,label
+000003  207F              :                 fim     0,127
+000005  21                :                 src     0
+000006  30                :                 fin     0
+000007  31                :                 jin     0
+000008  4015              :                 jun     label
+00000A  5015              :                 jms     label
+00000C  60                :                 inc     0
+00000D  7715              :                 isz     7,label
+00000F  80                :                 add     0
+000010  90                :                 sub     0
+000011  A0                :                 ld      0
+000012  B0                :                 xch     0
+000013  C7                :                 bbl     7
+000014  D9                :                 ldm     -7
+                                            
+000015  E0                : label:          wrm
+000016  E1                :                 wmp
+000017  E2                :                 wrr
+000018  E3                :                 wpm
+000019  E4                :                 wr0
+00001A  E5                :                 wr1
+00001B  E6                :                 wr2
+00001C  E7                :                 wr3
+00001D  E8                :                 sbm
+00001E  E9                :                 rdm
+00001F  EA                :                 rdr
+000020  EB                :                 adm
+000021  EC                :                 rd0
+000022  ED                :                 rd1
+000023  EE                :                 rd2
+000024  EF                :                 rd3
+                                            
+000025  F0                :                 clb
+000026  F1                :                 clc
+000027  F2                :                 iac
+000028  F3                :                 cmc
+000029  F4                :                 cma
+00002A  F5                :                 ral
+00002B  F6                :                 rar
+00002C  F7                :                 tcc
+00002D  F8                :                 dac
+00002E  F9                :                 tcs
+00002F  FA                :                 stc
+000030  FB                :                 daa
+000031  FC                :                 kbp
+000032  FD                :                 dcl
+                                            
+                                            .end
+
+Portable Intel 4004 Assembler [16.10]
+
+Symbol Table
+
+A0                               00000004  | NC                               00000000 
+A1                               0000000C  | T0                               00000001 
+AN                               0000000C  | TZ                               00000001 
+AZ                               00000004  | C1                               00000002 
+C0                               0000000A  | CN                               00000002 
+C1                               00000002  | A0                               00000004 
+CN                               00000002  | AZ                               00000004 
+CZ                               0000000A  | T1                               00000009 
+NC                               00000000  | TN                               00000009 
+T0                               00000001  | C0                               0000000A 
+T1                               00000009  | CZ                               0000000A 
+TN                               00000009  | A1                               0000000C 
+TZ                               00000001  | AN                               0000000C 
+label                            00000015  | label                            00000015 
