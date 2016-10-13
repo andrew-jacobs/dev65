@@ -92,6 +92,11 @@ public abstract class Assembler extends Application
 		= new TokenKind ("UNKNOWN");
 
 	/**
+	 * The set of all symbols defined in this module.
+	 */
+	protected HashMap<String, Expr> symbols	= new HashMap<String, Expr> ();
+	
+	/**
 	 * A <CODE>Token</CODE> representing white-space.
 	 */
 	protected final Token 		WS		= new Token (UNKNOWN, "#SPACE");
@@ -2295,11 +2300,6 @@ public abstract class Assembler extends Application
 	 */
 	@SuppressWarnings("unused")
 	private int					warnings;
-	
-	/**
-	 * The set of all symbols defined in this module.
-	 */
-	private HashMap<String, Expr> symbols	= new HashMap<String, Expr> ();
 	
 	/**
 	 * The subset of symbols that may be redefined.
