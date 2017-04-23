@@ -1,13 +1,9 @@
 package uk.co.demon.obelisk.xide;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Hashtable;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-
-import uk.co.demon.obelisk.xide.swing.MenuManager;
 
 final class TextWindow extends ChildWindow
 {

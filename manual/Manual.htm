@@ -16,8 +16,8 @@
         The assembler (As65) produces a relocatable object modules by compiling lines of
         source code held in local files. The format of each source line must follow the
         pattern shown below. The 'square' brackets enclose optional components within the
-        line (like the label) whilst the&nbsp; '(X|Y)' pattern indicates a choice between
-        types delimited by '|' characters.&nbsp;</p>
+        line (like the label) whilst the '(X|Y)' pattern indicates a choice between
+        types delimited by '|' characters.</p>
     <pre>[[label[:]] [(opcode|directive|macro) [arguments]]] [; comment]</pre>
     <p>
         Opcodes and directives names are case insensitive in source code but labels and
@@ -33,7 +33,7 @@ a_label_by_itself
     <h3>
         Labels</h3>
     <p>
-        Labels can&nbsp; be placed before all opcodes or on lines by themselves. A global
+        Labels can be placed before all opcodes or on lines by themselves. A global
         label is comprised of a letter or underscore ('_') followed by a series of alphanumeric
         and/or underscore characters. A label may optionally be followed by a colon (':').</p>
     <p>
@@ -57,7 +57,7 @@ a_label_by_itself
         The expression parser evaluates operations on absolute values during processing
         to produce constant values but expressions involving relative and external terms
         are left for the linker to resolve. The following table shows all the supported
-        operators in decreasing order or precedence. &nbsp;</p>
+        operators in decreasing order or precedence.</p>
     <p>
         <table border="1" cellspacing="0" height="170" width="60%">
             <tr>
@@ -182,7 +182,7 @@ a_label_by_itself
         LDX #@177         ; Load an octal constant
         LDA 127           ; Load from a location specified in decimal
         STA $FFC1         ; Store at a location specified in hexadecimal
-        lda #'X'          ; Load ASCII for 'X' into the accumlator
+        lda #'X'          ; Load ASCII for 'X' into the accumulator
         .LONG 'ABCD'      ; A 32-bit character constant</pre>
     <h2>
         Directives</h2>
@@ -201,15 +201,15 @@ a_label_by_itself
     <h3>
         .65C02</h3>
     <p>
-        This directive places the assembler in 65C02 processor mode.&nbsp; The 65C02 processor
+        This directive places the assembler in 65C02 processor mode. The 65C02 processor
         supports all normal 6502 instructions plus new addressing modes and extra some instructions
-        including the BBR, BBS, SMB and RMB instructions,&nbsp;</p>
+        including the BBR, BBS, SMB and RMB instructions.</p>
     <h3>
         .65SC02</h3>
     <p>
-        This directive places the assembler in 65SC02 processor mode.&nbsp; The 65SC02 processor
+        This directive places the assembler in 65SC02 processor mode. The 65SC02 processor
         supports the same instructions as the 65C02 BUT does not have then extended BBR,
-        BBS, SMB and RMB instructions,&nbsp;</p>
+        BBS, SMB and RMB instructions.</p>
     <h3>
         .65816</h3>
     <p>
@@ -230,7 +230,7 @@ a_label_by_itself
         creates a symbol for the ASII carriage return character. An error will be generated
         if the symbol is already defined.</p>
     <pre>
-CR &nbsp; &nbsp;&nbsp; .EQU&nbsp; $0D</pre>
+CR      .EQU  $0D</pre>
     <p>
         As65 accepts '= &lt;expr&gt;' as an alternative syntax when defining equates for
         compatibility with other assemblers.</p>
@@ -268,7 +268,7 @@ COUNT   .SET COUNT+1</pre>
         .ORG &lt;constant expr&gt;</h3>
     <p>
         The .ORG directive sets the absolute target address for the current section. For
-        compatibility with other assemblers As65 will also accept&nbsp; '*= &lt;expr&gt;'.</p>
+        compatibility with other assemblers As65 will also accept '*= &lt;expr&gt;'.</p>
     <h3>
         .DPAGE &lt;constant expr&gt; (65816/65832 only)</h3>
     <p>
@@ -346,8 +346,8 @@ COUNT   .SET COUNT+1</pre>
     <h3>
         .ELSE</h3>
     <p>
-        Assembles the folloing source code up the matching .ENDIF if the condition for the
-        preceding matching .IF, .IFABS, .IFNABS, .IFREL, .IFNREL directive was not met.&nbsp;</p>
+        Assembles the following source code up the matching .ENDIF if the condition for the
+        preceding matching .IF, .IFABS, .IFNABS, .IFREL, .IFNREL directive was not met.</p>
     <h3>
         .ENDIF</h3>
     <p>
@@ -435,12 +435,26 @@ COUNT   .SET COUNT+1</pre>
         they can be used in expressions within the current module (e.g. subroutine addresses,
         key data areas, etc.).</p>
     <h3>
-        .BYTE&nbsp; (&lt;expr&gt;|&lt;string&gt;)[,(&lt;expr&gt;|&lt;string&gt;)]*</h3>
+        .BYTE (&lt;expr&gt;|&lt;string&gt;)[,(&lt;expr&gt;|&lt;string&gt;)]*</h3>
     <p>
         The .BYTE directive deposits a series of 8-bit values into the object code for the
         current module. The values can be defined as the result of an expression (this includes
         simple numeric values) or as strings delimited by quotes.</p>
     <pre>        .BYTE "Hello World",$0D,$0A,0</pre>
+    <h3>.A2STR (&lt;expr&gt;|&lt;string&gt;)[,(&lt;expr&gt;|&lt;string&gt;)]*</h3>
+    <p>
+	Deposits a series of bytes defined by either numeric expressions or strings in which
+	bit 7 of each byte is always set. This directive is useful for generating string tables
+	for the Apple II.
+    </p>
+    <h3>.HSTR &lt;string&gt</h3>
+    <p>
+	Deposits the bytes for each character in a string with bit 7 in the last character set.
+    </p>
+    <h3>.PSTR &lt;string&gt</h3>
+    <p>
+	Deposits the data for a Pascal style string with a character count preceding the data bytes.
+    </p>
     <h3>.DBYTE &lt;expr&gt;[,&lt;expr&gt;]*</h3>
     <p>The .DBYTE directive deposits a series of 16-bit values defined by a series of expressions
         into the object code for the current module. The values are defined most significant byte
@@ -1892,7 +1906,7 @@ COUNT   .SET COUNT+1</pre>
                 <td>
                     &lt;expr,X</td>
                 <td>
-                    Direct Indexed by X&nbsp;</td>
+                    Direct Indexed by X</td>
             </tr>
             <tr>
                 <td>
@@ -1983,7 +1997,7 @@ COUNT   .SET COUNT+1</pre>
                 <td>
                     expr,Y</td>
                 <td>
-                    Absolute or Direct Indexed by Y&nbsp;</td>
+                    Absolute or Direct Indexed by Y</td>
             </tr>
             <tr>
                 <td>
@@ -2095,7 +2109,7 @@ COUNT   .SET COUNT+1</pre>
     <h3>
         WHILE..ENDW</h3>
     <p>
-        The WHILE and WEND commands produce a block of code that will repeat while some
+        The WHILE and ENDW commands produce a block of code that will repeat while some
         condition is true.</p>
     <pre>        WHILE EQ
         ENDW </pre>
@@ -2164,7 +2178,7 @@ Lk65 -code $F000-FD00,$FF00-$FFFF rtos.obj</pre>
         The library application allows a collection of compiled modules to be converted
         into a single library file. The linker scans libraries during the link process and
         removed only the modules needed to satisfy missing references. The command line
-        syntax for the librarion is shown below</p>
+        syntax for the librarian is shown below</p>
     <pre>Lb65 [-create|update|remove|list] library [object ...]</pre>
     <p>
         The librarian supports four actions, namely:</p>
