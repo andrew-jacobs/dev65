@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2011 Andrew John Jacobs.
+ * Copyright (C),2005-2016 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -21,6 +21,8 @@
  */
 
 package uk.co.demon.obelisk.xlnk;
+
+import uk.co.demon.obelisk.xobj.Hex;
 
 /**
  * The <CODE>Region</CODE> class contains the lower and upper address of a
@@ -71,7 +73,7 @@ final class Region
 	 */
 	public int getSize ()
 	{
-		return ((int)(end - start + 1));
+		return ((start <= end) ? (int)(end - start + 1) : 0);
 	}
 
 	/**
@@ -96,6 +98,15 @@ final class Region
 		
 		end = addr - 1;
 		return (tail);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString ()
+	{
+		return ("$" + Hex.toHex(start,8) + "-$" + Hex.toHex (end, 8));
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2006-2014 Andrew John Jacobs.
+ * Copyright (C),2006-2016 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -119,14 +119,16 @@ final class Area
 			for (int index = 0; index < regions.size (); ++index) {
 				Region region = (Region) regions.elementAt (index);
 				
-				if ((region.getStart () <= addr) &&	((addr + size) <= region.getEnd ())) {
-					if (region.getStart () == addr)
+				if ((region.getStart () <= addr) &&	((addr + size - 1) <= region.getEnd ())) {
+					if (region.getStart () == addr) {
 						region.reserve (size);
+					}
 					else {
 						region = region.split (addr);
 						regions.insertElementAt (region, index + 1);
 						region.reserve (size);
 					}
+					break;
 				}
 			}
 		}
@@ -143,6 +145,24 @@ final class Area
 			}
 		}
 		return (addr);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString ()
+	{
+		StringBuffer	buffer = new StringBuffer ();
+		
+		buffer.append("{ ");
+		for (int index = 0; index < regions.size (); ++index) {
+			if (index != 0) buffer.append(", ");
+			buffer.append(regions.elementAt(index));
+		}
+		buffer.append(" }");
+		
+		return (buffer.toString ());
 	}
 	
 	/**
