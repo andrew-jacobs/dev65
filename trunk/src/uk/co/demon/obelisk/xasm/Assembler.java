@@ -39,6 +39,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 import uk.co.demon.obelisk.xapp.Application;
+import uk.co.demon.obelisk.xapp.Option;
 import uk.co.demon.obelisk.xobj.Expr;
 import uk.co.demon.obelisk.xobj.Extern;
 import uk.co.demon.obelisk.xobj.Hex;
@@ -1307,6 +1308,36 @@ public abstract class Assembler extends Application
 	{
 		super.startUp ();
 		
+		if (defineOption.isPresent ()) {
+			String[] defines = defineOption.getValue().split(",");
+			
+			for (int index = 0; index < defines.length; ++index) {
+				String[] parts = defines [index].split ("=");
+				
+				switch (parts.length) {
+				case 1:	doSet (parts [0], ONE);
+						break;
+						
+				case 2: {
+					long		value;
+					
+					switch (parts [1].charAt(0)) {
+					case '%':	value = Long.parseLong (parts [1].substring (1), 2); break;
+					case '@':	value = Long.parseLong (parts [1].substring (1), 8); break;
+					case '$':	value = Long.parseLong (parts [1].substring (1), 16); break;
+					default:	value = Long.parseLong (parts [1]);
+					}
+					
+					doSet (parts [0], new Value (null, value));
+				}
+						
+				default:
+					System.err.println ("Error: Invalid define (" + defines [index] + ")");
+					setFinished (true);
+				}
+			}
+		}
+		
 		switch (getArguments ().length) {
 		case 0:		System.err.println ("Error: No source file name provided");
 					setFinished (true);
@@ -2181,11 +2212,22 @@ public abstract class Assembler extends Application
 	 */
 	private static final Value	ZERO	= new Value (null, 0);
 	
+	/*
+	 * Another constant value used here and there.
+	 */
+	private static final Value	ONE		= new Value (null, 1);
+	
 	/**
 	 * General string buffer area.
 	 */
 	private static StringBuffer	buffer	= new StringBuffer ();
 	
+	/**
+	 * The <CODE>Option</CODE> instance use to detect <CODE>-help</CODE>
+	 */
+	private Option				defineOption
+		= new Option ("-define", "Define symbols",  "(symbol|symbol=value)(,..)*");
+
 	/**
 	 * Tab expansion size.
 	 */
