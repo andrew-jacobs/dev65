@@ -1701,18 +1701,13 @@ public final class As65 extends Assembler
 		{
 			switch (parseMode (PBANK)) {
 			case DPAG:
-			case ABSL:	genAbsl (0x4C, arg);	break;
+			case ABSL:
+			case ALNG:	genAbsl (0x4C, arg);	break;
+			
 			case INDI:	genIndi	(0x6C, arg, true);	break;
 			case INDX:	
 				if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0)
 					genAbsl (0x7C, arg);
-				else
-					error (ERR_MODE_NOT_SUPPORTED);
-				break;
-				
-			case ALNG:
-				if ((processor & (M65816 | M65832)) != 0)
-					genLong (0x5C, arg);
 				else
 					error (ERR_MODE_NOT_SUPPORTED);
 				break;
@@ -1764,7 +1759,8 @@ public final class As65 extends Assembler
 		{
 			switch (parseMode (PBANK)) {
 			case DPAG:
-			case ABSL:	genAbsl (0x20, arg);	break;
+			case ABSL:
+			case ALNG:	genAbsl (0x20, arg);	break;
 			
 			case INDX:
 				if ((processor & (M65816 | M65832)) != 0)
@@ -4192,7 +4188,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [16.06]";
+		title 		= "Portable 65xx Assembler [17.05]";
 	}
 	
 	/**
