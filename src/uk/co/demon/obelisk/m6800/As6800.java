@@ -1597,7 +1597,7 @@ public final class As6800 extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable Motorola 6800 Assembler [15.02]";
+		title = "Portable Motorola 6800 Assembler [17.08]";
 	}
 	
 	/**
@@ -2111,8 +2111,10 @@ public final class As6800 extends Assembler
 		// Handle .. ..,X
 		arg = parseExpr ();
 
-		if (arg == null)
+		if (arg == null) {
 			error (ERR_MISSING_EXPRESSION);
+			return (EXTD);
+		}
 		
 		if (token == COMMA) {
 			token = nextRealToken ();
@@ -2190,7 +2192,13 @@ public final class As6800 extends Assembler
 		
 		if (origin != null) {
 			addByte (opcode);
-			addByte (Expr.sub (expr, Expr.add (origin, TWO)));
+			
+			Expr dist = Expr.sub (expr, Expr.add (origin, TWO));
+			if (getPass () == Pass.FINAL) {
+				if (dist.isAbsolute () && ((dist.resolve () < -128) || (dist.resolve () > 127)))
+					error ("Relative branch is out of range");
+			}
+			addByte (dist);
 		}
 		else
 			error ("No active section");
