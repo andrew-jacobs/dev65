@@ -4188,7 +4188,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [17.05]";
+		title 		= "Portable 65xx Assembler [17.08]";
 	}
 	
 	/**
@@ -4971,8 +4971,10 @@ public final class As65 extends Assembler
 		// Handle .. ..,X ..,Y and ..,S
 		arg = parseExpr ();
 
-		if (arg == null)
+		if (arg == null) {
 			error (ERR_MISSING_EXPRESSION);
+			return (ABSL);
+		}
 		
 		if (token == COMMA) {
 			token = nextRealToken ();
@@ -5135,10 +5137,23 @@ public final class As65 extends Assembler
 		
 		if (origin != null) {
 			addByte (opcode);
-			if (isLong)
-				addWord (Expr.sub (expr, Expr.add (origin, THREE)));
-			else
-				addByte (Expr.sub (expr, Expr.add (origin, TWO)));
+			if (isLong) {
+				Expr dist = Expr.sub (expr, Expr.add (origin, THREE));
+				if (getPass () == Pass.FINAL) {
+					if (dist.isAbsolute () && ((dist.resolve () < -32768) || (dist.resolve () > 32767)))
+						error ("Relative branch is out of range");
+				}
+				addWord (dist);
+			}
+			else {
+				Expr dist = Expr.sub (expr, Expr.add (origin, TWO));
+				
+				if (getPass () == Pass.FINAL) {
+					if (dist.isAbsolute () && ((dist.resolve () < -128) || (dist.resolve () > 127)))
+						error ("Relative branch is out of range");
+				}
+				addWord (dist);
+			}
 		}
 		else
 			error ("No active section");
