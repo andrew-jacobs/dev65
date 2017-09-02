@@ -5152,7 +5152,7 @@ public final class As65 extends Assembler
 					if (dist.isAbsolute () && ((dist.resolve () < -128) || (dist.resolve () > 127)))
 						error ("Relative branch is out of range");
 				}
-				addWord (dist);
+				addByte (dist);
 			}
 		}
 		else
