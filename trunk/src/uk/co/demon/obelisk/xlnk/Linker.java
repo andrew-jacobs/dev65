@@ -139,8 +139,6 @@ public abstract class Linker extends Application
 			if (arguments [index].endsWith (".obj")) {
 				Object object = Parser.parse (arguments [index]);
 	
-//	System.err.println ("Parsed: " + object);
-	
 				if ((object != null) && (object instanceof Module)) {
 					if (!modules.contains (object))
 						modules.add ((Module) object);
@@ -234,7 +232,11 @@ public abstract class Linker extends Application
 			Section		section = rel.elementAt (index);
 			long 		base 	= fitSection (section);
 		
-			if (base == -1) return;
+			if (base == -1) {
+				error ("Failed to fit section '" + section.getName() + "' in module '" + section.getModule().getName () + "'");
+				setFinished (true);
+				return;
+			}
 			sectionMap.setBaseAddress (section, base);
 		}
 		
@@ -558,14 +560,17 @@ public abstract class Linker extends Application
 			Module			module 	= modules [count];
 			Vector<String>	globals = module.getGlobals();
 			
-			// Looking for globals that match referenced symbols
-			for (int index = 0; index < globals.size (); ++index) {
-				String			symbol = globals.elementAt (index);
-
-				if (refs.containsKey (symbol)) {
-					this.modules.add (module);
-					processModule (module);
-					break;
+			// Ignore modules that have already been tagged
+			if (!this.modules.contains (module)) {
+				// Looking for globals that match referenced symbols
+				for (int index = 0; index < globals.size (); ++index) {
+					String			symbol = globals.elementAt (index);
+	
+					if (refs.containsKey (symbol)) {
+						this.modules.add (module);
+						processModule (module);
+						break;
+					}
 				}
 			}
 		}

@@ -76,7 +76,9 @@ public final class Library
 	{
 		Module [] result = new Module [modules.size ()];
 		
-		modules.copyInto (result);
+		for (int index = 0; index < modules.size (); ++index)
+			result [index] = modules.get(index);
+		
 		return (result);
 	}
 	
