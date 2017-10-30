@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2016 Andrew John Jacobs.
+ * Copyright (C),2017 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -20,7 +20,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package uk.co.demon.obelisk.i4004;
+package uk.co.demon.obelisk.i8008;
 
 import java.util.Hashtable;
 
@@ -34,7 +34,7 @@ import uk.co.demon.obelisk.xobj.Hex;
 import uk.co.demon.obelisk.xobj.Module;
 import uk.co.demon.obelisk.xobj.Value;
 
-public final class As4004 extends Assembler
+public final class As8008 extends Assembler
 {
 	/**
 	 * Processes the command line and executes the assembler.
@@ -43,9 +43,20 @@ public final class As4004 extends Assembler
 	 */
 	public static void main(String[] args)
 	{
-		new As4004 ().run (args);
+		new As8008 ().run (args);
 	}
 	
+	/**
+	 * Constructs an <CODE>As8008</CODE> instance and initialises the object
+	 * module.
+	 */
+	protected As8008 ()
+	{
+		super (new Module ("8008", false));
+		
+		setMemoryModel (new MemoryModelByte (errorHandler));
+	}
+
 	protected class ImpliedOpcode extends Opcode
 	{
 		public ImpliedOpcode (String text, int opcode)
@@ -73,66 +84,6 @@ public final class As4004 extends Assembler
 		private final int opcode;
 	}
 	
-	protected class RegisterOpcode extends Opcode
-	{
-		public RegisterOpcode (String text, int opcode)
-		{
-			super (KEYWORD, text);
-			
-			this.opcode = opcode;
-		}
-		
-		/**
-		 * {@inheritDoc}
-		 */
-		public boolean compile ()
-		{
-			token	= nextRealToken ();
-			Expr expr = parseExpr ();
-			long reg;
-			
-			if ((expr != null) && expr.isAbsolute () && ((reg = expr.resolve ()) >= 0) && (reg <= 15)) {
-				addByte (opcode | (int) reg);
-			}
-			else
-				error (ERR_EXPECTED_REGISTER);
-			
-			return (true);
-		}
-		
-		private final int opcode;
-	}
-	
-	protected class RegisterPairOpcode extends Opcode
-	{
-		public RegisterPairOpcode (String text, int opcode)
-		{
-			super (KEYWORD, text);
-			
-			this.opcode = opcode;
-		}
-		
-		/**
-		 * {@inheritDoc}
-		 */
-		public boolean compile ()
-		{
-			token	= nextRealToken ();
-			Expr expr = parseExpr ();
-			long reg;
-			
-			if ((expr != null) && expr.isAbsolute () && ((reg = expr.resolve ()) >= 0) && (reg <= 7)) {
-				addByte (opcode | (int)(reg << 1));
-			}
-			else
-				error (ERR_EXPECTED_REGISTER_PAIR);
-			
-			return (true);
-		}
-		
-		private final int opcode;
-	}
-
 	protected class ImmediateOpcode extends Opcode
 	{
 		public ImmediateOpcode (String text, int opcode)
@@ -193,212 +144,21 @@ public final class As4004 extends Assembler
 		
 		private final int opcode;
 	}
-	
-	protected final Opcode ADD = new RegisterOpcode ("ADD", 0x80);
-	
-	protected final Opcode ADM = new ImpliedOpcode ("ADM", 0xeb);
-	
-	protected final Opcode BBL = new ImmediateOpcode ("BBL", 0xc0);
-	
-	protected final Opcode CLB = new ImpliedOpcode ("CLB", 0xf0);
-	
-	protected final Opcode CLC = new ImpliedOpcode ("CLC", 0xf1);
-	
-	protected final Opcode CMA = new ImpliedOpcode ("CMA", 0xf4);
-	
-	protected final Opcode CMC = new ImpliedOpcode ("CMC", 0xf3);
-	
-	protected final Opcode DAA = new ImpliedOpcode ("DAA", 0xfb);
-	
-	protected final Opcode DAC = new ImpliedOpcode ("DAC", 0xf8);
-	
-	protected final Opcode DCL = new ImpliedOpcode ("DCL", 0xfd);
-	
-	protected final Opcode FIM = new Opcode (KEYWORD, "FIM")
-		{
-			@Override
-			public boolean compile()
-			{
-				token	= nextRealToken ();
-				Expr pair = parseExpr ();
-				Expr expr;
-				
-				if ((pair != null) && pair.isAbsolute()) {
-					if (token == COMMA)
-						token = nextRealToken ();
-					
-					expr = parseExpr ();
-					
-					if (expr == null) {
-						error (ERR_MISSING_EXPRESSION);
-						return (true);
-					}
-				}
-				else {
-					error (ERR_EXPECTED_REGISTER_PAIR);
-					return (true);
-				}
-					
-				if ((pair.resolve() >= 0) && (pair.resolve() <= 7)) {
-					addByte (Expr.or (new Value (null, 0x20), Expr.shl(pair,  new Value (null, 2))));
-					addByte (expr);
-				}
-				else
-					error (ERR_EXPECTED_REGISTER_PAIR);
-					
-				return (true);
-			}
-		};
-	
-	protected final Opcode FIN = new RegisterPairOpcode ("FIN", 0x30);
-		
-	protected final Opcode IAC = new ImpliedOpcode ("IAC", 0xf2);
-	
-	protected final Opcode INC = new RegisterOpcode ("INC", 0x60);
-	
-	protected final Opcode ISZ = new Opcode (KEYWORD, "ISZ")
-		{
-			@Override
-			public boolean compile()
-			{
-				token	= nextRealToken ();
-				Expr reg = parseExpr ();
-				Expr expr;
-				
-				if ((reg != null) && reg.isAbsolute()) {
-					if (token == COMMA)
-						token = nextRealToken ();
-					
-					expr = parseExpr ();
-					
-					if (expr == null) {
-						error (ERR_MISSING_EXPRESSION);
-						return (true);
-					}
-				}
-				else {
-					error (ERR_EXPECTED_REGISTER_PAIR);
-					return (true);
-				}
-					
-				if ((reg.resolve() >= 0) && (reg.resolve() <= 15)) {
-					addByte (Expr.or (new Value (null, 0x70), reg));
-					addByte (expr);
-				}
-				else
-					error (ERR_EXPECTED_REGISTER_PAIR);
-					
-				return (true);
-			}
-		};
-	
-	protected final Opcode JCN = new Opcode (KEYWORD, "JCN")
-		{
-			@Override
-			public boolean compile()
-			{
-				token	= nextRealToken ();
-				Expr cond = parseExpr ();
-				Expr expr;
-				
-				if ((cond != null) && cond.isAbsolute()) {
-					if (token == COMMA)
-						token = nextRealToken ();
-					
-					expr = parseExpr ();
-					
-					if (expr == null) {
-						error (ERR_MISSING_EXPRESSION);
-						return (true);
-					}
-				}
-				else {
-					error (ERR_EXPECTED_CONDITION);
-					return (true);
-				}
-					
-				if ((cond.resolve() >= 0) && (cond.resolve() <= 15)) {
-					addByte (Expr.or (new Value (null, 0x10), cond));
-					addByte (expr);
-				}
-				else
-					error (ERR_EXPECTED_CONDITION);
-					
-				return (true);
-			}
-		};
-	
-	protected final Opcode JIN = new RegisterPairOpcode ("JIN", 0x31);
-	
-	protected final Opcode JMS = new JumpOpcode ("JMS", 0x50);
-	
-	protected final Opcode JUN = new JumpOpcode ("JUN", 0x40);
-	
-	protected final Opcode KBP = new ImpliedOpcode ("KBP", 0xfc);
-	
-	protected final Opcode LD  = new RegisterOpcode ("LD", 0xa0);
-	
-	protected final Opcode LDM = new ImmediateOpcode ("LDM", 0xd0);
-	
-	protected final Opcode NOP = new ImpliedOpcode ("NOP", 0x00);
-	
-	protected final Opcode RAL = new ImpliedOpcode ("RAL", 0xf5);
-	
-	protected final Opcode RAR = new ImpliedOpcode ("RAR", 0xf6);
-	
-	protected final Opcode RD0 = new ImpliedOpcode ("RD0", 0xec);
-	
-	protected final Opcode RD1 = new ImpliedOpcode ("RD1", 0xed);
-	
-	protected final Opcode RD2 = new ImpliedOpcode ("RD2", 0xee);
-	
-	protected final Opcode RD3 = new ImpliedOpcode ("RD3", 0xef);
-	
-	protected final Opcode RDM = new ImpliedOpcode ("RDM", 0xe9);
-	
-	protected final Opcode RDR = new ImpliedOpcode ("RDR", 0xea);
-	
-	protected final Opcode SBM = new ImpliedOpcode ("SBM", 0xe8);
-	
-	protected final Opcode SRC = new RegisterPairOpcode ("SRC", 0x21);
-	
-	protected final Opcode STC = new ImpliedOpcode ("STC", 0xfa);
-	
-	protected final Opcode SUB = new RegisterOpcode ("SUB", 0x90);
-	
-	protected final Opcode TCC = new ImpliedOpcode ("TCC", 0xf7);
-	
-	protected final Opcode TCS = new ImpliedOpcode ("TCS", 0xf9);
-		
-	protected final Opcode WMP = new ImpliedOpcode ("WMP", 0xe1);
-	
-	protected final Opcode WPM = new ImpliedOpcode ("WPM", 0xe3);
-	
-	protected final Opcode WR0 = new ImpliedOpcode ("WR0", 0xe4);
-	
-	protected final Opcode WR1 = new ImpliedOpcode ("WR1", 0xe5);
-	
-	protected final Opcode WR2 = new ImpliedOpcode ("WR2", 0xe6);
-	
-	protected final Opcode WR3 = new ImpliedOpcode ("WR3", 0xe7);
-	
-	protected final Opcode WRM = new ImpliedOpcode ("WRM", 0xe0);
-	
-	protected final Opcode WRR = new ImpliedOpcode ("WRR", 0xe2);
-	
-	protected final Opcode XCH = new RegisterOpcode ("XCH", 0xb0);
-	
-	/**
-	 * Constructs an <CODE>As4004</CODE> instance and initialises the object
-	 * module.
-	 */
-	protected As4004 ()
-	{
-		super (new Module ("4004", false));
-		
-		setMemoryModel (new MemoryModelByte (errorHandler));
-	}
 
+	protected final Opcode	ADI	= new ImmediateOpcode ("ADI", 0x04);
+	
+	protected final Opcode 	JMP	= new JumpOpcode ("JMP", 0x44);
+	
+	protected final Opcode	RAL	= new ImpliedOpcode ("RAL", 0x12);
+
+	protected final Opcode	RAR	= new ImpliedOpcode ("RAR", 0x1a);
+	
+	protected final Opcode	RET	= new ImpliedOpcode ("RET", 0x07);
+	
+	protected final Opcode	RLC	= new ImpliedOpcode ("RLC", 0x02);
+	
+	protected final Opcode	RRC	= new ImpliedOpcode ("RRC", 0x0a);
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -445,70 +205,73 @@ public final class As4004 extends Assembler
 		addToken (WORD);
 		
 		// Opcodes
-		addToken (ADD);
-		addToken (ADM);
-		addToken (BBL);
-		addToken (CLB);
-		addToken (CLC);
-		addToken (CMA);
-		addToken (CMC);
-		addToken (DAA);
-		addToken (DAC);
-		addToken (DCL);
-		addToken (FIM);
-		addToken (FIN);
-		addToken (IAC);
-		addToken (INC);
-		addToken (ISZ);
-		addToken (JCN);
-		addToken (JIN);
-		addToken (JMS);
-		addToken (JUN);
-		addToken (KBP);
-		addToken (LD);
-		addToken (LDM);
-		addToken (NOP);
+//		addToken (ADD);
+		addToken (ADI);
+//		addToken (ADM);
+//		addToken (BBL);
+//		addToken (CLB);
+//		addToken (CLC);
+//		addToken (CMA);
+//		addToken (CMC);
+//		addToken (DAA);
+//		addToken (DAC);
+//		addToken (DCL);
+//		addToken (FIM);
+//		addToken (FIN);
+//		addToken (IAC);
+//		addToken (INC);
+//		addToken (ISZ);
+		addToken (JMP);
+//		addToken (JIN);
+//		addToken (JMS);
+//		addToken (JUN);
+//		addToken (KBP);
+//		addToken (LD);
+//		addToken (LDM);
+//		addToken (NOP);
 		addToken (RAL);
 		addToken (RAR);
-		addToken (RD0);
-		addToken (RD1);
-		addToken (RD2);
-		addToken (RD3);
-		addToken (RDM);
-		addToken (RDR);
-		addToken (SBM);
-		addToken (SRC);
-		addToken (STC);
-		addToken (SUB);
-		addToken (TCC);
-		addToken (TCS);
-		addToken (WMP);
-		addToken (WPM);
-		addToken (WRM);
-		addToken (WRR);
-		addToken (WR0);
-		addToken (WR1);
-		addToken (WR2);
-		addToken (WR3);
-		addToken (XCH);
+		addToken (RLC);
+		addToken (RRC);
+//		addToken (RD0);
+//		addToken (RD1);
+//		addToken (RD2);
+//		addToken (RD3);
+//		addToken (RDM);
+//		addToken (RDR);
+//		addToken (SBM);
+//		addToken (SRC);
+//		addToken (STC);
+//		addToken (SUB);
+//		addToken (TCC);
+//		addToken (TCS);
+//		addToken (WMP);
+//		addToken (WPM);
+//		addToken (WRM);
+//		addToken (WRR);
+//		addToken (WR0);
+//		addToken (WR1);
+//		addToken (WR2);
+//		addToken (WR3);
+//		addToken (XCH);
 		
-		symbols.put ("NC", new Value (null, 0x0));
-		symbols.put ("TZ", new Value (null, 0x1));
-		symbols.put ("T0", new Value (null, 0x1));
-		symbols.put ("TN", new Value (null, 0x9));
-		symbols.put ("T1", new Value (null, 0x9));
-		symbols.put ("CN", new Value (null, 0x2));
-		symbols.put ("C1", new Value (null, 0x2));
-		symbols.put ("CZ", new Value (null, 0xa));
-		symbols.put ("C0", new Value (null, 0xa));
-		symbols.put ("AZ", new Value (null, 0x4));
-		symbols.put ("A0", new Value (null, 0x4));
-		symbols.put ("AN", new Value (null, 0xc));
-		symbols.put ("A1", new Value (null, 0xc));
+//		symbols.put ("NC", new Value (null, 0x0));
+//		symbols.put ("TZ", new Value (null, 0x1));
+//		symbols.put ("T0", new Value (null, 0x1));
+//		symbols.put ("TN", new Value (null, 0x9));
+//		symbols.put ("T1", new Value (null, 0x9));
+//		symbols.put ("CN", new Value (null, 0x2));
+//		symbols.put ("C1", new Value (null, 0x2));
+//		symbols.put ("CZ", new Value (null, 0xa));
+//		symbols.put ("C0", new Value (null, 0xa));
+//		symbols.put ("AZ", new Value (null, 0x4));
+//		symbols.put ("A0", new Value (null, 0x4));
+//		symbols.put ("AN", new Value (null, 0xc));
+//		symbols.put ("A1", new Value (null, 0xc));
 		
 		super.startUp ();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -526,7 +289,7 @@ public final class As4004 extends Assembler
 	{
 		super.startPass ();
 		
-		title = "Portable Intel 4004 Assembler [16.10]";
+		title = "Portable Intel 8008 Assembler [17.10]";
 	}
 	
 	/**
