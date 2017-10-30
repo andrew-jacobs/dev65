@@ -1,60 +1,284 @@
 
 Portable Intel 4004 Assembler [16.10]
 
+                            ;===============================================================================
+                            ; As4004 Opcode Test
+                            ;-------------------------------------------------------------------------------
+                            ; Copyright (C),2016-2017 Andrew John Jacobs.
+                            ;
+                            ; This program is provided free of charge for educational purposes
+                            ;
+                            ; Redistribution and use in binary form without modification, is permitted
+                            ; provided that the above copyright notice, this list of conditions and the
+                            ; following disclaimer in the documentation and/or other materials provided
+                            ; with the distribution.
+                            ;
+                            ; THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS 'AS IS' AND ANY
+                            ; EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+                            ; WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+                            ; DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
+                            ; DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+                            ; (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+                            ; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+                            ; ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+                            ; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+                            ; THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+                            ;-------------------------------------------------------------------------------
+                            ; Notes:
+                            ;
+                            ;
+                            ;===============================================================================
                             
                                             .code
                                             .org    0
-                            
+                                            
 000000  00                :                 nop
-000001  1415              :                 jcn     A0,label
-000003  207F              :                 fim     0,127
-000005  21                :                 src     0
-000006  30                :                 fin     0
-000007  31                :                 jin     0
-000008  4015              :                 jun     label
-00000A  5015              :                 jms     label
-00000C  60                :                 inc     0
-00000D  7715              :                 isz     7,label
-00000F  80                :                 add     0
-000010  90                :                 sub     0
-000011  A0                :                 ld      0
-000012  B0                :                 xch     0
-000013  C7                :                 bbl     7
-000014  D9                :                 ldm     -7
+000001  1010              :                 jcn     0,label
+000003  1110              :                 jcn     1,label
+000005  1210              :                 jcn     2,label
+000007  1310              :                 jcn     3,label
+000009  1410              :                 jcn     4,label
+00000B  1510              :                 jcn     5,label
+00000D  1610              :                 jcn     6,label
+00000F  1710              :                 jcn     7,label
+000011  1810              :                 jcn     8,label
+000013  1710              :                 jcn     7,label
+000015  1A10              :                 jcn     10,label
+000017  1B10              :                 jcn     11,label
+000019  1C10              :                 jcn     12,label
+00001B  1D10              :                 jcn     13,label
+00001D  1E10              :                 jcn     14,label
+00001F  1F10              :                 jcn     15,label
+000021  2012              :                 fim     0,12h
+000023  21                :                 src     0
+000024  2212              :                 fim     1,12h
+000026  23                :                 src     1
+000027  2412              :                 fim     2,12h
+000029  25                :                 src     2
+
+Portable Intel 4004 Assembler [16.10]
+
+00002A  2612              :                 fim     3,12h
+00002C  27                :                 src     3
+00002D  2812              :                 fim     4,12h
+00002F  29                :                 src     4
+000030  2A12              :                 fim     5,12h
+000032  2B                :                 src     5
+000033  2C12              :                 fim     6,12h
+000035  2D                :                 src     6
+000036  2E12              :                 fim     7,12h
+000038  2F                :                 src     7
+000039  30                :                 fin     0
+00003A  31                :                 jin     0
+00003B  32                :                 fin     1
+00003C  33                :                 jin     1
+00003D  34                :                 fin     2
+00003E  35                :                 jin     2
+00003F  36                :                 fin     3
+000040  37                :                 jin     3
+000041  38                :                 fin     4
+000042  39                :                 jin     4
+000043  3A                :                 fin     5
+000044  3B                :                 jin     5
+000045  3C                :                 fin     6
+000046  3D                :                 jin     6
+000047  3E                :                 fin     7
+000048  3F                :                 jin     7
+000049  4110              :                 jun     label
+00004B  5110              :                 jms     label
+00004D  60                :                 inc     0
+00004E  61                :                 inc     1
+00004F  62                :                 inc     2
+000050  63                :                 inc     3
+000051  64                :                 inc     4
+000052  65                :                 inc     5
+000053  66                :                 inc     6
+000054  67                :                 inc     7
+000055  68                :                 inc     8
+000056  69                :                 inc     9
+000057  6A                :                 inc     10
+000058  6B                :                 inc     11
+000059  6C                :                 inc     12
+00005A  6D                :                 inc     13
+00005B  6E                :                 inc     14
+00005C  6F                :                 inc     15
+00005D  7010              :                 isz     0,label
+00005F  7110              :                 isz     1,label
+000061  7210              :                 isz     2,label
+000063  7310              :                 isz     3,label
+000065  7410              :                 isz     4,label
+000067  7510              :                 isz     5,label
+000069  7610              :                 isz     6,label
+00006B  7710              :                 isz     7,label
+00006D  7810              :                 isz     8,label
+00006F  7910              :                 isz     9,label
+
+Portable Intel 4004 Assembler [16.10]
+
+000071  7A10              :                 isz     10,label
+000073  7B10              :                 isz     11,label
+000075  7C10              :                 isz     12,label
+000077  7D10              :                 isz     13,label
+000079  7E10              :                 isz     14,label
+00007B  7F10              :                 isz     15,label
+00007D  80                :                 add     0
+00007E  81                :                 add     1
+00007F  82                :                 add     2
+000080  83                :                 add     3
+000081  84                :                 add     4
+000082  85                :                 add     5
+000083  86                :                 add     6
+000084  87                :                 add     7
+000085  88                :                 add     8
+000086  89                :                 add     9
+000087  8A                :                 add     10
+000088  8B                :                 add     11
+000089  8C                :                 add     12
+00008A  8D                :                 add     13
+00008B  8E                :                 add     14
+00008C  8F                :                 add     15
+00008D  90                :                 sub     0
+00008E  91                :                 sub     1
+00008F  92                :                 sub     2
+000090  93                :                 sub     3
+000091  94                :                 sub     4
+000092  95                :                 sub     5
+000093  96                :                 sub     6
+000094  97                :                 sub     7
+000095  98                :                 sub     8
+000096  99                :                 sub     9
+000097  9A                :                 sub     10
+000098  9B                :                 sub     11
+000099  9C                :                 sub     12
+00009A  9D                :                 sub     13
+00009B  9E                :                 sub     14
+00009C  9F                :                 sub     15
+00009D  A0                :                 ld      0
+00009E  A1                :                 ld      1
+00009F  A2                :                 ld      2
+0000A0  A3                :                 ld      3
+0000A1  A4                :                 ld      4
+0000A2  A5                :                 ld      5
+0000A3  A6                :                 ld      6
+0000A4  A7                :                 ld      7
+0000A5  A8                :                 ld      8
+0000A6  A9                :                 ld      9
+0000A7  AA                :                 ld      10
+0000A8  AB                :                 ld      11
+0000A9  AC                :                 ld      12
+0000AA  AD                :                 ld      13
+0000AB  AE                :                 ld      14
+0000AC  AF                :                 ld      15
+
+Portable Intel 4004 Assembler [16.10]
+
+0000AD  B0                :                 xch     0
+0000AE  B1                :                 xch     1
+0000AF  B2                :                 xch     2
+0000B0  B3                :                 xch     3
+0000B1  B4                :                 xch     4
+0000B2  B5                :                 xch     5
+0000B3  B6                :                 xch     6
+0000B4  B7                :                 xch     7
+0000B5  B8                :                 xch     8
+0000B6  B9                :                 xch     9
+0000B7  BA                :                 xch     10
+0000B8  BB                :                 xch     11
+0000B9  BC                :                 xch     12
+0000BA  BD                :                 xch     13
+0000BB  BE                :                 xch     14
+0000BC  BF                :                 xch     15
+0000BD  C0                :                 bbl     0
+0000BE  C1                :                 bbl     1
+0000BF  C2                :                 bbl     2
+0000C0  C3                :                 bbl     3
+0000C1  C4                :                 bbl     4
+0000C2  C5                :                 bbl     5
+0000C3  C6                :                 bbl     6
+0000C4  C7                :                 bbl     7
+0000C5  C8                :                 bbl     8
+0000C6  C9                :                 bbl     9
+0000C7  CA                :                 bbl     10
+0000C8  CB                :                 bbl     11
+0000C9  CC                :                 bbl     12
+0000CA  CD                :                 bbl     13
+0000CB  CE                :                 bbl     14
+0000CC  CF                :                 bbl     15
+0000CD  D0                :                 ldm     0
+0000CE  D1                :                 ldm     1
+0000CF  D2                :                 ldm     2
+0000D0  D3                :                 ldm     3
+0000D1  D4                :                 ldm     4
+0000D2  D5                :                 ldm     5
+0000D3  D6                :                 ldm     6
+0000D4  D7                :                 ldm     7
+0000D5  D8                :                 ldm     8
+0000D6  D9                :                 ldm     9
+0000D7  DA                :                 ldm     10
+0000D8  DB                :                 ldm     11
+0000D9  DC                :                 ldm     12
+0000DA  DD                :                 ldm     13
+0000DB  DE                :                 ldm     14
+0000DC  DF                :                 ldm     15
+0000DD  E0                :                 wrm
+0000DE  E1                :                 wmp
+0000DF  E2                :                 wrr
+0000E0  E3                :                 wpm
+0000E1  E4                :                 wr0
+0000E2  E5                :                 wr1
+
+Portable Intel 4004 Assembler [16.10]
+
+0000E3  E6                :                 wr2
+0000E4  E7                :                 wr3
+0000E5  E8                :                 sbm
+0000E6  E9                :                 rdm
+0000E7  EA                :                 rdr
+0000E8  EB                :                 adm
+0000E9  EC                :                 rd0
+0000EA  ED                :                 rd1
+0000EB  EE                :                 rd2
+0000EC  EF                :                 rd3
+0000ED  F0                :                 clb
+0000EE  F1                :                 clc
+0000EF  F2                :                 iac
+0000F0  F3                :                 cmc
+0000F1  F4                :                 cma
+0000F2  F5                :                 ral
+0000F3  F6                :                 rar
+0000F4  F7                :                 tcc
+0000F5  F8                :                 dac
+0000F6  F9                :                 tcs
+0000F7  FA                :                 stc
+0000F8  FB                :                 daa
+0000F9  FC                :                 kbp
+0000FA  FD                :                 dcl
                                             
-000015  E0                : label:          wrm
-000016  E1                :                 wmp
-000017  E2                :                 wrr
-000018  E3                :                 wpm
-000019  E4                :                 wr0
-00001A  E5                :                 wr1
-00001B  E6                :                 wr2
-00001C  E7                :                 wr3
-00001D  E8                :                 sbm
-00001E  E9                :                 rdm
-00001F  EA                :                 rdr
-000020  EB                :                 adm
-000021  EC                :                 rd0
-000022  ED                :                 rd1
-000023  EE                :                 rd2
-000024  EF                :                 rd3
+                            ;-------------------------------------------------------------------------------
+                            
+                            ; Example from user guide
+                            
+0000FB  00                :                 nop
+0000FC  1410              :                 jcn     A0,label
+0000FE  207F              :                 fim     0,127
+000100  21                :                 src     0
+000101  30                :                 fin     0
+000102  31                :                 jin     0
+000103  4110              :                 jun     label
+000105  5110              :                 jms     label
+000107  60                :                 inc     0
+000108  7710              :                 isz     7,label
+00010A  80                :                 add     0
+00010B  90                :                 sub     0
+00010C  A0                :                 ld      0
+00010D  B0                :                 xch     0
+00010E  C7                :                 bbl     7
+00010F  D9                :                 ldm     -7
                                             
-000025  F0                :                 clb
-000026  F1                :                 clc
-000027  F2                :                 iac
-000028  F3                :                 cmc
-000029  F4                :                 cma
-00002A  F5                :                 ral
-00002B  F6                :                 rar
-00002C  F7                :                 tcc
-00002D  F8                :                 dac
-00002E  F9                :                 tcs
-00002F  FA                :                 stc
-000030  FB                :                 daa
-000031  FC                :                 kbp
-000032  FD                :                 dcl
+                            label:
                                             
                                             .end
+
 
 Portable Intel 4004 Assembler [16.10]
 
@@ -73,4 +297,4 @@ T0                               00000001  | C0                               00
 T1                               00000009  | CZ                               0000000A 
 TN                               00000009  | A1                               0000000C 
 TZ                               00000001  | AN                               0000000C 
-label                            00000015  | label                            00000015 
+label                            00000110  | label                            00000110 

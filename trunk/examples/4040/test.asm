@@ -1,5 +1,5 @@
 ;===============================================================================
-; As4004 Opcode Test
+; As4040 Opcode Test
 ;-------------------------------------------------------------------------------
 ; Copyright (C),2016-2017 Andrew John Jacobs.
 ;
@@ -30,6 +30,20 @@
 		.org	0
 		
 		nop
+		hlt
+		bbs
+		lcr
+		or4
+		or5
+		an6
+		an7
+		db0
+		db1
+		sb0
+		sb1
+		ein
+		din
+		rpm		
 		jcn	0,label
 		jcn	1,label
 		jcn	2,label

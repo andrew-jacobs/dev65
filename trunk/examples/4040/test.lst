@@ -1,0 +1,292 @@
+
+Portable Intel 4040 Assembler [17.10]
+
+                            ; As4040 Test
+                            ;
+                            ; Notes:
+                            ;
+                            ; 
+                            
+                                            .code
+                                            .org    0
+                                            
+000000  00                :                 nop
+000001  01                :                 hlt
+000002  02                :                 bbs
+000003  03                :                 lcr
+000004  04                :                 or4
+000005  05                :                 or5
+000006  06                :                 an6
+000007  07                :                 an7
+000008  08                :                 db0
+000009  09                :                 db1
+00000A  0A                :                 sb0
+00000B  0B                :                 sb1
+00000C  0D                :                 ein
+00000D  0C                :                 din
+00000E  0E                :                 rpm             
+00000F  101E              :                 jcn     0,label
+000011  111E              :                 jcn     1,label
+000013  121E              :                 jcn     2,label
+000015  131E              :                 jcn     3,label
+000017  141E              :                 jcn     4,label
+000019  151E              :                 jcn     5,label
+00001B  161E              :                 jcn     6,label
+00001D  171E              :                 jcn     7,label
+00001F  181E              :                 jcn     8,label
+000021  171E              :                 jcn     7,label
+000023  1A1E              :                 jcn     10,label
+000025  1B1E              :                 jcn     11,label
+000027  1C1E              :                 jcn     12,label
+000029  1D1E              :                 jcn     13,label
+00002B  1E1E              :                 jcn     14,label
+00002D  1F1E              :                 jcn     15,label
+00002F  2012              :                 fim     0,12h
+000031  21                :                 src     0
+000032  2212              :                 fim     1,12h
+000034  23                :                 src     1
+000035  2412              :                 fim     2,12h
+000037  25                :                 src     2
+000038  2612              :                 fim     3,12h
+00003A  27                :                 src     3
+00003B  2812              :                 fim     4,12h
+00003D  29                :                 src     4
+00003E  2A12              :                 fim     5,12h
+000040  2B                :                 src     5
+000041  2C12              :                 fim     6,12h
+000043  2D                :                 src     6
+
+Portable Intel 4040 Assembler [17.10]
+
+000044  2E12              :                 fim     7,12h
+000046  2F                :                 src     7
+000047  30                :                 fin     0
+000048  31                :                 jin     0
+000049  32                :                 fin     1
+00004A  33                :                 jin     1
+00004B  34                :                 fin     2
+00004C  35                :                 jin     2
+00004D  36                :                 fin     3
+00004E  37                :                 jin     3
+00004F  38                :                 fin     4
+000050  39                :                 jin     4
+000051  3A                :                 fin     5
+000052  3B                :                 jin     5
+000053  3C                :                 fin     6
+000054  3D                :                 jin     6
+000055  3E                :                 fin     7
+000056  3F                :                 jin     7
+000057  411E              :                 jun     label
+000059  511E              :                 jms     label
+00005B  60                :                 inc     0
+00005C  61                :                 inc     1
+00005D  62                :                 inc     2
+00005E  63                :                 inc     3
+00005F  64                :                 inc     4
+000060  65                :                 inc     5
+000061  66                :                 inc     6
+000062  67                :                 inc     7
+000063  68                :                 inc     8
+000064  69                :                 inc     9
+000065  6A                :                 inc     10
+000066  6B                :                 inc     11
+000067  6C                :                 inc     12
+000068  6D                :                 inc     13
+000069  6E                :                 inc     14
+00006A  6F                :                 inc     15
+00006B  701E              :                 isz     0,label
+00006D  711E              :                 isz     1,label
+00006F  721E              :                 isz     2,label
+000071  731E              :                 isz     3,label
+000073  741E              :                 isz     4,label
+000075  751E              :                 isz     5,label
+000077  761E              :                 isz     6,label
+000079  771E              :                 isz     7,label
+00007B  781E              :                 isz     8,label
+00007D  791E              :                 isz     9,label
+00007F  7A1E              :                 isz     10,label
+000081  7B1E              :                 isz     11,label
+000083  7C1E              :                 isz     12,label
+000085  7D1E              :                 isz     13,label
+000087  7E1E              :                 isz     14,label
+000089  7F1E              :                 isz     15,label
+00008B  80                :                 add     0
+00008C  81                :                 add     1
+
+Portable Intel 4040 Assembler [17.10]
+
+00008D  82                :                 add     2
+00008E  83                :                 add     3
+00008F  84                :                 add     4
+000090  85                :                 add     5
+000091  86                :                 add     6
+000092  87                :                 add     7
+000093  88                :                 add     8
+000094  89                :                 add     9
+000095  8A                :                 add     10
+000096  8B                :                 add     11
+000097  8C                :                 add     12
+000098  8D                :                 add     13
+000099  8E                :                 add     14
+00009A  8F                :                 add     15
+00009B  90                :                 sub     0
+00009C  91                :                 sub     1
+00009D  92                :                 sub     2
+00009E  93                :                 sub     3
+00009F  94                :                 sub     4
+0000A0  95                :                 sub     5
+0000A1  96                :                 sub     6
+0000A2  97                :                 sub     7
+0000A3  98                :                 sub     8
+0000A4  99                :                 sub     9
+0000A5  9A                :                 sub     10
+0000A6  9B                :                 sub     11
+0000A7  9C                :                 sub     12
+0000A8  9D                :                 sub     13
+0000A9  9E                :                 sub     14
+0000AA  9F                :                 sub     15
+0000AB  A0                :                 ld      0
+0000AC  A1                :                 ld      1
+0000AD  A2                :                 ld      2
+0000AE  A3                :                 ld      3
+0000AF  A4                :                 ld      4
+0000B0  A5                :                 ld      5
+0000B1  A6                :                 ld      6
+0000B2  A7                :                 ld      7
+0000B3  A8                :                 ld      8
+0000B4  A9                :                 ld      9
+0000B5  AA                :                 ld      10
+0000B6  AB                :                 ld      11
+0000B7  AC                :                 ld      12
+0000B8  AD                :                 ld      13
+0000B9  AE                :                 ld      14
+0000BA  AF                :                 ld      15
+0000BB  B0                :                 xch     0
+0000BC  B1                :                 xch     1
+0000BD  B2                :                 xch     2
+0000BE  B3                :                 xch     3
+0000BF  B4                :                 xch     4
+0000C0  B5                :                 xch     5
+0000C1  B6                :                 xch     6
+0000C2  B7                :                 xch     7
+
+Portable Intel 4040 Assembler [17.10]
+
+0000C3  B8                :                 xch     8
+0000C4  B9                :                 xch     9
+0000C5  BA                :                 xch     10
+0000C6  BB                :                 xch     11
+0000C7  BC                :                 xch     12
+0000C8  BD                :                 xch     13
+0000C9  BE                :                 xch     14
+0000CA  BF                :                 xch     15
+0000CB  C0                :                 bbl     0
+0000CC  C1                :                 bbl     1
+0000CD  C2                :                 bbl     2
+0000CE  C3                :                 bbl     3
+0000CF  C4                :                 bbl     4
+0000D0  C5                :                 bbl     5
+0000D1  C6                :                 bbl     6
+0000D2  C7                :                 bbl     7
+0000D3  C8                :                 bbl     8
+0000D4  C9                :                 bbl     9
+0000D5  CA                :                 bbl     10
+0000D6  CB                :                 bbl     11
+0000D7  CC                :                 bbl     12
+0000D8  CD                :                 bbl     13
+0000D9  CE                :                 bbl     14
+0000DA  CF                :                 bbl     15
+0000DB  D0                :                 ldm     0
+0000DC  D1                :                 ldm     1
+0000DD  D2                :                 ldm     2
+0000DE  D3                :                 ldm     3
+0000DF  D4                :                 ldm     4
+0000E0  D5                :                 ldm     5
+0000E1  D6                :                 ldm     6
+0000E2  D7                :                 ldm     7
+0000E3  D8                :                 ldm     8
+0000E4  D9                :                 ldm     9
+0000E5  DA                :                 ldm     10
+0000E6  DB                :                 ldm     11
+0000E7  DC                :                 ldm     12
+0000E8  DD                :                 ldm     13
+0000E9  DE                :                 ldm     14
+0000EA  DF                :                 ldm     15
+0000EB  E0                :                 wrm
+0000EC  E1                :                 wmp
+0000ED  E2                :                 wrr
+0000EE  E3                :                 wpm
+0000EF  E4                :                 wr0
+0000F0  E5                :                 wr1
+0000F1  E6                :                 wr2
+0000F2  E7                :                 wr3
+0000F3  E8                :                 sbm
+0000F4  E9                :                 rdm
+0000F5  EA                :                 rdr
+0000F6  EB                :                 adm
+0000F7  EC                :                 rd0
+0000F8  ED                :                 rd1
+
+Portable Intel 4040 Assembler [17.10]
+
+0000F9  EE                :                 rd2
+0000FA  EF                :                 rd3
+0000FB  F0                :                 clb
+0000FC  F1                :                 clc
+0000FD  F2                :                 iac
+0000FE  F3                :                 cmc
+0000FF  F4                :                 cma
+000100  F5                :                 ral
+000101  F6                :                 rar
+000102  F7                :                 tcc
+000103  F8                :                 dac
+000104  F9                :                 tcs
+000105  FA                :                 stc
+000106  FB                :                 daa
+000107  FC                :                 kbp
+000108  FD                :                 dcl
+                                            
+                            ;-------------------------------------------------------------------------------
+                            
+                            ; Example from user guide
+                            
+000109  00                :                 nop
+00010A  141E              :                 jcn     A0,label
+00010C  207F              :                 fim     0,127
+00010E  21                :                 src     0
+00010F  30                :                 fin     0
+000110  31                :                 jin     0
+000111  411E              :                 jun     label
+000113  511E              :                 jms     label
+000115  60                :                 inc     0
+000116  771E              :                 isz     7,label
+000118  80                :                 add     0
+000119  90                :                 sub     0
+00011A  A0                :                 ld      0
+00011B  B0                :                 xch     0
+00011C  C7                :                 bbl     7
+00011D  D9                :                 ldm     -7
+                                            
+                            label:
+                                            
+                                            .end
+
+
+Portable Intel 4040 Assembler [17.10]
+
+Symbol Table
+
+A0                               00000004  | NC                               00000000 
+A1                               0000000C  | T0                               00000001 
+AN                               0000000C  | TZ                               00000001 
+AZ                               00000004  | C1                               00000002 
+C0                               0000000A  | CN                               00000002 
+C1                               00000002  | A0                               00000004 
+CN                               00000002  | AZ                               00000004 
+CZ                               0000000A  | T1                               00000009 
+NC                               00000000  | TN                               00000009 
+T0                               00000001  | C0                               0000000A 
+T1                               00000009  | CZ                               0000000A 
+TN                               00000009  | A1                               0000000C 
+TZ                               00000001  | AN                               0000000C 
+label                            0000011E  | label                            0000011E 

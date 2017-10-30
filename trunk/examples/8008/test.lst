@@ -1,0 +1,304 @@
+
+Portable Intel 8008 Assembler [17.10]
+
+                            ;===============================================================================
+                            ; As8008 Opcode Test
+                            ;-------------------------------------------------------------------------------
+                            ; Copyright (C),2016-2017 Andrew John Jacobs.
+                            ;
+                            ; This program is provided free of charge for educational purposes
+                            ;
+                            ; Redistribution and use in binary form without modification, is permitted
+                            ; provided that the above copyright notice, this list of conditions and the
+                            ; following disclaimer in the documentation and/or other materials provided
+                            ; with the distribution.
+                            ;
+                            ; THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS 'AS IS' AND ANY
+                            ; EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+                            ; WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+                            ; DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
+                            ; DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+                            ; (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+                            ; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+                            ; ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+                            ; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+                            ; THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+                            ;-------------------------------------------------------------------------------
+                            ; Notes:
+                            ;
+                            ; Register names are declared as constants in the assembler so by default
+                            ; must be in UPPER case. You can create lower case versions with equates, for
+                            ; example 'a .equ A'.
+                            ;
+                            ;===============================================================================;
+                            
+                                            .code
+                                            .org    0h
+                                            
+000000  88                :                 adc     A
+000001  89                :                 adc     B
+000002  8A                :                 adc     C
+000003  8B                :                 adc     D
+000004  8C                :                 adc     E
+000005  8D                :                 adc     H
+000006  8E                :                 adc     L
+000007  8F                :                 adc     M
+000008  0C12              :                 aci     12h
+00000A  80                :                 add     A
+00000B  81                :                 add     B
+00000C  82                :                 add     C
+00000D  83                :                 add     D
+00000E  84                :                 add     E
+00000F  85                :                 add     H
+000010  86                :                 add     L
+000011  87                :                 add     M
+000012  0412              :                 adi     12h
+000014  A0                :                 ana     A
+000015  A1                :                 ana     B
+
+Portable Intel 8008 Assembler [17.10]
+
+000016  A2                :                 ana     C
+000017  A3                :                 ana     D
+000018  A4                :                 ana     E
+000019  A5                :                 ana     H
+00001A  A6                :                 ana     L
+00001B  A7                :                 ana     M
+00001C  2412              :                 ani     12h
+00001E  461B01            :                 call    label
+000021  621B01            :                 cc      label
+000024  721B01            :                 cm      label
+000027  B8                :                 cmp     A
+000028  B9                :                 cmp     B
+000029  BA                :                 cmp     C
+00002A  BB                :                 cmp     D
+00002B  BC                :                 cmp     E
+00002C  BD                :                 cmp     H
+00002D  BE                :                 cmp     L
+00002E  BF                :                 cmp     M
+00002F  421B01            :                 cnc     label
+000032  4A1B01            :                 cnz     label
+000035  521B01            :                 cp      label
+000038  7A1B01            :                 cpe     label
+00003B  3C12              :                 cpi     12h
+00003D  5A1B01            :                 cpo     label
+000040  6A1B01            :                 cz      label
+000043  09                :                 dcr     B
+000044  11                :                 dcr     C
+000045  19                :                 dcr     D
+000046  21                :                 dcr     E
+000047  29                :                 dcr     H
+000048  31                :                 dcr     L
+000049  39                :                 dcr     M
+00004A  00FF              :                 hlt
+00004C  41                :                 in      0
+00004D  43                :                 in      1
+00004E  45                :                 in      2
+00004F  47                :                 in      3
+000050  49                :                 in      4
+000051  4B                :                 in      5
+000052  4D                :                 in      6
+000053  4F                :                 in      7
+000054  09                :                 inr     B
+000055  11                :                 inr     C
+000056  19                :                 inr     D
+000057  21                :                 inr     E
+000058  29                :                 inr     H
+000059  31                :                 inr     L
+00005A  39                :                 inr     M
+00005B  601B01            :                 jc      label
+00005E  701B01            :                 jm      label
+000061  441B01            :                 jmp     label
+000064  401B01            :                 jnc     label
+000067  481B01            :                 jnz     label
+00006A  501B01            :                 jp      label
+
+Portable Intel 8008 Assembler [17.10]
+
+00006D  781B01            :                 jpe     label
+000070  581B01            :                 jpo     label
+000073  681B01            :                 jz      label
+000076  C0                :                 mov     A,A
+000077  C1                :                 mov     A,B
+000078  C2                :                 mov     A,C
+000079  C3                :                 mov     A,D
+00007A  C4                :                 mov     A,E
+00007B  C5                :                 mov     A,H
+00007C  C6                :                 mov     A,L
+00007D  C7                :                 mov     A,M
+00007E  C8                :                 mov     B,A
+00007F  C9                :                 mov     B,B
+000080  CA                :                 mov     B,C
+000081  CB                :                 mov     B,D
+000082  CC                :                 mov     B,E
+000083  CD                :                 mov     B,H
+000084  CE                :                 mov     B,L
+000085  CF                :                 mov     B,M
+000086  D0                :                 mov     C,A
+000087  D1                :                 mov     C,B
+000088  D2                :                 mov     C,C
+000089  D3                :                 mov     C,D
+00008A  D4                :                 mov     C,E
+00008B  D5                :                 mov     C,H
+00008C  D6                :                 mov     C,L
+00008D  D7                :                 mov     C,M
+00008E  D8                :                 mov     D,A
+00008F  D9                :                 mov     D,B
+000090  DA                :                 mov     D,C
+000091  DB                :                 mov     D,D
+000092  DC                :                 mov     D,E
+000093  DD                :                 mov     D,H
+000094  DE                :                 mov     D,L
+000095  DF                :                 mov     D,M
+000096  E0                :                 mov     E,A
+000097  E1                :                 mov     E,B
+000098  E2                :                 mov     E,C
+000099  E3                :                 mov     E,D
+00009A  E4                :                 mov     E,E
+00009B  E5                :                 mov     E,H
+00009C  E6                :                 mov     E,L
+00009D  E7                :                 mov     E,M
+00009E  E8                :                 mov     H,A
+00009F  E9                :                 mov     H,B
+0000A0  EA                :                 mov     H,C
+0000A1  EB                :                 mov     H,D
+0000A2  EC                :                 mov     H,E
+0000A3  ED                :                 mov     H,H
+0000A4  EE                :                 mov     H,L
+0000A5  EF                :                 mov     H,M
+0000A6  F0                :                 mov     L,A
+0000A7  F1                :                 mov     L,B
+0000A8  F2                :                 mov     L,C
+
+Portable Intel 8008 Assembler [17.10]
+
+0000A9  F3                :                 mov     L,D
+0000AA  F4                :                 mov     L,E
+0000AB  F5                :                 mov     L,H
+0000AC  F6                :                 mov     L,L
+0000AD  F7                :                 mov     L,M
+0000AE  F8                :                 mov     M,A
+0000AF  F9                :                 mov     M,B
+0000B0  FA                :                 mov     M,C
+0000B1  FB                :                 mov     M,D
+0000B2  FC                :                 mov     M,E
+0000B3  FD                :                 mov     M,H
+0000B4  FE                :                 mov     M,L
+0000B5  FF                :                 mov     M,M
+0000B6  0612              :                 mvi     A, 12h
+0000B8  0E12              :                 mvi     B, 12h
+0000BA  1612              :                 mvi     C, 12h
+0000BC  1E12              :                 mvi     D, 12h
+0000BE  2612              :                 mvi     E, 12h
+0000C0  2E12              :                 mvi     H, 12h
+0000C2  3612              :                 mvi     L, 12h
+0000C4  3E12              :                 mvi     M, 12h
+0000C6  B0                :                 ora     A
+0000C7  B1                :                 ora     B
+0000C8  B2                :                 ora     C
+0000C9  B3                :                 ora     D
+0000CA  B4                :                 ora     E
+0000CB  B5                :                 ora     H
+0000CC  B6                :                 ora     L
+0000CD  B7                :                 ora     M
+0000CE  3412              :                 ori     12h
+0000D0  51                :                 out     8
+0000D1  53                :                 out     9
+0000D2  55                :                 out     10
+0000D3  57                :                 out     11
+0000D4  59                :                 out     12
+0000D5  5B                :                 out     13
+0000D6  5D                :                 out     14
+0000D7  5F                :                 out     15
+0000D8  61                :                 out     16
+0000D9  63                :                 out     17
+0000DA  65                :                 out     18
+0000DB  67                :                 out     19
+0000DC  69                :                 out     20
+0000DD  6B                :                 out     21
+0000DE  6D                :                 out     22
+0000DF  6F                :                 out     23
+0000E0  71                :                 out     24
+0000E1  73                :                 out     25
+0000E2  75                :                 out     26
+0000E3  77                :                 out     27
+0000E4  79                :                 out     28
+0000E5  7B                :                 out     29
+0000E6  7D                :                 out     30
+0000E7  7F                :                 out     31
+
+Portable Intel 8008 Assembler [17.10]
+
+0000E8  12                :                 ral
+0000E9  1A                :                 rar
+0000EA  23                :                 rc
+0000EB  07                :                 ret
+0000EC  02                :                 rlc
+0000ED  33                :                 rm
+0000EE  03                :                 rnc
+0000EF  0B                :                 rnz
+0000F0  13                :                 rp
+0000F1  1B                :                 rpo
+0000F2  3B                :                 rpe
+0000F3  0A                :                 rrc
+0000F4  05                :                 rst     0
+0000F5  0D                :                 rst     1
+0000F6  15                :                 rst     2
+0000F7  1D                :                 rst     3
+0000F8  25                :                 rst     4
+0000F9  2D                :                 rst     5
+0000FA  35                :                 rst     6
+0000FB  3D                :                 rst     7
+0000FC  2B                :                 rz
+0000FD  98                :                 sbb     A
+0000FE  99                :                 sbb     B
+0000FF  9A                :                 sbb     C
+000100  9B                :                 sbb     D
+000101  9C                :                 sbb     E
+000102  9D                :                 sbb     H
+000103  9E                :                 sbb     L
+000104  9F                :                 sbb     M
+000105  1C12              :                 sbi     12h
+000107  90                :                 sub     A
+000108  91                :                 sub     B
+000109  92                :                 sub     C
+00010A  93                :                 sub     D
+00010B  94                :                 sub     E
+00010C  95                :                 sub     H
+00010D  96                :                 sub     L
+00010E  97                :                 sub     M
+00010F  1412              :                 sui     12h
+000111  A8                :                 xra     A
+000112  A9                :                 xra     B
+000113  AA                :                 xra     C
+000114  AB                :                 xra     D
+000115  AC                :                 xra     E
+000116  AD                :                 xra     H
+000117  AE                :                 xra     L
+000118  AF                :                 xra     M
+000119  2C12              :                 xri     12h
+                                            
+                            label:
+                                            
+00011B  010203            :                 .byte   1,2,3
+00011E  010002000300      :                 .word   1,2,3           
+                                            
+
+Portable Intel 8008 Assembler [17.10]
+
+                                            .end
+
+
+Portable Intel 8008 Assembler [17.10]
+
+Symbol Table
+
+A                                00000000  | A                                00000000 
+B                                00000001  | B                                00000001 
+C                                00000002  | C                                00000002 
+D                                00000003  | D                                00000003 
+E                                00000004  | E                                00000004 
+H                                00000005  | H                                00000005 
+L                                00000006  | L                                00000006 
+M                                00000007  | M                                00000007 
+label                            0000011B  | label                            0000011B 

@@ -114,6 +114,39 @@ public final class As8008 extends Assembler
 		private final int opcode;
 	}
 
+	protected class IncDecOpcode extends Opcode
+	{
+		public IncDecOpcode (String text, int opcode)
+		{
+			super (KEYWORD, text);
+			
+			this.opcode = opcode;
+		}
+		
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean compile ()
+		{
+			token	= nextRealToken ();
+			Expr expr = parseExpr ();
+			long reg;
+			
+			if ((expr != null) && expr.isAbsolute () && ((reg = expr.resolve ()) >= 0) && (reg <= 7)) {
+				if (reg != 0)
+					addByte (opcode | (int) (reg << 3));
+				else
+					error ("Register A not allowed in INR/DCR");
+			}
+			else
+				error (ERR_EXPECTED_REGISTER);
+			
+			return (true);
+		}
+		
+		private final int opcode;
+	}
+
 	protected class ImmediateOpcode extends Opcode
 	{
 		public ImmediateOpcode (String text, int opcode)
@@ -162,10 +195,8 @@ public final class As8008 extends Assembler
 			Expr expr = parseExpr ();
 			
 			if (expr != null) {
-				Expr	msb = Expr.and (Expr.shr(expr, new Value (null, 8)), new Value (null, 0xff));
-				
-				addByte (Expr.or(new Value (null, opcode), msb));
-				addByte (expr);
+				addByte (opcode);
+				addWord (expr);
 			}
 			else
 				error (ERR_MISSING_EXPRESSION);
@@ -188,25 +219,217 @@ public final class As8008 extends Assembler
 	
 	protected final Opcode	ANI	= new ImmediateOpcode ("ANI", 0x24);
 	
+	protected final Opcode 	CALL = new JumpOpcode ("CALL", 0x46);
+	
+	protected final Opcode 	CC = new JumpOpcode ("CC", 0x62);
+	
+	protected final Opcode 	CM = new JumpOpcode ("CM", 0x72);
+	
+	protected final Opcode 	CNC = new JumpOpcode ("CNC", 0x42);
+	
+	protected final Opcode 	CNZ = new JumpOpcode ("CNZ", 0x4a);
+	
+	protected final Opcode 	CP = new JumpOpcode ("CP", 0x52);
+	
+	protected final Opcode 	CPO = new JumpOpcode ("CPO", 0x5a);
+	
+	protected final Opcode 	CPE = new JumpOpcode ("CPE", 0x7a);
+	
 	protected final Opcode 	CMP = new RegisterOpcode ("CMP", 0xb8);
 	
 	protected final Opcode	CPI	= new ImmediateOpcode ("CPI", 0x3c);
 	
+	protected final Opcode 	CZ = new JumpOpcode ("CZ", 0x6a);
+	
+	protected final Opcode 	DCR = new IncDecOpcode ("DCR", 0x01);
+	
+	protected final Opcode 	HLT = new ImpliedOpcode ("HLT", 0x00);
+	
+	protected final Opcode 	IN = new Opcode (KEYWORD, "IN")
+		{
+			@Override
+			public boolean compile ()
+			{
+				token	= nextRealToken ();
+				Expr expr = parseExpr ();
+				long port;
+				
+				if ((expr != null) && expr.isAbsolute () && ((port = expr.resolve ()) >= 0) && (port <= 7))
+					addByte (0x41 | (int) (port << 1));
+				else
+					error ("Invalid input port number");
+				
+				return (true);
+			}
+		};
+	
+	protected final Opcode 	INR = new IncDecOpcode ("INR", 0x01);
+		
+	protected final Opcode 	JC	= new JumpOpcode ("JC", 0x60);
+	
+	protected final Opcode 	JM	= new JumpOpcode ("JM", 0x70);
+	
 	protected final Opcode 	JMP	= new JumpOpcode ("JMP", 0x44);
+	
+	protected final Opcode 	JNC	= new JumpOpcode ("JNC", 0x40);
+	
+	protected final Opcode 	JNZ	= new JumpOpcode ("JNZ", 0x48);
+	
+	protected final Opcode 	JP	= new JumpOpcode ("JP", 0x50);
+	
+	protected final Opcode 	JPE	= new JumpOpcode ("JPE", 0x78);
+	
+	protected final Opcode 	JPO	= new JumpOpcode ("JPO", 0x58);
+	
+	protected final Opcode 	JZ	= new JumpOpcode ("JZ", 0x68);
+	
+	protected final Opcode 	MOV = new Opcode (KEYWORD, "MOV")
+		{
+			@Override
+			public boolean compile ()
+			{
+				token	= nextRealToken ();
+				Expr expr1 = parseExpr ();
+				
+				if (expr1 == null) {
+					error (ERR_EXPECTED_REGISTER);
+					return (true);
+				}
+				
+				if (token != COMMA)
+					error (ERR_EXPECTED_COMMA);
+				else
+					token = nextRealToken ();
+				
+				Expr expr2 = parseExpr ();
+				
+				if (expr2 == null) {
+					error (ERR_EXPECTED_REGISTER);
+					return (true);
+				}
+			
+				long src, dst;
+				
+				if ((expr1 != null) && expr1.isAbsolute () && ((dst = expr1.resolve ()) >= 0) && (dst <= 7)) {
+					if ((expr2 != null) && expr2.isAbsolute () && ((src = expr2.resolve ()) >= 0) && (src <= 7))
+						addByte (0xc0 | (int) ((dst << 3) | src));
+					else
+						error ("Invalid source register");
+				}
+				else
+					error ("Invalid destination register");
+				
+				return (true);
+			}
+		};
+		
+	protected final Opcode	MVI = new Opcode (KEYWORD, "MVI")
+		{
+			@Override
+			public boolean compile ()
+			{
+				token	= nextRealToken ();
+				Expr expr1 = parseExpr ();
+				
+				if (expr1 == null) {
+					error (ERR_EXPECTED_REGISTER);
+					return (true);
+				}
+				
+				if (token != COMMA)
+					error (ERR_EXPECTED_COMMA);
+				else
+					token = nextRealToken ();
+				
+				Expr expr2 = parseExpr ();
+				
+				if (expr2 == null) {
+					error (ERR_MISSING_EXPRESSION);
+					return (true);
+				}
+				
+				long reg;
+
+				if ((expr1 != null) && expr1.isAbsolute () && ((reg = expr1.resolve ()) >= 0) && (reg <= 7)) {
+					addByte (0x06 | ((int) reg << 3));
+					addByte (expr2);
+				}
+				else
+					error ("Invalid destination register");
+
+				return (true);
+			}
+		};
 	
 	protected final Opcode 	ORA = new RegisterOpcode ("ORA", 0xb0);
 	
 	protected final Opcode	ORI	= new ImmediateOpcode ("ORI", 0x34);
 	
+	protected final Opcode 	OUT = new Opcode (KEYWORD, "OUT")
+	{
+		@Override
+		public boolean compile ()
+		{
+			token	= nextRealToken ();
+			Expr expr = parseExpr ();
+			long port;
+			
+			if ((expr != null) && expr.isAbsolute () && ((port = expr.resolve ()) >= 8) && (port <= 31)) {
+				addByte (0x41 | (int) (port << 1));
+			}
+			else
+				error ("Invalid output port number");
+			
+			return (true);
+		}
+	};
+
 	protected final Opcode	RAL	= new ImpliedOpcode ("RAL", 0x12);
 
 	protected final Opcode	RAR	= new ImpliedOpcode ("RAR", 0x1a);
+	
+	protected final Opcode	RC	= new ImpliedOpcode ("RC", 0x23);
 	
 	protected final Opcode	RET	= new ImpliedOpcode ("RET", 0x07);
 	
 	protected final Opcode	RLC	= new ImpliedOpcode ("RLC", 0x02);
 	
+	protected final Opcode	RM	= new ImpliedOpcode ("RM", 0x33);
+	
+	protected final Opcode	RNC	= new ImpliedOpcode ("RNC", 0x03);
+	
+	protected final Opcode	RNZ	= new ImpliedOpcode ("RNZ", 0x0b);
+	
+	protected final Opcode	RP	= new ImpliedOpcode ("RP", 0x13);
+	
+	protected final Opcode	RPE	= new ImpliedOpcode ("RPE", 0x3b);
+	
+	protected final Opcode	RPO	= new ImpliedOpcode ("RPO", 0x1b);
+	
 	protected final Opcode	RRC	= new ImpliedOpcode ("RRC", 0x0a);
+	
+	protected final Opcode	RST	= new Opcode (KEYWORD, "RST")
+		{
+			/**
+			 * {@inheritDoc}
+			 */
+			public boolean compile ()
+			{
+				token	= nextRealToken ();
+				Expr expr = parseExpr ();
+				long adr;
+				
+				if ((expr != null) && expr.isAbsolute () && ((adr = expr.resolve ()) >= 0) && (adr <= 7)) {
+					addByte (0x05 | (int) (adr << 3));
+				}
+				else
+					error (ERR_RESTART_NUMBER);
+				
+				return (true);
+			}
+		};
+		
+	protected final Opcode	RZ	= new ImpliedOpcode ("RZ", 0x2b);
 	
 	protected final Opcode 	SBB = new RegisterOpcode ("SBB", 0x98);
 
@@ -272,60 +495,53 @@ public final class As8008 extends Assembler
 		addToken (ADI);
 		addToken (ANA);
 		addToken (ANI);
-//		addToken (ADM);
-//		addToken (BBL);
-//		addToken (CLB);
-//		addToken (CLC);
-//		addToken (CMA);
-//		addToken (CMC);
+		addToken (CALL);
+		addToken (CC);
+		addToken (CM);
 		addToken (CMP);
+		addToken (CNC);
+		addToken (CNZ);
+		addToken (CP);
+		addToken (CPE);
 		addToken (CPI);
-//		addToken (DAA);
-//		addToken (DAC);
-//		addToken (DCL);
-//		addToken (FIM);
-//		addToken (FIN);
-//		addToken (IAC);
-//		addToken (INC);
-//		addToken (ISZ);
+		addToken (CPO);
+		addToken (CZ);
+		addToken (DCR);
+		addToken (HLT);
+		addToken (IN);
+		addToken (INR);
+		addToken (JC);
+		addToken (JM);
 		addToken (JMP);
-//		addToken (JIN);
-//		addToken (JMS);
-//		addToken (JUN);
-//		addToken (KBP);
-//		addToken (LD);
-//		addToken (LDM);
-//		addToken (NOP);
+		addToken (JNC);
+		addToken (JNZ);
+		addToken (JP);
+		addToken (JPE);
+		addToken (JPO);
+		addToken (JZ);
+		addToken (MOV);
+		addToken (MVI);
 		addToken (ORA);
 		addToken (ORI);
+		addToken (OUT);
 		addToken (RAL);
-		addToken (RAR);
+		addToken (RAR);	
+		addToken (RC);
+		addToken (RET);
 		addToken (RLC);
+		addToken (RM);
+		addToken (RNC);
+		addToken (RNZ);
+		addToken (RP);
+		addToken (RPE);
+		addToken (RPO);
 		addToken (RRC);
-//		addToken (RD0);
-//		addToken (RD1);
-//		addToken (RD2);
-//		addToken (RD3);
-//		addToken (RDM);
-//		addToken (RDR);
+		addToken (RST);
+		addToken (RZ);
 		addToken (SBB);
 		addToken (SBI);
 		addToken (SUB);
 		addToken (SUI);
-//		addToken (SRC);
-//		addToken (STC);
-//		addToken (SUB);
-//		addToken (TCC);
-//		addToken (TCS);
-//		addToken (WMP);
-//		addToken (WPM);
-//		addToken (WRM);
-//		addToken (WRR);
-//		addToken (WR0);
-//		addToken (WR1);
-//		addToken (WR2);
-//		addToken (WR3);
-//		addToken (XCH);
 		addToken (XRA);
 		addToken (XRI);
 		
@@ -442,17 +658,14 @@ public final class As8008 extends Assembler
 	private static final String ERR_MISSING_EXPRESSION
 		= "Missing expression";
 	
-	private static final String ERR_EXPECTED_REGISTER
-		= "Expected register number (0-15)";
-	
-	private static final String ERR_EXPECTED_CONDITION
-		= "Expected condition code";
+	private static final String ERR_EXPECTED_COMMA
+		= "Expected comma separator";
 
-	private static final String ERR_EXPECTED_REGISTER_PAIR
-		= "Expected register pair number (0-7)";
+	private static final String ERR_EXPECTED_REGISTER
+		= "Expected register number (0-7)";
 	
-	private static final String ERR_ACCUM_NOT_ALLOWED
-		= "The register operand must not be the accumulator";
+	private static final String ERR_RESTART_NUMBER
+		= "Expected restart value (0-7)";
 	
 	/**
 	 * A <CODE>Hashtable</CODE> of keyword tokens to speed up classification.
