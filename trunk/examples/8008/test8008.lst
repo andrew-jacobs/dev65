@@ -1,0 +1,112 @@
+
+Portable Intel 8008 Assembler [17.10]
+
+                            ; As8008 Test
+                            ;
+                            ; Notes:
+                            ;
+                            ; Register names are declared as constants in the assembler so by default
+                            ; must be in UPPER case.
+                            
+                                            .code
+                                            .org    0h
+                                            
+000000  88                :                 adc     A
+000001  89                :                 adc     B
+000002  8A                :                 adc     C
+000003  8B                :                 adc     D
+000004  8C                :                 adc     E
+000005  8D                :                 adc     H
+000006  8E                :                 adc     L
+000007  8F                :                 adc     M
+000008  0C12              :                 aci     12h
+00000A  80                :                 add     A
+00000B  81                :                 add     B
+00000C  82                :                 add     C
+00000D  83                :                 add     D
+00000E  84                :                 add     E
+00000F  85                :                 add     H
+000010  86                :                 add     L
+000011  87                :                 add     M
+000012  0412              :                 adi     12h
+000014  A0                :                 ana     A
+000015  A1                :                 ana     B
+000016  A2                :                 ana     C
+000017  A3                :                 ana     D
+000018  A4                :                 ana     E
+000019  A5                :                 ana     H
+00001A  A6                :                 ana     L
+00001B  A7                :                 ana     M
+00001C  2412              :                 ani     12h
+00001E  B8                :                 cmp     A
+00001F  B9                :                 cmp     B
+000020  BA                :                 cmp     C
+000021  BB                :                 cmp     D
+000022  BC                :                 cmp     E
+000023  BD                :                 cmp     H
+000024  BE                :                 cmp     L
+000025  BF                :                 cmp     M
+000026  3C12              :                 cpi     12h
+000028  B0                :                 ora     A
+000029  B1                :                 ora     B
+00002A  B2                :                 ora     C
+00002B  B3                :                 ora     D
+00002C  B4                :                 ora     E
+00002D  B5                :                 ora     H
+00002E  B6                :                 ora     L
+00002F  B7                :                 ora     M
+
+Portable Intel 8008 Assembler [17.10]
+
+000030  3412              :                 ori     12h
+000032  12                :                 ral
+000033  1A                :                 rar
+000034  02                :                 rlc
+000035  0A                :                 rrc
+000036  98                :                 sbb     A
+000037  99                :                 sbb     B
+000038  9A                :                 sbb     C
+000039  9B                :                 sbb     D
+00003A  9C                :                 sbb     E
+00003B  9D                :                 sbb     H
+00003C  9E                :                 sbb     L
+00003D  9F                :                 sbb     M
+00003E  1C12              :                 sbi     12h
+000040  90                :                 sub     A
+000041  91                :                 sub     B
+000042  92                :                 sub     C
+000043  93                :                 sub     D
+000044  94                :                 sub     E
+000045  95                :                 sub     H
+000046  96                :                 sub     L
+000047  97                :                 sub     M
+000048  1412              :                 sui     12h
+00004A  A8                :                 xra     A
+00004B  A9                :                 xra     B
+00004C  AA                :                 xra     C
+00004D  AB                :                 xra     D
+00004E  AC                :                 xra     E
+00004F  AD                :                 xra     H
+000050  AE                :                 xra     L
+000051  AF                :                 xra     M
+000052  2C12              :                 xri     12h
+                                            
+                                            
+000054  010203            :                 .byte   1,2,3
+000057  010002000300      :                 .word   1,2,3           
+                                            
+                                            .end
+
+
+Portable Intel 8008 Assembler [17.10]
+
+Symbol Table
+
+A                                00000000  | A                                00000000 
+B                                00000001  | B                                00000001 
+C                                00000002  | C                                00000002 
+D                                00000003  | D                                00000003 
+E                                00000004  | E                                00000004 
+H                                00000005  | H                                00000005 
+L                                00000006  | L                                00000006 
+M                                00000007  | M                                00000007 
