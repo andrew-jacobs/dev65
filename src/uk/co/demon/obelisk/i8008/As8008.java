@@ -84,6 +84,36 @@ public final class As8008 extends Assembler
 		private final int opcode;
 	}
 	
+	protected class RegisterOpcode extends Opcode
+	{
+		public RegisterOpcode (String text, int opcode)
+		{
+			super (KEYWORD, text);
+			
+			this.opcode = opcode;
+		}
+		
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean compile ()
+		{
+			token	= nextRealToken ();
+			Expr expr = parseExpr ();
+			long reg;
+			
+			if ((expr != null) && expr.isAbsolute () && ((reg = expr.resolve ()) >= 0) && (reg <= 7)) {
+				addByte (opcode | (int) reg);
+			}
+			else
+				error (ERR_EXPECTED_REGISTER);
+			
+			return (true);
+		}
+		
+		private final int opcode;
+	}
+
 	protected class ImmediateOpcode extends Opcode
 	{
 		public ImmediateOpcode (String text, int opcode)
@@ -102,7 +132,8 @@ public final class As8008 extends Assembler
 			Expr expr = parseExpr ();
 			
 			if (expr != null) {
-				addByte (Expr.or(new Value (null, opcode), Expr.and(expr, new Value (null, 0x0f))));
+				addByte (opcode);
+				addByte (expr);
 			}
 			else
 				error (ERR_MISSING_EXPRESSION);
@@ -144,10 +175,28 @@ public final class As8008 extends Assembler
 		
 		private final int opcode;
 	}
+	
+	protected final Opcode	ACI	= new ImmediateOpcode ("ACI", 0x0c);
+	
+	protected final Opcode 	ADD = new RegisterOpcode ("ADD", 0x80);
 
+	protected final Opcode 	ADC = new RegisterOpcode ("ADC", 0x88);
+	
 	protected final Opcode	ADI	= new ImmediateOpcode ("ADI", 0x04);
 	
+	protected final Opcode 	ANA = new RegisterOpcode ("ANA", 0xa0);
+	
+	protected final Opcode	ANI	= new ImmediateOpcode ("ANI", 0x24);
+	
+	protected final Opcode 	CMP = new RegisterOpcode ("CMP", 0xb8);
+	
+	protected final Opcode	CPI	= new ImmediateOpcode ("CPI", 0x3c);
+	
 	protected final Opcode 	JMP	= new JumpOpcode ("JMP", 0x44);
+	
+	protected final Opcode 	ORA = new RegisterOpcode ("ORA", 0xb0);
+	
+	protected final Opcode	ORI	= new ImmediateOpcode ("ORI", 0x34);
 	
 	protected final Opcode	RAL	= new ImpliedOpcode ("RAL", 0x12);
 
@@ -158,6 +207,18 @@ public final class As8008 extends Assembler
 	protected final Opcode	RLC	= new ImpliedOpcode ("RLC", 0x02);
 	
 	protected final Opcode	RRC	= new ImpliedOpcode ("RRC", 0x0a);
+	
+	protected final Opcode 	SBB = new RegisterOpcode ("SBB", 0x98);
+
+	protected final Opcode	SBI	= new ImmediateOpcode ("SBI", 0x1c);
+	
+	protected final Opcode 	SUB = new RegisterOpcode ("SUB", 0x90);
+	
+	protected final Opcode	SUI	= new ImmediateOpcode ("SUI", 0x14);
+	
+	protected final Opcode 	XRA = new RegisterOpcode ("XRA", 0xa8);
+	
+	protected final Opcode	XRI	= new ImmediateOpcode ("XRI", 0x2c);
 	
 	/**
 	 * {@inheritDoc}
@@ -205,14 +266,20 @@ public final class As8008 extends Assembler
 		addToken (WORD);
 		
 		// Opcodes
-//		addToken (ADD);
+		addToken (ACI);
+		addToken (ADD);
+		addToken (ADC);
 		addToken (ADI);
+		addToken (ANA);
+		addToken (ANI);
 //		addToken (ADM);
 //		addToken (BBL);
 //		addToken (CLB);
 //		addToken (CLC);
 //		addToken (CMA);
 //		addToken (CMC);
+		addToken (CMP);
+		addToken (CPI);
 //		addToken (DAA);
 //		addToken (DAC);
 //		addToken (DCL);
@@ -229,6 +296,8 @@ public final class As8008 extends Assembler
 //		addToken (LD);
 //		addToken (LDM);
 //		addToken (NOP);
+		addToken (ORA);
+		addToken (ORI);
 		addToken (RAL);
 		addToken (RAR);
 		addToken (RLC);
@@ -239,7 +308,10 @@ public final class As8008 extends Assembler
 //		addToken (RD3);
 //		addToken (RDM);
 //		addToken (RDR);
-//		addToken (SBM);
+		addToken (SBB);
+		addToken (SBI);
+		addToken (SUB);
+		addToken (SUI);
 //		addToken (SRC);
 //		addToken (STC);
 //		addToken (SUB);
@@ -254,20 +326,17 @@ public final class As8008 extends Assembler
 //		addToken (WR2);
 //		addToken (WR3);
 //		addToken (XCH);
+		addToken (XRA);
+		addToken (XRI);
 		
-//		symbols.put ("NC", new Value (null, 0x0));
-//		symbols.put ("TZ", new Value (null, 0x1));
-//		symbols.put ("T0", new Value (null, 0x1));
-//		symbols.put ("TN", new Value (null, 0x9));
-//		symbols.put ("T1", new Value (null, 0x9));
-//		symbols.put ("CN", new Value (null, 0x2));
-//		symbols.put ("C1", new Value (null, 0x2));
-//		symbols.put ("CZ", new Value (null, 0xa));
-//		symbols.put ("C0", new Value (null, 0xa));
-//		symbols.put ("AZ", new Value (null, 0x4));
-//		symbols.put ("A0", new Value (null, 0x4));
-//		symbols.put ("AN", new Value (null, 0xc));
-//		symbols.put ("A1", new Value (null, 0xc));
+		symbols.put ("A", new Value (null, 0));
+		symbols.put ("B", new Value (null, 1));
+		symbols.put ("C", new Value (null, 2));
+		symbols.put ("D", new Value (null, 3));
+		symbols.put ("E", new Value (null, 4));
+		symbols.put ("H", new Value (null, 5));
+		symbols.put ("L", new Value (null, 6));
+		symbols.put ("M", new Value (null, 7));
 		
 		super.startUp ();
 	}
@@ -381,6 +450,9 @@ public final class As8008 extends Assembler
 
 	private static final String ERR_EXPECTED_REGISTER_PAIR
 		= "Expected register pair number (0-7)";
+	
+	private static final String ERR_ACCUM_NOT_ALLOWED
+		= "The register operand must not be the accumulator";
 	
 	/**
 	 * A <CODE>Hashtable</CODE> of keyword tokens to speed up classification.
