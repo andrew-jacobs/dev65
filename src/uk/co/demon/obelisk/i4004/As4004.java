@@ -240,7 +240,7 @@ public final class As4004 extends Assembler
 				}
 					
 				if ((pair.resolve() >= 0) && (pair.resolve() <= 7)) {
-					addByte (Expr.or (new Value (null, 0x20), Expr.shl(pair,  new Value (null, 2))));
+					addByte (Expr.or (new Value (null, 0x20), Expr.shl(pair,  new Value (null, 1))));
 					addByte (expr);
 				}
 				else
