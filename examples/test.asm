@@ -1044,8 +1044,8 @@ COUNT	.SET	COUNT+1
 	ORA 4,S
 	ORA (4,S),Y
 	PEA #$1122
-	PEI #$11
-	PER #$1122
+	PEI ($11)
+	PER $1122
 	PHA
 	PHB
 	PHD
@@ -1329,8 +1329,8 @@ COUNT	.SET	COUNT+1
 	ORA 4,S
 	ORA (4,S),Y
 	PEA #$1122
-	PEI #$11
-	PER #$1122
+	PEI ($11)
+	PER $1122
 	PHA
 	PHB
 	PHD
@@ -1595,8 +1595,8 @@ COUNT	.SET	COUNT+1
 	ORA 4,S
 	ORA (4,S),Y
 	PEA #$1122
-	PEI #$11
-	PER #$1122
+	PEI ($11)
+	PER $1122
 	PHA
 	PHB
 	PHD
@@ -1742,7 +1742,28 @@ COUNT	.SET	COUNT+1
 	 .ENDR
 	 ASL A
 	ENDW
-
+	
+ABSADR	.EQU	$C000
+RELADR:
+	JCC	RELADR
+	JCC	ABSADR
+	JCS	RELADR
+	JCS	ABSADR
+	JEQ	RELADR
+	JEQ	ABSADR
+	JMI	RELADR
+	JMI	ABSADR
+	JNE	RELADR
+	JNE	ABSADR
+	JPL	RELADR
+	JPL	ABSADR
+	JVC	RELADR
+	JVC	ABSADR
+	JVS	RELADR
+	JVS	ABSADR
+	JPA	RELADR
+	JPA	ABSADR
+	
 ;==============================================================================
 ; Data Related Directives
 ;------------------------------------------------------------------------------
