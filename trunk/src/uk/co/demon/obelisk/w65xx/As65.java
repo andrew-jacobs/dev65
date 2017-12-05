@@ -3863,6 +3863,46 @@ public final class As65 extends Assembler
 		}
 	};
 	
+	protected class Jump extends Opcode
+	{
+		public Jump (String opcode, Token flag)
+		{
+			super (KEYWORD, opcode);
+			
+			this.flag = flag;
+		}
+		
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			Expr expr = parseExpr ();
+			if (expr != null)
+				if (flag != null)
+					genBranch (flag, expr);
+				else
+					genJump (expr);
+			else
+				error (ERR_MISSING_EXPRESSION);
+			
+			return (true);
+		}
+		
+		private final Token flag;
+	}
+	
+	protected final Opcode 	JCC		= new Jump ("JCC", CC);
+	protected final Opcode 	JCS		= new Jump ("JCS", CS);
+	protected final Opcode 	JEQ		= new Jump ("JEQ", EQ);
+	protected final Opcode 	JMI		= new Jump ("JMI", MI);
+	protected final Opcode 	JNE		= new Jump ("JNE", NE);
+	protected final Opcode 	JPL		= new Jump ("JPL", PL);
+	protected final Opcode 	JVC		= new Jump ("JVC", VC);
+	protected final Opcode 	JVS		= new Jump ("JVS", VS);
+	protected final Opcode 	JPA		= new Jump ("JPA", null);
+	
+	
 	/**
 	 * Constructs an <CODE>As65</CODE> instance and initialises the object
 	 * module.
@@ -4094,6 +4134,17 @@ public final class As65 extends Assembler
 			addToken (MI);
 			addToken (VC);
 			addToken (VS);
+			
+			// Expanding jumps
+			addToken (JCC);
+			addToken (JCS);
+			addToken (JEQ);
+			addToken (JMI);
+			addToken (JNE);
+			addToken (JPL);
+			addToken (JVC);
+			addToken (JVS);
+			addToken (JPA);
 		}
 		
 		super.startUp ();
@@ -4119,6 +4170,8 @@ public final class As65 extends Assembler
 		switch (lineType) {
 		case '=':
 			output.append ("         ");
+			if (addr == null)
+				error ("Addr is null");
 			output.append (Hex.toHex (addr.resolve (null, null), 8));
 			output.append (addr.isAbsolute() ? "  " : "' ");
 			output.append ("        ");
@@ -4188,7 +4241,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [17.08]";
+		title 		= "Portable 65xx Assembler [17.12]";
 	}
 	
 	/**
