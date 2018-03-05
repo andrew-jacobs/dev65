@@ -1,0 +1,198 @@
+
+Portable Motorola 6809 Assembler [18.03]
+
+                            
+                                    .code
+                                    .org    $1000
+                                    
+                            ; Opcode Numerically
+001000  3A                :         abx
+001001  8912              :         adca    #$12
+001003  9900              :         adca    <0
+001005  A900              :         adca    ,x
+001007  B90000            :         adca    >0
+00100A  C912              :         adcb    #$12
+00100C  D900              :         adcb    <0
+00100E  E900              :         adcb    ,x
+001010  F90000            :         adcb    >0
+001013  8B12              :         adda    #$12
+001015  9B00              :         adda    <0
+001017  AB00              :         adda    ,x
+001019  BB0000            :         adda    >0
+00101C  CB12              :         addb    #$12
+00101E  DB00              :         addb    <0
+001020  EB00              :         addb    ,x
+001022  FB0000            :         addb    >0
+001025  C31234            :         addd    #$1234
+001028  D300              :         addd    <0
+00102A  E300              :         addd    ,x
+00102C  F30000            :         addd    >0      
+00102F  8412              :         anda    #$12
+001031  9400              :         anda    <0
+001033  A400              :         anda    ,x
+001035  B40000            :         anda    >0
+001038  C412              :         andb    #$12
+00103A  D400              :         andb    <0
+00103C  E400              :         andb    ,x
+00103E  F40000            :         andb    >0
+001041  1C12              :         andcc   #$12
+001043  0800              :         asl     <0
+001045  6800              :         asl     ,x
+001047  780000            :         asl     >0
+00104A  48                :         asla
+00104B  58                :         aslb
+00104C  0700              :         asr     <0
+00104E  6700              :         asr     ,x
+001050  770000            :         asr     >0
+001053  47                :         asra
+001054  57                :         asrb
+001055  2434              :         bcc     label
+001057  2532              :         bcs     label
+001059  2730              :         beq     label
+00105B  2C2E              :         bge     label
+00105D  2E2C              :         bgt     label
+00105F  242A              :         bhs     label
+001061  8512              :         bita    #$12
+001063  9500              :         bita    <0
+001065  A500              :         bita    ,x
+
+Portable Motorola 6809 Assembler [18.03]
+
+001067  B50000            :         bita    >0
+00106A  C512              :         bitb    #$12
+00106C  D500              :         bitb    <0
+00106E  E500              :         bitb    ,x
+001070  F50000            :         bitb    >0      
+001073  2F16              :         ble     label
+001075  2314              :         blo     label
+001077  2312              :         bls     label
+001079  2D10              :         blt     label   
+00107B  2B0E              :         bmi     label
+00107D  260C              :         bne     label
+00107F  2A0A              :         bpl     label
+001081  2008              :         bra     label
+001083  2006              :         brn     label
+001085  8D04              :         bsr     label
+001087  2802              :         bvc     label
+001089  2900              :         bvs     label
+                            label:
+00108B  0F00              :         clr     <0
+00108D  6F00              :         clr     ,x
+00108F  7F0000            :         clr     >0
+001092  4F                :         clra
+001093  5F                :         clrb
+001094  8112              :         cmpa    #$12
+001096  9100              :         cmpa    <0
+001098  A100              :         cmpa    ,x
+00109A  B10000            :         cmpa    >0
+00109D  C112              :         cmpb    #$12
+00109F  D100              :         cmpb    <0
+0010A1  E100              :         cmpb    ,x
+0010A3  F10000            :         cmpb    >0
+0010A6  10831234          :         cmpd    #$1234
+0010AA  109300            :         cmpd    <0
+0010AD  10A300            :         cmpd    ,x
+0010B0  10B30000          :         cmpd    >0
+0010B4  118C1234          :         cmps    #$1234
+0010B8  119C00            :         cmps    <0
+0010BB  11AC00            :         cmps    ,x
+0010BE  11BC0000          :         cmps    >0
+0010C2  11831234          :         cmpu    #$1234
+0010C6  119300            :         cmpu    <0
+0010C9  11A300            :         cmpu    ,x
+0010CC  11B30000          :         cmpu    >0
+0010D0  8C1234            :         cmpx    #$1234
+0010D3  9C00              :         cmpx    <0
+0010D5  AC00              :         cmpx    ,x
+0010D7  BC0000            :         cmpx    >0
+0010DA  108C1234          :         cmpy    #$1234
+0010DE  109C00            :         cmpy    <0
+0010E1  10AC00            :         cmpy    ,x
+0010E4  10BC0000          :         cmpy    >0
+0010E8  0300              :         com     <0
+0010EA  6300              :         com     ,x
+0010EC  730000            :         com     >0
+
+Portable Motorola 6809 Assembler [18.03]
+
+0010EF  43                :         coma
+0010F0  53                :         comb
+0010F1  3C12              :         cwai    #$12
+0010F3  19                :         daa
+0010F4  0A00              :         dec     <0
+0010F6  6A00              :         dec     ,x
+0010F8  7A0000            :         dec     >0
+0010FB  4A                :         deca
+0010FC  5A                :         decb
+0010FD  8812              :         eora    #$12
+0010FF  9800              :         eora    <0
+001101  A800              :         eora    ,x
+001103  B80000            :         eora    >0
+001106  C812              :         eorb    #$12
+001108  D800              :         eorb    <0
+00110A  E800              :         eorb    ,x
+00110C  F80000            :         eorb    >0
+                            ; exg
+00110F  0C00              :         inc     <0
+001111  6C00              :         inc     ,x
+001113  7C0000            :         inc     >0
+001116  4C                :         inca
+001117  5C                :         incb
+001118  0E00              :         jmp     <0
+00111A  6E00              :         jmp     ,x
+00111C  7E0000            :         jmp     >0
+00111F  9D00              :         jsr     <0
+001121  AD00              :         jsr     ,x
+001123  BD0000            :         jsr     >0
+001126  8612              :         lda     #$12
+001128  9600              :         lda     <0
+00112A  A600              :         lda     ,x
+00112C  B60000            :         lda     >0
+00112F  C612              :         ldb     #$12
+001131  D600              :         ldb     <0
+001133  E600              :         ldb     ,x
+001135  F60000            :         ldb     >0
+001138  CC1234            :         ldd     #$1234
+00113B  DC00              :         ldd     <0
+00113D  EC00              :         ldd     ,x
+00113F  FC0000            :         ldd     >0
+001142  10CE1234          :         lds     #$1234
+001146  10DE00            :         lds     <0
+001149  10EE00            :         lds     ,x
+00114C  10FE0000          :         lds     >0
+001150  CE1234            :         ldu     #$1234
+001153  DE00              :         ldu     <0
+001155  EE00              :         ldu     ,x
+001157  FE0000            :         ldu     >0
+00115A  8E1234            :         ldx     #$1234
+00115D  9E00              :         ldx     <0
+00115F  AE00              :         ldx     ,x
+001161  BE0000            :         ldx     >0
+001164  108E1234          :         ldy     #$1234
+
+Portable Motorola 6809 Assembler [18.03]
+
+001168  109E00            :         ldy     <0
+00116B  10AE00            :         ldy     ,x
+00116E  10BE0000          :         ldy     >0
+                                    
+                            
+                            
+                            
+001172  1024FF15          :         lbcc    label
+001176  1025FF11          :         lbcs    label
+                            
+                                    
+                            ; Indexed Addressing modes
+                            
+                            ;       lda     ,x
+                            ;       lda     ,y
+                            
+                                    .end
+
+
+Portable Motorola 6809 Assembler [18.03]
+
+Symbol Table
+
+label                            0000108B  | label                            0000108B 
