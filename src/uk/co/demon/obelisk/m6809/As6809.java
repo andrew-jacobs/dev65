@@ -138,7 +138,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent(0x3a); break;
+					case INHR:	genInherent (0x00, 0x3a); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -331,7 +331,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent(0x48); break;
+					case INHR:	genInherent (0x00, 0x48); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -348,7 +348,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent(0x58); break;
+					case INHR:	genInherent(0x00, 0x58); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -384,7 +384,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent(0x47); break;
+					case INHR:	genInherent (0x00, 0x47); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -401,7 +401,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent(0x57); break;
+					case INHR:	genInherent (0x00, 0x57); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -612,7 +612,7 @@ public class As6809 extends Assembler
 					
 					switch (parseMode ()) {
 					case DRCT:
-					case EXTD:  genRelative (0x00, 0x23, arg); break;
+					case EXTD:  genRelative (0x00, 0x25, arg); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -714,7 +714,7 @@ public class As6809 extends Assembler
 					
 					switch (parseMode ()) {
 					case DRCT:
-					case EXTD:  genRelative (0x00, 0x20, arg); break;
+					case EXTD:  genRelative (0x00, 0x21, arg); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -800,7 +800,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent(0x4f); break;
+					case INHR:	genInherent (0x00, 0x4f); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -817,7 +817,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent(0x5f); break;
+					case INHR:	genInherent (0x00, 0x5f); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -994,7 +994,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent(0x43); break;
+					case INHR:	genInherent (0x00, 0x43); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -1011,7 +1011,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent(0x53); break;
+					case INHR:	genInherent (0x00, 0x53); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -1045,7 +1045,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent(0x19); break;
+					case INHR:	genInherent (0x00, 0x19); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -1081,7 +1081,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent (0x4a); break;
+					case INHR:	genInherent (0x00, 0x4a); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -1098,7 +1098,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent (0x5a); break;
+					case INHR:	genInherent (0x00, 0x5a); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -1174,7 +1174,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent (0x4c); break;
+					case INHR:	genInherent (0x00, 0x4c); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -1191,7 +1191,7 @@ public class As6809 extends Assembler
 					token = nextRealToken ();
 					
 					switch (parseMode ()) {
-					case INHR:	genInherent (0x5c); break;
+					case INHR:	genInherent (0x00, 0x5c); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -1340,6 +1340,23 @@ public class As6809 extends Assembler
 				}
 			};
 	
+	protected final Opcode LBHS = new Opcode (KEYWORD, "LBHS")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:
+					case EXTD:  genLongRelative (0x10, 0x24, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					return (true);
+				}
+			};
+	
 	protected final Opcode LBLE = new Opcode (KEYWORD, "LBLE")
 			{
 				@Override
@@ -1350,6 +1367,23 @@ public class As6809 extends Assembler
 					switch (parseMode ()) {
 					case DRCT:
 					case EXTD:  genLongRelative (0x10, 0x2f, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					return (true);
+				}
+			};
+	
+	protected final Opcode LBLO = new Opcode (KEYWORD, "LBLO")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:
+					case EXTD:  genLongRelative (0x10, 0x25, arg); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -1468,7 +1502,7 @@ public class As6809 extends Assembler
 					
 					switch (parseMode ()) {
 					case DRCT:
-					case EXTD:  genLongRelative (0x10, 0x20, arg); break;
+					case EXTD:  genLongRelative (0x10, 0x21, arg); break;
 					default:
 						error (ERR_ILLEGAL_ADDR);
 					}
@@ -1667,6 +1701,841 @@ public class As6809 extends Assembler
 				}
 			};
 
+	protected final Opcode LEAS = new Opcode (KEYWORD, "LEAS")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INDX:	genIndexed 	(0x00, 0x32, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+
+	protected final Opcode LEAU = new Opcode (KEYWORD, "LEAU")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INDX:	genIndexed 	(0x00, 0x33, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+
+	protected final Opcode LEAX = new Opcode (KEYWORD, "LEAX")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INDX:	genIndexed 	(0x00, 0x30, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+
+	protected final Opcode LEAY = new Opcode (KEYWORD, "LEAY")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INDX:	genIndexed 	(0x00, 0x31, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+
+	protected final Opcode LSL 	= new Opcode (KEYWORD, "LSL")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x00, 0x08, arg); break;
+					case INDX:	genIndexed	(0x00, 0x68, arg); break;
+					case EXTD:	genExtended (0x00, 0x78, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode LSLA	= new Opcode (KEYWORD, "LSLA")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x48); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+	protected final Opcode LSLB	= new Opcode (KEYWORD, "LSLB")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x58); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+	protected final Opcode LSR 	= new Opcode (KEYWORD, "LSR")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x00, 0x04, arg); break;
+					case INDX:	genIndexed	(0x00, 0x64, arg); break;
+					case EXTD:	genExtended (0x00, 0x74, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode LSRA	= new Opcode (KEYWORD, "LSRA")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x44); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+	protected final Opcode LSRB	= new Opcode (KEYWORD, "LSRB")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x54); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+	protected final Opcode MUL	= new Opcode (KEYWORD, "MUL")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x3d); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+	protected final Opcode NEG 	= new Opcode (KEYWORD, "NEG")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x00, 0x00, arg); break;
+					case INDX:	genIndexed	(0x00, 0x60, arg); break;
+					case EXTD:	genExtended (0x00, 0x70, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode NEGA	= new Opcode (KEYWORD, "NEGA")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x40); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+	protected final Opcode NEGB	= new Opcode (KEYWORD, "NEGB")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x50); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+	protected final Opcode NOP	= new Opcode (KEYWORD, "NOP")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x12); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+	protected final Opcode ORA = new Opcode (KEYWORD, "ORA")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case IMMD:	genDirect 	(0x00, 0x8a, arg); break;
+					case DRCT:	genDirect 	(0x00, 0x9a, arg); break;
+					case INDX:	genIndexed 	(0x00, 0xaa, arg); break;
+					case EXTD:	genExtended (0x00, 0xba, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode ORB = new Opcode (KEYWORD, "ORB")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case IMMD:	genDirect 	(0x00, 0xca, arg); break;
+					case DRCT:	genDirect 	(0x00, 0xda, arg); break;
+					case INDX:	genIndexed	(0x00, 0xea, arg); break;
+					case EXTD:	genExtended (0x00, 0xfa, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+
+	protected final Opcode ORCC = new Opcode (KEYWORD, "ORCC")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case IMMD:	genDirect 	(0x00, 0x1a, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+// PSH
+// PUL
+
+	protected final Opcode ROL 	= new Opcode (KEYWORD, "ROL")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x00, 0x09, arg); break;
+					case INDX:	genIndexed	(0x00, 0x69, arg); break;
+					case EXTD:	genExtended (0x00, 0x79, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+			
+					return (true);
+				}
+			};
+	
+	protected final Opcode ROLA	= new Opcode (KEYWORD, "ROLA")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x49); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+
+	protected final Opcode ROLB	= new Opcode (KEYWORD, "ROLB")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x59); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+				
+	protected final Opcode ROR 	= new Opcode (KEYWORD, "ROR")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x00, 0x06, arg); break;
+					case INDX:	genIndexed	(0x00, 0x66, arg); break;
+					case EXTD:	genExtended (0x00, 0x76, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+			
+					return (true);
+				}
+			};
+
+	protected final Opcode RORA	= new Opcode (KEYWORD, "RORA")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x46); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+
+	protected final Opcode RORB	= new Opcode (KEYWORD, "RORB")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x56); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+
+	protected final Opcode RTI	= new Opcode (KEYWORD, "RTI")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x3b); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+	protected final Opcode RTS	= new Opcode (KEYWORD, "RTS")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x39); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+	protected final Opcode SBCA = new Opcode (KEYWORD, "SBCA")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case IMMD:	genDirect 	(0x00, 0x82, arg); break;
+					case DRCT:	genDirect 	(0x00, 0x92, arg); break;
+					case INDX:	genIndexed	(0x00, 0xa2, arg); break;
+					case EXTD:	genExtended (0x00, 0xb2, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+
+	protected final Opcode SBCB = new Opcode (KEYWORD, "SBCB")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case IMMD:	genDirect 	(0x00, 0xc2, arg); break;
+					case DRCT:	genDirect 	(0x00, 0xd2, arg); break;
+					case INDX:	genIndexed	(0x00, 0xe2, arg); break;
+					case EXTD:	genExtended (0x00, 0xf2, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+		
+	protected final Opcode SEX	= new Opcode (KEYWORD, "SEX")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x1d); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+			
+	protected final Opcode STA 	= new Opcode (KEYWORD, "STA")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x00, 0x97, arg); break;
+					case INDX:	genIndexed	(0x00, 0xa7, arg); break;
+					case EXTD:	genExtended (0x00, 0xb7, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode STB 	= new Opcode (KEYWORD, "STB")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x00, 0xd7, arg); break;
+					case INDX:	genIndexed	(0x00, 0xe7, arg); break;
+					case EXTD:	genExtended (0x00, 0xf7, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode STD 	= new Opcode (KEYWORD, "STD")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x00, 0xdd, arg); break;
+					case INDX:	genIndexed	(0x00, 0xed, arg); break;
+					case EXTD:	genExtended (0x00, 0xfd, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode STS 	= new Opcode (KEYWORD, "STS")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x10, 0xdf, arg); break;
+					case INDX:	genIndexed	(0x10, 0xef, arg); break;
+					case EXTD:	genExtended (0x10, 0xff, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode STU 	= new Opcode (KEYWORD, "STU")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x00, 0xdf, arg); break;
+					case INDX:	genIndexed	(0x00, 0xef, arg); break;
+					case EXTD:	genExtended (0x00, 0xff, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode STX 	= new Opcode (KEYWORD, "STX")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x00, 0x9f, arg); break;
+					case INDX:	genIndexed	(0x00, 0xaf, arg); break;
+					case EXTD:	genExtended (0x00, 0xbf, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode STY 	= new Opcode (KEYWORD, "STY")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x10, 0x9f, arg); break;
+					case INDX:	genIndexed	(0x10, 0xaf, arg); break;
+					case EXTD:	genExtended (0x10, 0xbf, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode SUBA = new Opcode (KEYWORD, "SUBA")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case IMMD:	genDirect 	(0x00, 0x80, arg); break;
+					case DRCT:	genDirect 	(0x00, 0x90, arg); break;
+					case INDX:	genIndexed	(0x00, 0xa0, arg); break;
+					case EXTD:	genExtended (0x00, 0xb0, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+
+	protected final Opcode SUBB = new Opcode (KEYWORD, "SUBB")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case IMMD:	genDirect 	(0x00, 0xc0, arg); break;
+					case DRCT:	genDirect 	(0x00, 0xd0, arg); break;
+					case INDX:	genIndexed	(0x00, 0xe0, arg); break;
+					case EXTD:	genExtended (0x00, 0xf0, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode SUBD = new Opcode (KEYWORD, "SUBD")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case IMMD:	genDirect 	(0x00, 0x83, arg); break;
+					case DRCT:	genDirect 	(0x00, 0x93, arg); break;
+					case INDX:	genIndexed	(0x00, 0xa3, arg); break;
+					case EXTD:	genExtended (0x00, 0xb3, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode SWI	= new Opcode (KEYWORD, "SWI")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x3f); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+			
+	protected final Opcode SWI2	= new Opcode (KEYWORD, "SWI2")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x10, 0x3f); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+			
+	protected final Opcode SWI3	= new Opcode (KEYWORD, "SWI3")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x11, 0x3f); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+			
+	protected final Opcode SYNC	= new Opcode (KEYWORD, "SYNC")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x13); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+			
+// TFR
+			
+	protected final Opcode TST 	= new Opcode (KEYWORD, "TST")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case DRCT:	genDirect 	(0x00, 0x0d, arg); break;
+					case INDX:	genIndexed	(0x00, 0x6d, arg); break;
+					case EXTD:	genExtended (0x00, 0x7d, arg); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+		
+					return (true);
+				}
+			};
+	
+	protected final Opcode TSTA	= new Opcode (KEYWORD, "TSTA")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x4d); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+	protected final Opcode TSTB	= new Opcode (KEYWORD, "TSTB")
+			{
+				@Override
+				public boolean compile ()
+				{
+					token = nextRealToken ();
+					
+					switch (parseMode ()) {
+					case INHR:	genInherent (0x00, 0x5d); break;
+					default:
+						error (ERR_ILLEGAL_ADDR);
+					}
+					
+					return (true);
+				}
+			};
+	
+
 
 	
 	
@@ -1792,8 +2661,9 @@ public class As6809 extends Assembler
 		addToken (LBGE);
 		addToken (LBGT);
 		addToken (LBHI);
+		addToken (LBHS);
 		addToken (LBLE);
-//		addToken (LBLO);
+		addToken (LBLO);
 		addToken (LBLS);
 		addToken (LBLT);
 		addToken (LBMI);
@@ -1811,27 +2681,55 @@ public class As6809 extends Assembler
 		addToken (LDU);
 		addToken (LDX);
 		addToken (LDY);
-//		addToken (LEA);
-//		addToken (LSL);
-//		addToken (LSR);
-//		addToken (MUL);
-//		addToken (NEG);
-//		addToken (NOP);
-//		addToken (OR);
+		addToken (LEAS);
+		addToken (LEAU);
+		addToken (LEAX);
+		addToken (LEAY);
+		addToken (LSL);
+		addToken (LSLA);
+		addToken (LSLB);
+		addToken (LSR);
+		addToken (LSRA);
+		addToken (LSRB);
+		addToken (MUL);
+		addToken (NEG);
+		addToken (NEGA);
+		addToken (NEGB);
+		addToken (NOP);
+		addToken (ORA);
+		addToken (ORB);
+		addToken (ORCC);
 //		addToken (PSH);
 //		addToken (PUL);
-//		addToken (ROL);
-//		addToken (ROR);
-//		addToken (RTI);
-//		addToken (RTS);
-//		addToken (SBC);
-//		addToken (SEX);
-//		addToken (ST);
-//		addToken (SUB);
-//		addToken (SWI);
-//		addToken (SYNC);
+		addToken (ROL);
+		addToken (ROLA);
+		addToken (ROLB);
+		addToken (ROR);
+		addToken (RORA);
+		addToken (RORB);
+		addToken (RTI);
+		addToken (RTS);
+		addToken (SBCA);
+		addToken (SBCB);
+		addToken (SEX);
+		addToken (STA);
+		addToken (STB);
+		addToken (STD);
+		addToken (STS);
+		addToken (STU);
+		addToken (STX);
+		addToken (STY);
+		addToken (SUBA);
+		addToken (SUBB);
+		addToken (SUBD);
+		addToken (SWI);
+		addToken (SWI2);
+		addToken (SWI3);
+		addToken (SYNC);
 //		addToken (TFR);
-//		addToken (TST);
+		addToken (TST);
+		addToken (TSTA);
+		addToken (TSTB);
 		
 		// Registers
 		addToken (A);
@@ -1950,17 +2848,6 @@ public class As6809 extends Assembler
 
 	private static final String ERR_MISSING_EXPRESSION
 		= "Missing expression";
-
-	private static final String ERR_EXPECTED_X
-		= "Expected X index";
-
-	private static final String ERR_MISSING_A_OR_B
-		= "Missing A or B accumulator";
-	
-	/**
-	 * Represents an invalid addressing mode.
-	 */
-	private static final int	UNKN	= 0;
 
 	/**
 	 * Represents the immediate addressing mode.
@@ -2489,8 +3376,10 @@ public class As6809 extends Assembler
 		return (null);
 	}
 
-	private void genInherent (int opcode)
+	private void genInherent (int prefix, int opcode)
 	{
+		if (prefix != 0)
+			addByte (prefix);
 		addByte (opcode);
 	}
 	
