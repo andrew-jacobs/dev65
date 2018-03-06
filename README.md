@@ -21,7 +21,7 @@ flavours of Windows and Linux (on PC and Raspberry Pi).
 The linkers supports several output formats including hex, Intel hex, binary, S19, S28 and S37. Like
 the assembler its quite easy to add other formats.
 
-The object modules and libaries are actually XML files under covers. I had intended to pass it
+The object modules and libaries are actually XML files under the covers. I had intended to pass it
 through a ZIP compression but never got round to it and now disks are so big it hardly seems worth
 it.
 
