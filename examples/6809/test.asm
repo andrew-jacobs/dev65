@@ -2,7 +2,7 @@
 	.code
 
 ;===============================================================================	
-; Opcode Alphabetically
+; Opcodes Alphabetically
 ;-------------------------------------------------------------------------------
 
 	.org	$1000
@@ -127,7 +127,7 @@ label:
 	eorb	<0
 	eorb	,x
 	eorb	>0
-; exg
+	exg	a,b
 	inc	<0
 	inc	,x
 	inc	>0
@@ -198,8 +198,10 @@ label:
 	orb	<0
 	orb	,x
 	orb	>0
-; psh
-; pul
+	pshs	#$12
+	pshu	#$12
+	puls	#$12
+	pulu	#$12
 	rol	<0
 	rol	,x
 	rol	>0
@@ -221,7 +223,27 @@ label:
 	sbcb	,x
 	sbcb	>0
 	sex
-; st
+	sta	<0
+	sta	,x
+	sta	>0
+	stb	<0
+	stb	,x
+	stb	>0
+	std	<0
+	std	,x
+	std	>0
+	sts	<0
+	sts	,x
+	sts	>0
+	stu	<0
+	stu	,x
+	stu	>0
+	stx	<0
+	stx	,x
+	stx	>0
+	sty	<0
+	sty	,x
+	sty	>0
 	suba	#$12
 	suba	<0
 	suba	,x
@@ -234,15 +256,15 @@ label:
 	swi2
 	swi3
 	sync
-; tfr
+	tfr	x,y
 	tst	<0
 	tst	,x
 	tst	>0
 	tsta
 	tstb
 	
-
 ;===============================================================================
+; Opcodes Numerically
 ;-------------------------------------------------------------------------------
 
 	.org	$2000
@@ -279,8 +301,8 @@ label:
 ;*
 	andcc	#$12
 	sex
-; exg
-; tfr
+	exg	a,b
+	tfr	x,y
 
 	bra	branch
 	brn	branch
@@ -302,7 +324,22 @@ label:
 	ble	branch
 branch:
 
-; 30-3f
+	leax	,x
+	leay	,x
+	leas	,x
+	leau	,x
+	pshs	#$12
+	puls	#$12
+	pshu	#$12
+	pulu	#$12
+;	*
+	rts
+	abx
+	rti
+	cwai	#$12
+	mul
+;	*
+	swi
 
 	nega
 ;	*
@@ -389,7 +426,7 @@ branch:
 	ora	#$12
 	adda	#$12
 	cmpx	#$1234
-	bsr	branch
+	bsr	$
 	ldx	#$1234
 ;	*
 
@@ -558,6 +595,27 @@ target2:
 	cmps	,x
 	cmpu	>0
 	cmps	>0
+	
+;===============================================================================
+; Pushes and Transfers
+;-------------------------------------------------------------------------------
+
+	exg	b,a
+	exg	dp,cc
+	exg	y,x
+	exg	d,pc
+	exg	u,s
+	
+	pshs	pc,u,x,y
+	pshs	dp,b,a,cc
+	pulu	pc,s,x,y
+	pulu	dp,b,a,cc
+	
+	tfr	a,b
+	tfr	cc,dp
+	tfr	x,y
+	tfr	s,u
+	tfr	pc,d
 
 ;===============================================================================
 ; Indexed Addressing modes
@@ -567,7 +625,127 @@ target2:
 	
 	lda	,x
 	lda	,y
+	lda	,s
+	lda	,u
+	
+	lda	-16,x
+	lda	15,x
+	lda	-16,y
+	lda	15,y
+	lda	-16,s
+	lda	15,s
+	lda	-16,u
+	lda	15,u
 
+	lda	-128,x
+	lda	127,x
+	lda	-128,y
+	lda	127,y
+	lda	-128,s
+	lda	127,s
+	lda	-128,u
+	lda	127,u
 
+	lda	-32768,x
+	lda	32767,x
+	lda	-32768,y
+	lda	32767,y
+	lda	-32768,s
+	lda	32767,s
+	lda	-32768,u
+	lda	32767,u
+
+	lda	a,x
+	lda	a,y
+	lda	a,s
+	lda	a,u
+	lda	b,x
+	lda	b,y
+	lda	b,s
+	lda	b,u
+	lda	d,x
+	lda	d,y
+	lda	d,s
+	lda	d,u
+	
+	lda	,x+
+	lda	,y+
+	lda	,s+
+	lda	,u+
+	lda	,x++
+	lda	,y++
+	lda	,s++
+	lda	,u++
+	lda	,-x
+	lda	,-y
+	lda	,-s
+	lda	,-u
+	lda	,--x
+	lda	,--y
+	lda	,--s
+	lda	,--u
+	
+	lda	<$,pcr
+	lda 	>$,pcr
+	
+	lda	[,x]
+	lda	[,y]
+	lda	[,s]
+	lda	[,u]
+
+	lda	[-16,x]
+	lda	[15,x]
+	lda	[-16,y]
+	lda	[15,y]
+	lda	[-16,s]
+	lda	[15,s]
+	lda	[-16,u]
+	lda	[15,u]
+
+	lda	[-128,x]
+	lda	[127,x]
+	lda	[-128,y]
+	lda	[127,y]
+	lda	[-128,s]
+	lda	[127,s]
+	lda	[-128,u]
+	lda	[127,u]
+
+	lda	[-32768,x]
+	lda	[32767,x]
+	lda	[-32768,y]
+	lda	[32767,y]
+	lda	[-32768,s]
+	lda	[32767,s]
+	lda	[-32768,u]
+	lda	[32767,u]
+
+	lda	[a,x]
+	lda	[a,y]
+	lda	[a,s]
+	lda	[a,u]
+	lda	[b,x]
+	lda	[b,y]
+	lda	[b,s]
+	lda	[b,u]
+	lda	[d,x]
+	lda	[d,y]
+	lda	[d,s]
+	lda	[d,u]
+
+	lda	[,x++]
+	lda	[,y++]
+	lda	[,s++]
+	lda	[,u++]
+	lda	[,--x]
+	lda	[,--y]
+	lda	[,--s]
+	lda	[,--u]
+
+	lda	<[$,pcr]
+	lda 	>[$,pcr]
+	
+	lda	[$12]
+	lda	[$1234]
 
 	.end

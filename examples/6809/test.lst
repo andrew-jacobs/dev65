@@ -5,7 +5,7 @@ Portable Motorola 6809 Assembler [18.03]
                                     .code
                             
                             ;===============================================================================        
-                            ; Opcode Alphabetically
+                            ; Opcodes Alphabetically
                             ;-------------------------------------------------------------------------------
                             
                                     .org    $1000
@@ -13,40 +13,40 @@ Portable Motorola 6809 Assembler [18.03]
 001000  3A                :         abx
 001001  8912              :         adca    #$12
 001003  9900              :         adca    <0
-001005  A900              :         adca    ,x
+001005  A984              :         adca    ,x
 001007  B90000            :         adca    >0
 00100A  C912              :         adcb    #$12
 00100C  D900              :         adcb    <0
-00100E  E900              :         adcb    ,x
+00100E  E984              :         adcb    ,x
 001010  F90000            :         adcb    >0
 001013  8B12              :         adda    #$12
 001015  9B00              :         adda    <0
-001017  AB00              :         adda    ,x
+001017  AB84              :         adda    ,x
 001019  BB0000            :         adda    >0
 00101C  CB12              :         addb    #$12
 00101E  DB00              :         addb    <0
-001020  EB00              :         addb    ,x
+001020  EB84              :         addb    ,x
 001022  FB0000            :         addb    >0
 001025  C31234            :         addd    #$1234
 001028  D300              :         addd    <0
-00102A  E300              :         addd    ,x
+00102A  E384              :         addd    ,x
 00102C  F30000            :         addd    >0      
 00102F  8412              :         anda    #$12
 001031  9400              :         anda    <0
-001033  A400              :         anda    ,x
+001033  A484              :         anda    ,x
 001035  B40000            :         anda    >0
 001038  C412              :         andb    #$12
 00103A  D400              :         andb    <0
-00103C  E400              :         andb    ,x
+00103C  E484              :         andb    ,x
 00103E  F40000            :         andb    >0
 001041  1C12              :         andcc   #$12
 001043  0800              :         asl     <0
-001045  6800              :         asl     ,x
+001045  6884              :         asl     ,x
 001047  780000            :         asl     >0
 00104A  48                :         asla
 00104B  58                :         aslb
 00104C  0700              :         asr     <0
-00104E  6700              :         asr     ,x
+00104E  6784              :         asr     ,x
 001050  770000            :         asr     >0
 001053  47                :         asra
 001054  57                :         asrb
@@ -61,11 +61,11 @@ Portable Motorola 6809 Assembler [18.03]
 00105F  242A              :         bhs     label
 001061  8512              :         bita    #$12
 001063  9500              :         bita    <0
-001065  A500              :         bita    ,x
+001065  A584              :         bita    ,x
 001067  B50000            :         bita    >0
 00106A  C512              :         bitb    #$12
 00106C  D500              :         bitb    <0
-00106E  E500              :         bitb    ,x
+00106E  E584              :         bitb    ,x
 001070  F50000            :         bitb    >0      
 001073  2F16              :         ble     label
 001075  2514              :         blo     label
@@ -81,186 +81,211 @@ Portable Motorola 6809 Assembler [18.03]
 001089  2900              :         bvs     label
                             label:
 00108B  0F00              :         clr     <0
-00108D  6F00              :         clr     ,x
+00108D  6F84              :         clr     ,x
 00108F  7F0000            :         clr     >0
 001092  4F                :         clra
 001093  5F                :         clrb
 001094  8112              :         cmpa    #$12
 001096  9100              :         cmpa    <0
-001098  A100              :         cmpa    ,x
+001098  A184              :         cmpa    ,x
 00109A  B10000            :         cmpa    >0
 00109D  C112              :         cmpb    #$12
 00109F  D100              :         cmpb    <0
-0010A1  E100              :         cmpb    ,x
+0010A1  E184              :         cmpb    ,x
 0010A3  F10000            :         cmpb    >0
 0010A6  10831234          :         cmpd    #$1234
 0010AA  109300            :         cmpd    <0
-0010AD  10A300            :         cmpd    ,x
+0010AD  10A384            :         cmpd    ,x
 0010B0  10B30000          :         cmpd    >0
 0010B4  118C1234          :         cmps    #$1234
 0010B8  119C00            :         cmps    <0
-0010BB  11AC00            :         cmps    ,x
+0010BB  11AC84            :         cmps    ,x
 0010BE  11BC0000          :         cmps    >0
 0010C2  11831234          :         cmpu    #$1234
 0010C6  119300            :         cmpu    <0
-0010C9  11A300            :         cmpu    ,x
+0010C9  11A384            :         cmpu    ,x
 0010CC  11B30000          :         cmpu    >0
 0010D0  8C1234            :         cmpx    #$1234
 0010D3  9C00              :         cmpx    <0
-0010D5  AC00              :         cmpx    ,x
+0010D5  AC84              :         cmpx    ,x
 0010D7  BC0000            :         cmpx    >0
 0010DA  108C1234          :         cmpy    #$1234
 0010DE  109C00            :         cmpy    <0
-0010E1  10AC00            :         cmpy    ,x
+0010E1  10AC84            :         cmpy    ,x
 
 Portable Motorola 6809 Assembler [18.03]
 
 0010E4  10BC0000          :         cmpy    >0
 0010E8  0300              :         com     <0
-0010EA  6300              :         com     ,x
+0010EA  6384              :         com     ,x
 0010EC  730000            :         com     >0
 0010EF  43                :         coma
 0010F0  53                :         comb
 0010F1  3C12              :         cwai    #$12
 0010F3  19                :         daa
 0010F4  0A00              :         dec     <0
-0010F6  6A00              :         dec     ,x
+0010F6  6A84              :         dec     ,x
 0010F8  7A0000            :         dec     >0
 0010FB  4A                :         deca
 0010FC  5A                :         decb
 0010FD  8812              :         eora    #$12
 0010FF  9800              :         eora    <0
-001101  A800              :         eora    ,x
+001101  A884              :         eora    ,x
 001103  B80000            :         eora    >0
 001106  C812              :         eorb    #$12
 001108  D800              :         eorb    <0
-00110A  E800              :         eorb    ,x
+00110A  E884              :         eorb    ,x
 00110C  F80000            :         eorb    >0
-                            ; exg
-00110F  0C00              :         inc     <0
-001111  6C00              :         inc     ,x
-001113  7C0000            :         inc     >0
-001116  4C                :         inca
-001117  5C                :         incb
-001118  0E00              :         jmp     <0
-00111A  6E00              :         jmp     ,x
-00111C  7E0000            :         jmp     >0
-00111F  9D00              :         jsr     <0
-001121  AD00              :         jsr     ,x
-001123  BD0000            :         jsr     >0
-001126  1024FF61          :         lbcc    label
-00112A  1025FF5D          :         lbcs    label
-00112E  8612              :         lda     #$12
-001130  9600              :         lda     <0
-001132  A600              :         lda     ,x
-001134  B60000            :         lda     >0
-001137  C612              :         ldb     #$12
-001139  D600              :         ldb     <0
-00113B  E600              :         ldb     ,x
-00113D  F60000            :         ldb     >0
-001140  CC1234            :         ldd     #$1234
-001143  DC00              :         ldd     <0
-001145  EC00              :         ldd     ,x
-001147  FC0000            :         ldd     >0
-00114A  10CE1234          :         lds     #$1234
-00114E  10DE00            :         lds     <0
-001151  10EE00            :         lds     ,x
-001154  10FE0000          :         lds     >0
-001158  CE1234            :         ldu     #$1234
-00115B  DE00              :         ldu     <0
-00115D  EE00              :         ldu     ,x
+00110F  1E89              :         exg     a,b
+001111  0C00              :         inc     <0
+001113  6C84              :         inc     ,x
+001115  7C0000            :         inc     >0
+001118  4C                :         inca
+001119  5C                :         incb
+00111A  0E00              :         jmp     <0
+00111C  6E84              :         jmp     ,x
+00111E  7E0000            :         jmp     >0
+001121  9D00              :         jsr     <0
+001123  AD84              :         jsr     ,x
+001125  BD0000            :         jsr     >0
+001128  1024FF5F          :         lbcc    label
+00112C  1025FF5B          :         lbcs    label
+001130  8612              :         lda     #$12
+001132  9600              :         lda     <0
+001134  A684              :         lda     ,x
+001136  B60000            :         lda     >0
+001139  C612              :         ldb     #$12
+00113B  D600              :         ldb     <0
+00113D  E684              :         ldb     ,x
+00113F  F60000            :         ldb     >0
+001142  CC1234            :         ldd     #$1234
+001145  DC00              :         ldd     <0
+001147  EC84              :         ldd     ,x
+001149  FC0000            :         ldd     >0
+00114C  10CE1234          :         lds     #$1234
+001150  10DE00            :         lds     <0
+001153  10EE84            :         lds     ,x
+001156  10FE0000          :         lds     >0
+00115A  CE1234            :         ldu     #$1234
+00115D  DE00              :         ldu     <0
+00115F  EE84              :         ldu     ,x
 
 Portable Motorola 6809 Assembler [18.03]
 
-00115F  FE0000            :         ldu     >0
-001162  8E1234            :         ldx     #$1234
-001165  9E00              :         ldx     <0
-001167  AE00              :         ldx     ,x
-001169  BE0000            :         ldx     >0
-00116C  108E1234          :         ldy     #$1234
-001170  109E00            :         ldy     <0
-001173  10AE00            :         ldy     ,x
-001176  10BE0000          :         ldy     >0
-00117A  3200              :         leas    ,x
-00117C  3300              :         leau    ,x
-00117E  3000              :         leax    ,x
-001180  3100              :         leay    ,x
-001182  0800              :         lsl     <0
-001184  6800              :         lsl     ,x
-001186  780000            :         lsl     >0
-001189  48                :         lsla
-00118A  58                :         lslb
-00118B  0400              :         lsr     <0
-00118D  6400              :         lsr     ,x
-00118F  740000            :         lsr     >0
-001192  44                :         lsra
-001193  54                :         lsrb
-001194  3D                :         mul
-001195  0000              :         neg     <0
-001197  6000              :         neg     ,x
-001199  700000            :         neg     >0
-00119C  40                :         nega
-00119D  50                :         negb
-00119E  12                :         nop
-00119F  8A12              :         ora     #$12
-0011A1  9A00              :         ora     <0
-0011A3  AA00              :         ora     ,x
-0011A5  BA0000            :         ora     >0
-0011A8  CA12              :         orb     #$12
-0011AA  DA00              :         orb     <0
-0011AC  EA00              :         orb     ,x
-0011AE  FA0000            :         orb     >0
-                            ; psh
-                            ; pul
-0011B1  0900              :         rol     <0
-0011B3  6900              :         rol     ,x
-0011B5  790000            :         rol     >0
-0011B8  49                :         rola
-0011B9  59                :         rolb
-0011BA  0600              :         ror     <0
-0011BC  6600              :         ror     ,x
-0011BE  760000            :         ror     >0
-0011C1  46                :         rora
-0011C2  56                :         rorb
-0011C3  3B                :         rti
-0011C4  39                :         rts
-0011C5  8212              :         sbca    #$12
-0011C7  9200              :         sbca    <0
+001161  FE0000            :         ldu     >0
+001164  8E1234            :         ldx     #$1234
+001167  9E00              :         ldx     <0
+001169  AE84              :         ldx     ,x
+00116B  BE0000            :         ldx     >0
+00116E  108E1234          :         ldy     #$1234
+001172  109E00            :         ldy     <0
+001175  10AE84            :         ldy     ,x
+001178  10BE0000          :         ldy     >0
+00117C  3284              :         leas    ,x
+00117E  3384              :         leau    ,x
+001180  3084              :         leax    ,x
+001182  3184              :         leay    ,x
+001184  0800              :         lsl     <0
+001186  6884              :         lsl     ,x
+001188  780000            :         lsl     >0
+00118B  48                :         lsla
+00118C  58                :         lslb
+00118D  0400              :         lsr     <0
+00118F  6484              :         lsr     ,x
+001191  740000            :         lsr     >0
+001194  44                :         lsra
+001195  54                :         lsrb
+001196  3D                :         mul
+001197  0000              :         neg     <0
+001199  6084              :         neg     ,x
+00119B  700000            :         neg     >0
+00119E  40                :         nega
+00119F  50                :         negb
+0011A0  12                :         nop
+0011A1  8A12              :         ora     #$12
+0011A3  9A00              :         ora     <0
+0011A5  AA84              :         ora     ,x
+0011A7  BA0000            :         ora     >0
+0011AA  CA12              :         orb     #$12
+0011AC  DA00              :         orb     <0
+0011AE  EA84              :         orb     ,x
+0011B0  FA0000            :         orb     >0
+0011B3  3412              :         pshs    #$12
+0011B5  3612              :         pshu    #$12
+0011B7  3512              :         puls    #$12
+0011B9  3712              :         pulu    #$12
+0011BB  0900              :         rol     <0
+0011BD  6984              :         rol     ,x
+0011BF  790000            :         rol     >0
+0011C2  49                :         rola
+0011C3  59                :         rolb
+0011C4  0600              :         ror     <0
+0011C6  6684              :         ror     ,x
+0011C8  760000            :         ror     >0
+0011CB  46                :         rora
+0011CC  56                :         rorb
+0011CD  3B                :         rti
+0011CE  39                :         rts
 
 Portable Motorola 6809 Assembler [18.03]
 
-0011C9  A200              :         sbca    ,x
-0011CB  B20000            :         sbca    >0
-0011CE  C212              :         sbcb    #$12
-0011D0  D200              :         sbcb    <0
-0011D2  E200              :         sbcb    ,x
-0011D4  F20000            :         sbcb    >0
-0011D7  1D                :         sex
-                            ; st
-0011D8  8012              :         suba    #$12
-0011DA  9000              :         suba    <0
-0011DC  A000              :         suba    ,x
-0011DE  B00000            :         suba    >0
-0011E1  C012              :         subb    #$12
-0011E3  D000              :         subb    <0
-0011E5  E000              :         subb    ,x
-0011E7  F00000            :         subb    >0
-0011EA  3F                :         swi
-0011EB  103F              :         swi2
-0011ED  113F              :         swi3
-0011EF  13                :         sync
-                            ; tfr
-0011F0  0D00              :         tst     <0
-0011F2  6D00              :         tst     ,x
-0011F4  7D0000            :         tst     >0
-0011F7  4D                :         tsta
-0011F8  5D                :         tstb
+0011CF  8212              :         sbca    #$12
+0011D1  9200              :         sbca    <0
+0011D3  A284              :         sbca    ,x
+0011D5  B20000            :         sbca    >0
+0011D8  C212              :         sbcb    #$12
+0011DA  D200              :         sbcb    <0
+0011DC  E284              :         sbcb    ,x
+0011DE  F20000            :         sbcb    >0
+0011E1  1D                :         sex
+0011E2  9700              :         sta     <0
+0011E4  A784              :         sta     ,x
+0011E6  B70000            :         sta     >0
+0011E9  D700              :         stb     <0
+0011EB  E784              :         stb     ,x
+0011ED  F70000            :         stb     >0
+0011F0  DD00              :         std     <0
+0011F2  ED84              :         std     ,x
+0011F4  FD0000            :         std     >0
+0011F7  10DF00            :         sts     <0
+0011FA  10EF84            :         sts     ,x
+0011FD  10FF0000          :         sts     >0
+001201  DF00              :         stu     <0
+001203  EF84              :         stu     ,x
+001205  FF0000            :         stu     >0
+001208  9F00              :         stx     <0
+00120A  AF84              :         stx     ,x
+00120C  BF0000            :         stx     >0
+00120F  109F00            :         sty     <0
+001212  10AF84            :         sty     ,x
+001215  10BF0000          :         sty     >0
+001219  8012              :         suba    #$12
+00121B  9000              :         suba    <0
+00121D  A084              :         suba    ,x
+00121F  B00000            :         suba    >0
+001222  C012              :         subb    #$12
+001224  D000              :         subb    <0
+001226  E084              :         subb    ,x
+001228  F00000            :         subb    >0
+00122B  3F                :         swi
+00122C  103F              :         swi2
+00122E  113F              :         swi3
+001230  13                :         sync
+001231  1F12              :         tfr     x,y
+001233  0D00              :         tst     <0
+001235  6D84              :         tst     ,x
+001237  7D0000            :         tst     >0
+00123A  4D                :         tsta
+00123B  5D                :         tstb
                                     
-                            
                             ;===============================================================================
+                            ; Opcodes Numerically
                             ;-------------------------------------------------------------------------------
                             
                                     .org    $2000
+
+Portable Motorola 6809 Assembler [18.03]
+
                                     
 002000  0000              :         neg     <0
                             ;       *
@@ -283,9 +308,6 @@ Portable Motorola 6809 Assembler [18.03]
                             ; Page 2
                             ; Page 3
 00201A  12                :         nop
-
-Portable Motorola 6809 Assembler [18.03]
-
 00201B  13                :         sync
                             ;       *
                             ;       *
@@ -297,300 +319,339 @@ Portable Motorola 6809 Assembler [18.03]
                             ;*
 002025  1C12              :         andcc   #$12
 002027  1D                :         sex
-                            ; exg
-                            ; tfr
+002028  1E89              :         exg     a,b
+00202A  1F12              :         tfr     x,y
                             
-002028  2022              :         bra     branch
-00202A  2120              :         brn     branch
-00202C  221E              :         bhi     branch
-00202E  231C              :         bls     branch
-002030  241A              :         bhs     branch                  ; same as bcc
-002032  2418              :         bcc     branch
-002034  2516              :         blo     branch                  ; same as bcs
-002036  2514              :         bcs     branch
-002038  2612              :         bne     branch
-00203A  2710              :         beq     branch
-00203C  280E              :         bvc     branch
-00203E  290C              :         bvs     branch
-002040  2A0A              :         bpl     branch
-002042  2B08              :         bmi     branch
-002044  2C06              :         bge     branch
-002046  2D04              :         blt     branch
-002048  2E02              :         bgt     branch
-00204A  2F00              :         ble     branch
+00202C  2022              :         bra     branch
+00202E  2120              :         brn     branch
+002030  221E              :         bhi     branch
+002032  231C              :         bls     branch
+002034  241A              :         bhs     branch                  ; same as bcc
+002036  2418              :         bcc     branch
+002038  2516              :         blo     branch                  ; same as bcs
+00203A  2514              :         bcs     branch
+00203C  2612              :         bne     branch
+00203E  2710              :         beq     branch
+002040  280E              :         bvc     branch
+002042  290C              :         bvs     branch
+002044  2A0A              :         bpl     branch
+002046  2B08              :         bmi     branch
+002048  2C06              :         bge     branch
+00204A  2D04              :         blt     branch
+00204C  2E02              :         bgt     branch
+00204E  2F00              :         ble     branch
+
+Portable Motorola 6809 Assembler [18.03]
+
                             branch:
                             
-                            ; 30-3f
+002050  3084              :         leax    ,x
+002052  3184              :         leay    ,x
+002054  3284              :         leas    ,x
+002056  3384              :         leau    ,x
+002058  3412              :         pshs    #$12
+00205A  3512              :         puls    #$12
+00205C  3612              :         pshu    #$12
+00205E  3712              :         pulu    #$12
+                            ;       *
+002060  39                :         rts
+002061  3A                :         abx
+002062  3B                :         rti
+002063  3C12              :         cwai    #$12
+002065  3D                :         mul
+                            ;       *
+002066  3F                :         swi
                             
-00204C  40                :         nega
+002067  40                :         nega
                             ;       *
                             ;       *       
-00204D  43                :         coma
-00204E  44                :         lsra
+002068  43                :         coma
+002069  44                :         lsra
                             ;       *
-00204F  46                :         rora
-002050  47                :         asra
-002051  48                :         asla
-002052  48                :         lsla                            ; same as asla
-002053  49                :         rola
-002054  4A                :         deca
+00206A  46                :         rora
+00206B  47                :         asra
+00206C  48                :         asla
+00206D  48                :         lsla                            ; same as asla
+00206E  49                :         rola
+00206F  4A                :         deca
                             ;       *
-002055  4C                :         inca
-002056  4D                :         tsta
+002070  4C                :         inca
+002071  4D                :         tsta
                             ;       *
-002057  4F                :         clra
+002072  4F                :         clra
                                     
-
-Portable Motorola 6809 Assembler [18.03]
-
-002058  50                :         negb
+002073  50                :         negb
                             ;       *
                             ;       *       
-002059  53                :         comb
-00205A  54                :         lsrb
+002074  53                :         comb
+002075  54                :         lsrb
                             ;       *
-00205B  56                :         rorb
-00205C  57                :         asrb
-00205D  58                :         aslb
-00205E  58                :         lslb                            ; same as aslb
-00205F  59                :         rolb
-002060  5A                :         decb
+002076  56                :         rorb
+002077  57                :         asrb
+002078  58                :         aslb
+002079  58                :         lslb                            ; same as aslb
+00207A  59                :         rolb
+00207B  5A                :         decb
                             ;       *
-002061  5C                :         incb
-002062  5D                :         tstb
+00207C  5C                :         incb
+00207D  5D                :         tstb
                             ;       *
-002063  5F                :         clrb
+00207E  5F                :         clrb
+
+Portable Motorola 6809 Assembler [18.03]
+
                                     
-002064  6000              :         neg     ,x
+00207F  6084              :         neg     ,x
                             ;       *
                             ;       *
-002066  6300              :         com     ,x
-002068  6400              :         lsr     ,x
+002081  6384              :         com     ,x
+002083  6484              :         lsr     ,x
                             ;       *
-00206A  6600              :         ror     ,x
-00206C  6700              :         asr     ,x
-00206E  6800              :         asl     ,x
-002070  6800              :         lsl     ,x
-002072  6900              :         rol     ,x
-002074  6A00              :         dec     ,x
+002085  6684              :         ror     ,x
+002087  6784              :         asr     ,x
+002089  6884              :         asl     ,x
+00208B  6884              :         lsl     ,x
+00208D  6984              :         rol     ,x
+00208F  6A84              :         dec     ,x
                             ;       *
-002076  6C00              :         inc     ,x
-002078  6D00              :         tst     ,x
-00207A  6E00              :         jmp     ,x
-00207C  6F00              :         clr     ,x
+002091  6C84              :         inc     ,x
+002093  6D84              :         tst     ,x
+002095  6E84              :         jmp     ,x
+002097  6F84              :         clr     ,x
                                     
-00207E  700000            :         neg     >0
+002099  700000            :         neg     >0
                             ;       *
                             ;       *
-002081  730000            :         com     >0
-002084  740000            :         lsr     >0
+00209C  730000            :         com     >0
+00209F  740000            :         lsr     >0
                             ;       *
-002087  760000            :         ror     >0
-00208A  770000            :         asr     >0
-00208D  780000            :         asl     >0
-002090  780000            :         lsl     >0
-002093  790000            :         rol     >0
-002096  7A0000            :         dec     >0
+0020A2  760000            :         ror     >0
+0020A5  770000            :         asr     >0
+0020A8  780000            :         asl     >0
+0020AB  780000            :         lsl     >0
+0020AE  790000            :         rol     >0
+0020B1  7A0000            :         dec     >0
                             ;       *
-002099  7C0000            :         inc     >0
-00209C  7D0000            :         tst     >0
-00209F  7E0000            :         jmp     >0
-0020A2  7F0000            :         clr     >0
+0020B4  7C0000            :         inc     >0
+0020B7  7D0000            :         tst     >0
+0020BA  7E0000            :         jmp     >0
+0020BD  7F0000            :         clr     >0
+                            
+0020C0  8012              :         suba    #$12
+0020C2  8112              :         cmpa    #$12
+0020C4  8212              :         sbca    #$12
+0020C6  8334              :         subd    #$1234
+0020C8  8412              :         anda    #$12
+0020CA  8512              :         bita    #$12
+0020CC  8612              :         lda     #$12
+                            ;       *
+0020CE  8812              :         eora    #$12
+0020D0  8912              :         adca    #$12
+0020D2  8A12              :         ora     #$12
+0020D4  8B12              :         adda    #$12
+0020D6  8C1234            :         cmpx    #$1234
+0020D9  8DFE              :         bsr     $
+0020DB  8E1234            :         ldx     #$1234
+                            ;       *
                             
 
 Portable Motorola 6809 Assembler [18.03]
 
-0020A5  8012              :         suba    #$12
-0020A7  8112              :         cmpa    #$12
-0020A9  8212              :         sbca    #$12
-0020AB  8334              :         subd    #$1234
-0020AD  8412              :         anda    #$12
-0020AF  8512              :         bita    #$12
-0020B1  8612              :         lda     #$12
-                            ;       *
-0020B3  8812              :         eora    #$12
-0020B5  8912              :         adca    #$12
-0020B7  8A12              :         ora     #$12
-0020B9  8B12              :         adda    #$12
-0020BB  8C1234            :         cmpx    #$1234
-0020BE  8D8C              :         bsr     branch
-0020C0  8E1234            :         ldx     #$1234
-                            ;       *
+0020DE  9000              :         suba    <0
+0020E0  9100              :         cmpa    <0
+0020E2  9200              :         sbca    <0
+0020E4  9300              :         subd    <0
+0020E6  9400              :         anda    <0
+0020E8  9500              :         bita    <0
+0020EA  9600              :         lda     <0
+0020EC  9700              :         sta     <0
+0020EE  9800              :         eora    <0
+0020F0  9900              :         adca    <0
+0020F2  9A00              :         ora     <0
+0020F4  9B00              :         adda    <0
+0020F6  9C00              :         cmpx    <0
+0020F8  9D00              :         jsr     <0
+0020FA  9E00              :         ldx     <0
+0020FC  9F00              :         stx     <0
                             
-0020C3  9000              :         suba    <0
-0020C5  9100              :         cmpa    <0
-0020C7  9200              :         sbca    <0
-0020C9  9300              :         subd    <0
-0020CB  9400              :         anda    <0
-0020CD  9500              :         bita    <0
-0020CF  9600              :         lda     <0
-0020D1  9700              :         sta     <0
-0020D3  9800              :         eora    <0
-0020D5  9900              :         adca    <0
-0020D7  9A00              :         ora     <0
-0020D9  9B00              :         adda    <0
-0020DB  9C00              :         cmpx    <0
-0020DD  9D00              :         jsr     <0
-0020DF  9E00              :         ldx     <0
-0020E1  9F00              :         stx     <0
+0020FE  A084              :         suba    ,x
+002100  A184              :         cmpa    ,x
+002102  A284              :         sbca    ,x
+002104  A384              :         subd    ,x
+002106  A484              :         anda    ,x
+002108  A584              :         bita    ,x
+00210A  A684              :         lda     ,x
+00210C  A784              :         sta     ,x
+00210E  A884              :         eora    ,x
+002110  A984              :         adca    ,x
+002112  AA84              :         ora     ,x
+002114  AB84              :         adda    ,x
+002116  AC84              :         cmpx    ,x
+002118  AD84              :         jsr     ,x
+00211A  AE84              :         ldx     ,x
+00211C  AF84              :         stx     ,x
                             
-0020E3  A000              :         suba    ,x
-0020E5  A100              :         cmpa    ,x
-0020E7  A200              :         sbca    ,x
-0020E9  A300              :         subd    ,x
-0020EB  A400              :         anda    ,x
-0020ED  A500              :         bita    ,x
-0020EF  A600              :         lda     ,x
-0020F1  A700              :         sta     ,x
-0020F3  A800              :         eora    ,x
-0020F5  A900              :         adca    ,x
-0020F7  AA00              :         ora     ,x
-0020F9  AB00              :         adda    ,x
-0020FB  AC00              :         cmpx    ,x
-0020FD  AD00              :         jsr     ,x
-0020FF  AE00              :         ldx     ,x
-002101  AF00              :         stx     ,x
+00211E  B00000            :         suba    >0
+002121  B10000            :         cmpa    >0
+002124  B20000            :         sbca    >0
+002127  B30000            :         subd    >0
+00212A  B40000            :         anda    >0
+00212D  B50000            :         bita    >0
+002130  B60000            :         lda     >0
+002133  B70000            :         sta     >0
+002136  B80000            :         eora    >0
+002139  B90000            :         adca    >0
+00213C  BA0000            :         ora     >0
+00213F  BB0000            :         adda    >0
+002142  BC0000            :         cmpx    >0
+002145  BD0000            :         jsr     >0
+002148  BE0000            :         ldx     >0
+00214B  BF0000            :         stx     >0
                             
-002103  B00000            :         suba    >0
-002106  B10000            :         cmpa    >0
-002109  B20000            :         sbca    >0
+00214E  C012              :         subb    #$12
+002150  C112              :         cmpb    #$12
+002152  C212              :         sbcb    #$12
 
 Portable Motorola 6809 Assembler [18.03]
 
-00210C  B30000            :         subd    >0
-00210F  B40000            :         anda    >0
-002112  B50000            :         bita    >0
-002115  B60000            :         lda     >0
-002118  B70000            :         sta     >0
-00211B  B80000            :         eora    >0
-00211E  B90000            :         adca    >0
-002121  BA0000            :         ora     >0
-002124  BB0000            :         adda    >0
-002127  BC0000            :         cmpx    >0
-00212A  BD0000            :         jsr     >0
-00212D  BE0000            :         ldx     >0
-002130  BF0000            :         stx     >0
-                            
-002133  C012              :         subb    #$12
-002135  C112              :         cmpb    #$12
-002137  C212              :         sbcb    #$12
-002139  C31234            :         addd    #$1234
-00213C  C412              :         andb    #$12
-00213E  C512              :         bitb    #$12
-002140  C612              :         ldb     #$12
+002154  C31234            :         addd    #$1234
+002157  C412              :         andb    #$12
+002159  C512              :         bitb    #$12
+00215B  C612              :         ldb     #$12
                             ;       *
-002142  C812              :         eorb    #$12
-002144  C912              :         adcb    #$12
-002146  CA12              :         orb     #$12
-002148  CB12              :         addb    #$12
-00214A  CC1234            :         ldd     #$1234
+00215D  C812              :         eorb    #$12
+00215F  C912              :         adcb    #$12
+002161  CA12              :         orb     #$12
+002163  CB12              :         addb    #$12
+002165  CC1234            :         ldd     #$1234
                             ;       *
-00214D  CE1234            :         ldu     #$1234
+002168  CE1234            :         ldu     #$1234
                             ;       *
                             
-002150  D000              :         subb    <0
-002152  D100              :         cmpb    <0
-002154  D200              :         sbcb    <0
-002156  D300              :         addd    <0
-002158  D400              :         andb    <0
-00215A  D500              :         bitb    <0
-00215C  D600              :         ldb     <0
-00215E  D700              :         stb     <0
-002160  D800              :         eorb    <0
-002162  D900              :         adcb    <0
-002164  DA00              :         orb     <0
-002166  DB00              :         addb    <0
-002168  DC00              :         ldd     <0
-00216A  DD00              :         std     <0
-00216C  DE00              :         ldu     <0
-00216E  DF00              :         stu     <0
+00216B  D000              :         subb    <0
+00216D  D100              :         cmpb    <0
+00216F  D200              :         sbcb    <0
+002171  D300              :         addd    <0
+002173  D400              :         andb    <0
+002175  D500              :         bitb    <0
+002177  D600              :         ldb     <0
+002179  D700              :         stb     <0
+00217B  D800              :         eorb    <0
+00217D  D900              :         adcb    <0
+00217F  DA00              :         orb     <0
+002181  DB00              :         addb    <0
+002183  DC00              :         ldd     <0
+002185  DD00              :         std     <0
+002187  DE00              :         ldu     <0
+002189  DF00              :         stu     <0
                             
-002170  E000              :         subb    ,x
-002172  E100              :         cmpb    ,x
-002174  E200              :         sbcb    ,x
-002176  E300              :         addd    ,x
-002178  E400              :         andb    ,x
-00217A  E500              :         bitb    ,x
+00218B  E084              :         subb    ,x
+00218D  E184              :         cmpb    ,x
+00218F  E284              :         sbcb    ,x
+002191  E384              :         addd    ,x
+002193  E484              :         andb    ,x
+002195  E584              :         bitb    ,x
+002197  E684              :         ldb     ,x
+002199  E784              :         stb     ,x
+00219B  E884              :         eorb    ,x
+00219D  E984              :         adcb    ,x
+00219F  EA84              :         orb     ,x
+0021A1  EB84              :         addb    ,x
+0021A3  EC84              :         ldd     ,x
+0021A5  ED84              :         std     ,x
+0021A7  EE84              :         ldu     ,x
+0021A9  EF84              :         stu     ,x
+                            
+0021AB  F00000            :         subb    >0
+0021AE  F10000            :         cmpb    >0
+0021B1  F20000            :         sbcb    >0
+0021B4  F30000            :         addd    >0
+0021B7  F40000            :         andb    >0
+0021BA  F50000            :         bitb    >0
 
 Portable Motorola 6809 Assembler [18.03]
 
-00217C  E600              :         ldb     ,x
-00217E  E700              :         stb     ,x
-002180  E800              :         eorb    ,x
-002182  E900              :         adcb    ,x
-002184  EA00              :         orb     ,x
-002186  EB00              :         addb    ,x
-002188  EC00              :         ldd     ,x
-00218A  ED00              :         std     ,x
-00218C  EE00              :         ldu     ,x
-00218E  EF00              :         stu     ,x
+0021BD  F60000            :         ldb     >0
+0021C0  F70000            :         stb     >0
+0021C3  F80000            :         eorb    >0
+0021C6  F90000            :         adcb    >0
+0021C9  FA0000            :         orb     >0
+0021CC  FB0000            :         addb    >0
+0021CF  FC0000            :         ldd     >0
+0021D2  FD0000            :         std     >0
+0021D5  FE0000            :         ldu     >0
+0021D8  FF0000            :         stu     >0
                             
-002190  F00000            :         subb    >0
-002193  F10000            :         cmpb    >0
-002196  F20000            :         sbcb    >0
-002199  F30000            :         addd    >0
-00219C  F40000            :         andb    >0
-00219F  F50000            :         bitb    >0
-0021A2  F60000            :         ldb     >0
-0021A5  F70000            :         stb     >0
-0021A8  F80000            :         eorb    >0
-0021AB  F90000            :         adcb    >0
-0021AE  FA0000            :         orb     >0
-0021B1  FB0000            :         addb    >0
-0021B4  FC0000            :         ldd     >0
-0021B7  FD0000            :         std     >0
-0021BA  FE0000            :         ldu     >0
-0021BD  FF0000            :         stu     >0
-                            
-0021C0  1021003C          :         lbrn    target2
-0021C4  10220038          :         lbhi    target2
-0021C8  10230034          :         lbls    target2
-0021CC  10240030          :         lbhs    target2
-0021D0  1024002C          :         lbcc    target2
-0021D4  10250028          :         lblo    target2
-0021D8  10250024          :         lbcs    target2
-0021DC  10260020          :         lbne    target2
-0021E0  1027001C          :         lbeq    target2
-0021E4  10280018          :         lbvc    target2
-0021E8  10290014          :         lbvs    target2
-0021EC  102A0010          :         lbpl    target2
-0021F0  102B000C          :         lbmi    target2
-0021F4  102C0008          :         lbge    target2
-0021F8  102E0004          :         lbgt    target2
-0021FC  102F0000          :         lble    target2
+0021DB  1021003C          :         lbrn    target2
+0021DF  10220038          :         lbhi    target2
+0021E3  10230034          :         lbls    target2
+0021E7  10240030          :         lbhs    target2
+0021EB  1024002C          :         lbcc    target2
+0021EF  10250028          :         lblo    target2
+0021F3  10250024          :         lbcs    target2
+0021F7  10260020          :         lbne    target2
+0021FB  1027001C          :         lbeq    target2
+0021FF  10280018          :         lbvc    target2
+002203  10290014          :         lbvs    target2
+002207  102A0010          :         lbpl    target2
+00220B  102B000C          :         lbmi    target2
+00220F  102C0008          :         lbge    target2
+002213  102E0004          :         lbgt    target2
+002217  102F0000          :         lble    target2
                             target2:
-002200  103F              :         swi2
-002202  10831234          :         cmpd    #$1234
-002206  108C1234          :         cmpy    #$1234
-00220A  108E1234          :         ldy     #$1234
-00220E  109300            :         cmpd    <0
-002211  109C00            :         cmpy    <0
-002214  109E00            :         ldy     <0
-002217  10A300            :         cmpd    ,x
-00221A  10AC00            :         cmpy    ,x
+00221B  103F              :         swi2
+00221D  10831234          :         cmpd    #$1234
+002221  108C1234          :         cmpy    #$1234
+002225  108E1234          :         ldy     #$1234
+002229  109300            :         cmpd    <0
+00222C  109C00            :         cmpy    <0
+00222F  109E00            :         ldy     <0
+002232  10A384            :         cmpd    ,x
+002235  10AC84            :         cmpy    ,x
+002238  10AE84            :         ldy     ,x
+00223B  10B30000          :         cmpd    >0
+00223F  10BC0000          :         cmpy    >0
+002243  10BE0000          :         ldy     >0
+002247  10CE1234          :         lds     #$1234
+00224B  10DE00            :         lds     <0
+00224E  10DF00            :         sts     <0
+002251  10EE84            :         lds     ,x
+002254  10EF84            :         sts     ,x
+002257  10FE0000          :         lds     >0
+00225B  10FF0000          :         sts     >0
+00225F  113F              :         swi3
+002261  11831234          :         cmpu    #$1234
+002265  118C1234          :         cmps    #$1234
+002269  119300            :         cmpu    <0
+00226C  119C00            :         cmps    <0
+00226F  11A384            :         cmpu    ,x
 
 Portable Motorola 6809 Assembler [18.03]
 
-00221D  10AE00            :         ldy     ,x
-002220  10B30000          :         cmpd    >0
-002224  10BC0000          :         cmpy    >0
-002228  10BE0000          :         ldy     >0
-00222C  10CE1234          :         lds     #$1234
-002230  10DE00            :         lds     <0
-002233  10DF00            :         sts     <0
-002236  10EE00            :         lds     ,x
-002239  10EF00            :         sts     ,x
-00223C  10FE0000          :         lds     >0
-002240  10FF0000          :         sts     >0
-002244  113F              :         swi3
-002246  11831234          :         cmpu    #$1234
-00224A  118C1234          :         cmps    #$1234
-00224E  119300            :         cmpu    <0
-002251  119C00            :         cmps    <0
-002254  11A300            :         cmpu    ,x
-002257  11AC00            :         cmps    ,x
-00225A  11B30000          :         cmpu    >0
-00225E  11BC0000          :         cmps    >0
+002272  11AC84            :         cmps    ,x
+002275  11B30000          :         cmpu    >0
+002279  11BC0000          :         cmps    >0
+                                    
+                            ;===============================================================================
+                            ; Pushes and Transfers
+                            ;-------------------------------------------------------------------------------
+                            
+00227D  1E98              :         exg     b,a
+00227F  1EBA              :         exg     dp,cc
+002281  1E21              :         exg     y,x
+002283  1E05              :         exg     d,pc
+002285  1E34              :         exg     u,s
+                                    
+002287  34F0              :         pshs    pc,u,x,y
+002289  340F              :         pshs    dp,b,a,cc
+00228B  37F0              :         pulu    pc,s,x,y
+00228D  370F              :         pulu    dp,b,a,cc
+                                    
+00228F  1F89              :         tfr     a,b
+002291  1FAB              :         tfr     cc,dp
+002293  1F12              :         tfr     x,y
+002295  1F43              :         tfr     s,u
+002297  1F50              :         tfr     pc,d
                             
                             ;===============================================================================
                             ; Indexed Addressing modes
@@ -598,10 +659,136 @@ Portable Motorola 6809 Assembler [18.03]
                                     
                                     .org    $3000
                                     
-003000  A600              :         lda     ,x
-003002  A600              :         lda     ,y
+003000  A684              :         lda     ,x
+003002  A6A4              :         lda     ,y
+003004  A6E4              :         lda     ,s
+003006  A6C4              :         lda     ,u
+                                    
+003008  A610              :         lda     -16,x
+00300A  A60F              :         lda     15,x
+00300C  A630              :         lda     -16,y
+00300E  A62F              :         lda     15,y
+003010  A670              :         lda     -16,s
+003012  A66F              :         lda     15,s
+003014  A650              :         lda     -16,u
+003016  A64F              :         lda     15,u
                             
+003018  A68880            :         lda     -128,x
+00301B  A6887F            :         lda     127,x
+00301E  A6A880            :         lda     -128,y
+003021  A6A87F            :         lda     127,y
+003024  A6E880            :         lda     -128,s
+003027  A6E87F            :         lda     127,s
+00302A  A6C880            :         lda     -128,u
+00302D  A6C87F            :         lda     127,u
                             
+
+Portable Motorola 6809 Assembler [18.03]
+
+003030  A6898000          :         lda     -32768,x
+003034  A6897FFF          :         lda     32767,x
+003038  A6A98000          :         lda     -32768,y
+00303C  A6A97FFF          :         lda     32767,y
+003040  A6E98000          :         lda     -32768,s
+003044  A6E97FFF          :         lda     32767,s
+003048  A6C98000          :         lda     -32768,u
+00304C  A6C97FFF          :         lda     32767,u
+                            
+003050  A686              :         lda     a,x
+003052  A6A6              :         lda     a,y
+003054  A6E6              :         lda     a,s
+003056  A6C6              :         lda     a,u
+003058  A685              :         lda     b,x
+00305A  A6A5              :         lda     b,y
+00305C  A6E5              :         lda     b,s
+00305E  A6C5              :         lda     b,u
+003060  A68B              :         lda     d,x
+003062  A6AB              :         lda     d,y
+003064  A6EB              :         lda     d,s
+003066  A6CB              :         lda     d,u
+                                    
+003068  A682              :         lda     ,x+
+00306A  A6A2              :         lda     ,y+
+00306C  A6E2              :         lda     ,s+
+00306E  A6C2              :         lda     ,u+
+003070  A681              :         lda     ,x++
+003072  A6A1              :         lda     ,y++
+003074  A6E1              :         lda     ,s++
+003076  A6C1              :         lda     ,u++
+003078  A682              :         lda     ,-x
+00307A  A6A2              :         lda     ,-y
+00307C  A6E2              :         lda     ,-s
+00307E  A6C2              :         lda     ,-u
+003080  A683              :         lda     ,--x
+003082  A6A3              :         lda     ,--y
+003084  A6E3              :         lda     ,--s
+003086  A6C3              :         lda     ,--u
+                                    
+003088  A69CFD            :         lda     <$,pcr
+00308B  A69DFFFC          :         lda     >$,pcr
+                                    
+00308F  A694              :         lda     [,x]
+003091  A6B4              :         lda     [,y]
+003093  A6F4              :         lda     [,s]
+003095  A6D4              :         lda     [,u]
+                            
+003097  A698F0            :         lda     [-16,x]
+00309A  A6980F            :         lda     [15,x]
+00309D  A6B8F0            :         lda     [-16,y]
+0030A0  A6B80F            :         lda     [15,y]
+0030A3  A6F8F0            :         lda     [-16,s]
+0030A6  A6F80F            :         lda     [15,s]
+0030A9  A6D8F0            :         lda     [-16,u]
+
+Portable Motorola 6809 Assembler [18.03]
+
+0030AC  A6D80F            :         lda     [15,u]
+                            
+0030AF  A69880            :         lda     [-128,x]
+0030B2  A6987F            :         lda     [127,x]
+0030B5  A6B880            :         lda     [-128,y]
+0030B8  A6B87F            :         lda     [127,y]
+0030BB  A6F880            :         lda     [-128,s]
+0030BE  A6F87F            :         lda     [127,s]
+0030C1  A6D880            :         lda     [-128,u]
+0030C4  A6D87F            :         lda     [127,u]
+                            
+0030C7  A6998000          :         lda     [-32768,x]
+0030CB  A6997FFF          :         lda     [32767,x]
+0030CF  A6B98000          :         lda     [-32768,y]
+0030D3  A6B97FFF          :         lda     [32767,y]
+0030D7  A6F98000          :         lda     [-32768,s]
+0030DB  A6F97FFF          :         lda     [32767,s]
+0030DF  A6D98000          :         lda     [-32768,u]
+0030E3  A6D97FFF          :         lda     [32767,u]
+                            
+0030E7  A696              :         lda     [a,x]
+0030E9  A6B6              :         lda     [a,y]
+0030EB  A6F6              :         lda     [a,s]
+0030ED  A6D6              :         lda     [a,u]
+0030EF  A695              :         lda     [b,x]
+0030F1  A6B5              :         lda     [b,y]
+0030F3  A6F5              :         lda     [b,s]
+0030F5  A6D5              :         lda     [b,u]
+0030F7  A69B              :         lda     [d,x]
+0030F9  A6BB              :         lda     [d,y]
+0030FB  A6FB              :         lda     [d,s]
+0030FD  A6DB              :         lda     [d,u]
+                            
+0030FF  A691              :         lda     [,x++]
+003101  A6B1              :         lda     [,y++]
+003103  A6F1              :         lda     [,s++]
+003105  A6D1              :         lda     [,u++]
+003107  A693              :         lda     [,--x]
+003109  A6B3              :         lda     [,--y]
+00310B  A6F3              :         lda     [,--s]
+00310D  A6D3              :         lda     [,--u]
+                            
+00310F  A69CFD            :         lda     <[$,pcr]
+003112  A69DFFFC          :         lda     >[$,pcr]
+                                    
+003116  A69F0012          :         lda     [$12]
+00311A  A69F1234          :         lda     [$1234]
                             
                                     .end
 
@@ -610,6 +797,6 @@ Portable Motorola 6809 Assembler [18.03]
 
 Symbol Table
 
-branch                           0000204C  | label                            0000108B 
-label                            0000108B  | branch                           0000204C 
-target2                          00002200  | target2                          00002200 
+branch                           00002050  | label                            0000108B 
+label                            0000108B  | branch                           00002050 
+target2                          0000221B  | target2                          0000221B 

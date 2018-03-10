@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2017 Andrew John Jacobs.
+ * Copyright (C),2017-2018 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -129,6 +129,144 @@ public class As6809 extends Assembler
 	 */
 	protected final Token 	PCR
 		= new Token (KEYWORD, "PCR");
+	
+	
+	protected class PushPull extends Opcode
+	{
+		public PushPull (String text, final Token sp, int prefix, int opcode)
+		{
+			super (KEYWORD, text);
+			
+			this.sp     = sp;
+			this.prefix = prefix;
+			this.opcode = opcode;
+		}
+		
+		@Override
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			
+			if (token == HASH) {
+				token = nextRealToken ();
+				Expr expr = parseExpr ();
+				
+				if (expr != null)
+					genDirect (prefix, opcode, expr);
+				else
+					error (ERR_MISSING_EXPRESSION);
+			}
+			else {
+				int			bits = 0x00;
+				
+				do {
+					if (token == PC) 		bits |= 0x80;
+					else if (token == sp) 	bits |= 0x40;
+					else if (token == Y) 	bits |= 0x20;
+					else if (token == X) 	bits |= 0x10;
+					else if (token == DP) 	bits |= 0x08;
+					else if (token == B) 	bits |= 0x04;
+					else if (token == A) 	bits |= 0x02;
+					else if (token == CC) 	bits |= 0x01;
+					else {
+						error ("Invalid register in push/pull list");
+						return (true);
+					}
+					
+					if ((token = nextRealToken ()) == COMMA)
+						token = nextRealToken ();
+					else
+						break;
+				} while (token != EOL);
+				
+				genDirect (prefix, opcode, new Value (null, bits));
+			}
+			
+			return (true);
+		}
+		
+		private final Token sp;
+		
+		private final int	prefix;
+		
+		private final int	opcode;
+	}
+	
+	protected class ExchangeOrTransfer extends Opcode
+	{
+
+		public ExchangeOrTransfer (String text, int prefix, int opcode)
+		{
+			super (KEYWORD, text);
+
+			this.prefix = prefix;
+			this.opcode = opcode;
+		}
+		
+		@Override
+		public boolean compile ()
+		{
+			Token 	src 	= nextRealToken ();
+			Token 	dst;
+			
+			if (isByte (src) || isWord (src)) {
+				if ((token = nextRealToken ()) == COMMA) {
+					dst = nextRealToken ();
+					if (isByte (dst) || isWord (dst)) {
+						if ((isByte (src) && isWord (dst)) || (isWord (src) && isByte (dst)))
+							error ("Registers are different sizes");
+						
+						genDirect (prefix, opcode, new Value (null, mapRegister (src) << 4 | mapRegister (dst)));
+					}
+					else {
+						error ("Invalid second register");
+						return (true);
+					}
+				}
+				else {
+					error ("Expected R1,R2");
+					return (true);
+				}
+					
+			}
+			else {
+				error ("Invalid first register");
+				return (true);
+			}
+			
+			return (true);
+		}
+		
+		private final int	prefix;
+		
+		private final int	opcode;
+		
+		private boolean isByte (Token reg)
+		{
+			return ((reg == A) || (reg == B) || (reg == DP) || (reg == CC));
+		}
+
+		private boolean isWord (Token reg)
+		{
+			return ((reg == D) || (reg == X) || (reg == Y) || (reg == S) || (reg == U) || (reg == PC));
+		}
+		
+		private int mapRegister (Token reg)
+		{
+			if (reg == D) 	return (0);
+			if (reg == X) 	return (1);
+			if (reg == Y) 	return (2);
+			if (reg == U) 	return (3);
+			if (reg == S) 	return (4);
+			if (reg == PC) 	return (5);
+			if (reg == A) 	return (8);
+			if (reg == B) 	return (9);
+			if (reg == CC) 	return (10);
+			if (reg == DP) 	return (11);
+			
+			return (15);
+		}
+	}
 	
 	protected final Opcode ABX	= new Opcode (KEYWORD, "ABX")
 			{
@@ -1146,6 +1284,8 @@ public class As6809 extends Assembler
 					return (true);
 				}
 			};
+			
+	protected final Opcode EXG  = new ExchangeOrTransfer ("EXG", 0x00, 0x1e);
 	
 	protected final Opcode INC 	= new Opcode (KEYWORD, "INC")
 			{
@@ -2019,8 +2159,13 @@ public class As6809 extends Assembler
 				}
 			};
 	
-// PSH
-// PUL
+	protected final Opcode PSHS = new PushPull ("PSHS", U, 0x00, 0x34);
+	
+	protected final Opcode PSHU = new PushPull ("PSHU", S, 0x00, 0x36);
+	
+	protected final Opcode PULS = new PushPull ("PULS", U, 0x00, 0x35);
+	
+	protected final Opcode PULU = new PushPull ("PULU", S, 0x00, 0x37);
 
 	protected final Opcode ROL 	= new Opcode (KEYWORD, "ROL")
 			{
@@ -2480,8 +2625,8 @@ public class As6809 extends Assembler
 				}
 			};
 			
-// TFR
-			
+	protected final Opcode TFR  = new ExchangeOrTransfer ("TFR", 0x00, 0x1f);
+	
 	protected final Opcode TST 	= new Opcode (KEYWORD, "TST")
 			{
 				@Override
@@ -2534,10 +2679,6 @@ public class As6809 extends Assembler
 					return (true);
 				}
 			};
-	
-
-
-	
 	
 	/**
 	 * Constructs an <CODE>As8080</CODE> instance and initialises the object
@@ -2649,7 +2790,7 @@ public class As6809 extends Assembler
 		addToken (DECB);
 		addToken (EORA);
 		addToken (EORB);
-//		addToken (EXG);
+		addToken (EXG);
 		addToken (INC);
 		addToken (INCA);
 		addToken (INCB);
@@ -2699,8 +2840,10 @@ public class As6809 extends Assembler
 		addToken (ORA);
 		addToken (ORB);
 		addToken (ORCC);
-//		addToken (PSH);
-//		addToken (PUL);
+		addToken (PSHS);
+		addToken (PSHU);
+		addToken (PULS);
+		addToken (PULU);
 		addToken (ROL);
 		addToken (ROLA);
 		addToken (ROLB);
@@ -2726,7 +2869,7 @@ public class As6809 extends Assembler
 		addToken (SWI2);
 		addToken (SWI3);
 		addToken (SYNC);
-//		addToken (TFR);
+		addToken (TFR);
 		addToken (TST);
 		addToken (TSTA);
 		addToken (TSTB);
@@ -3233,6 +3376,8 @@ public class As6809 extends Assembler
 		boolean forceByte = false;
 		boolean forceWord = false;
 		
+		postByte = 0x00;
+		
 		if (token == EOL) return (INHR);
 		
 		// Handle Immediate
@@ -3251,12 +3396,8 @@ public class As6809 extends Assembler
 			
 			return (IMMD);
 		}
-		
-		if (token == A) {
-			
-		}
-		
-		// Handle <.. and >..
+				
+		// Handle < and >
 		if (token == LT) {
 			forceByte = true;
 			token = nextRealToken ();
@@ -3268,76 +3409,182 @@ public class As6809 extends Assembler
 				
 		// Handle extended indirect [..]
 		if (token == LBRACKET) {
+			token = nextRealToken ();
 			
-			// TODO
+			if (parseIndex (true, forceByte, forceWord))
+				postByte |= 0x10;
+			else
+				postByte = 0x9f;
+			
+			if (token == RBRACKET)
+				token = nextRealToken ();
+			else
+				error ("Expected closing indirect bracket");
 			
 			return (INDX);
 		}
 		
-		// Extract address or default to zero
+		if (parseIndex (false, forceByte, forceWord)) {
+		
+			
+			return (INDX);
+		}
+		else {
+			// Handle ..
+			if (forceByte) return (DRCT);
+			if (forceWord) return (EXTD);
+			
+			if (arg.isAbsolute()) {
+				int addr = (int) arg.resolve (null, null);
+				
+				if ((addr & 0xff00) == directPage) return (DRCT);
+			}
+			return (EXTD);
+		}
+	}
+	
+	private boolean parseIndex (boolean indirect, boolean forceByte, boolean forceWord)
+	{
+		if ((token == A) || (token == B) || (token == D)) {
+			if (token == A) postByte |= 0x86;
+			if (token == B) postByte |= 0x85;
+			if (token == D) postByte |= 0x8b;
+			
+			if ((token = nextRealToken ()) == COMMA) {
+				token = nextRealToken ();
+				
+				if ((token == X) || (token == Y) || (token == S) || (token == U)) {
+					if (token == X) postByte |= 0x00;
+					if (token == Y) postByte |= 0x20;
+					if (token == U) postByte |= 0x40;					
+					if (token == S) postByte |= 0x60;
+					
+					token = nextRealToken ();
+				}
+				else
+					error ("Expected X, Y, U or S");
+			}
+			else
+				error ("Expected comma after A, B or D");
+				
+			return (true);
+		}
+		
 		if (token != COMMA)
 			arg = parseExpr ();
 		else
 			arg = ZERO;
-		
+			
 		// Handle ,PCR ,X|Y|U|S ,-X|Y|U|S ,--X|Y|U|S ,X|Y|U|S+ ,X|Y|U|S++
 		if (token == COMMA) {
-			Token		register;
-			
 			// ,PCR
 			token = nextRealToken ();
 			if (token == PCR) {
-				Expr dist = Expr.sub (arg, getOrigin ());
-				if (dist.isAbsolute() && (dist.resolve () >= -128) && (dist.resolve () <= 127))
+				Expr dist3 = Expr.sub (arg, Expr.add (getOrigin (), THREE));
+				Expr dist4 = Expr.sub (arg, Expr.add (getOrigin (), FOUR));
+
+				if (forceByte) {
+					postByte = 0x9c;
+					arg = dist3;
+				}
+				else if (forceWord) {
+					postByte = 0x9d; 
+					arg = dist4;
+				}
+				else if (dist3.isAbsolute() && (dist3.resolve () >= -128) && (dist3.resolve () <= 127)) {
 					postByte = 0x9c; 
-				else
+					arg = dist3;
+				}
+				else {
 					postByte = 0x9d;
+					arg = dist4;
+				}
 				
-				return (INDX);
+				token = nextRealToken ();				
+				return (true);
 			}
 			
+			// Pre-Decrement
 			if (token == MINUS) {
+				if (arg.isRelative () || (arg.resolve () != 0))
+					error ("Offset must be zero or omitted");				
+				
 				token = nextRealToken ();
-				// auto dec
 				if (token == MINUS) {
 					token = nextRealToken ();
-					// auto dec2
+					postByte |= 0x83;
 				}
+				else {
+					if (indirect) error ("Pre-decrement by one not allowed when indirect");
+					postByte |= 0x82;
+				}
+				
+				if ((token == X) || (token == Y) || (token == S) || (token == U)) {
+					if (token == X) postByte |= 0x00;
+					if (token == Y) postByte |= 0x20;
+					if (token == U) postByte |= 0x40;					
+					if (token == S) postByte |= 0x60;
+					
+					token = nextRealToken ();
+				}
+				else
+					error ("Expected X, Y, U or S");
+				
+				return (true);
 			}
 			
-			if ((token == X)|(token == Y)|(token == U)|(token == S)) {
-				register = token;
+			if ((token == X) || (token == Y) || (token == S) || (token == U)) {
+				if (token == X) postByte |= 0x00;
+				if (token == Y) postByte |= 0x20;
+				if (token == U) postByte |= 0x40;					
+				if (token == S) postByte |= 0x60;
+				
 				token = nextRealToken ();
 			}
 			else
-				error ("Expected X, Y, U or S");
+				error ("Expected X, Y, U, S or PCR");
 
+			// Post-increment
 			if (token == PLUS) {
+				if (arg.isRelative () || (arg.resolve () != 0))
+					error ("Offset must be zero or omitted");				
+				
 				token = nextRealToken ();
-				// auto inc
 				if (token == PLUS) {
 					token = nextRealToken ();
-					// auto inc2
+					postByte |= 0x81;
 				}
+				else {
+					if (indirect) error ("Post-increment by one not allowed when indirect");
+					postByte |= 0x82;
+				}
+				
+				return (true);
 			}
-			return (INDX);
-		}
-	
-		// Handle ..
-		if (forceByte) return (DRCT);
-		if (forceWord) return (EXTD);
-		
-		if (arg.isAbsolute()) {
-			int addr = (int) arg.resolve (null, null);
 			
-			if ((addr & 0xff00) == directPage) return (DRCT);
-		}
-		return (EXTD);
-	}
-	
-	private void parseIndex ()
-	{
+			if (forceByte) {
+				postByte |= 0x88;
+				return (true);
+			}
+			if (forceWord || arg.isRelative ()) {
+				postByte |= 0x89;
+				return (true);
+			}
 		
+			long offset = arg.resolve ();
+			
+			if (offset == 0)
+				postByte |= 0x84;
+			else if (!indirect && ((offset >= -16) && (offset <= 15)))
+				postByte |= offset & 0x1f;
+			else if ((offset >= -128) && (offset <= 127))
+				postByte |= 0x88;
+			else 
+				postByte |= 0x89;
+
+			return (true);
+		}
+		return (false);
 	}
 	
 	/**
@@ -3447,7 +3694,12 @@ public class As6809 extends Assembler
 		addByte (postByte);
 		
 		if (expr != null) {
-			
+			switch (postByte & 0x9f) {
+			case 0x88: case 0x8c: case 0x98: case 0x9c:
+				addByte (expr); break;
+			case 0x89: case 0x8d: case 0x99: case 0x9d: case 0x9f:
+				addWord (expr); break;			
+			}
 		}
 	}
 }
