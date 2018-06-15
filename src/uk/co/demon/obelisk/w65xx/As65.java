@@ -258,7 +258,7 @@ public final class As65 extends Assembler
 		 */
 		public boolean compile ()
 		{
-			setSection (page0);
+			setSection (".page0");
 			return (false);
 		}
 	};
@@ -4236,12 +4236,12 @@ public final class As65 extends Assembler
 		bitsA		= 8;
 		bitsI		= 8;
 		
-		page0 		= getModule ().findSection (".page0");
+		sections.put (".page0", getModule ().findSection (".page0"));
 		
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [17.12]";
+		title 		= "Portable 65xx Assembler [18.06]";
 	}
 	
 	/**

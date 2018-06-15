@@ -68,7 +68,7 @@ public final class As65016 extends Assembler
 		 */
 		public boolean compile ()
 		{
-			setSection (page0);
+			setSection (".page0");
 			return (false);
 		}
 	};
@@ -2446,12 +2446,12 @@ public final class As65016 extends Assembler
 	{
 		super.startPass ();
 						
-		page0 		= getModule ().findSection (".page0");
+		sections.put (".page0", getModule ().findSection (".page0"));
 		
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65016 Assembler - V1.0 (2011-11-19)";
+		title 		= "Portable 65016 Assembler - [18.06]";
 	}
 	
 	/**

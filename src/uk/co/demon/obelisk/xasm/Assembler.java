@@ -33,6 +33,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
@@ -1074,7 +1075,7 @@ public abstract class Assembler extends Application
 		 */
 		public boolean compile ()
 		{
-			section = code;
+			setSection (".code");
 			return (false);
 		}
 	};
@@ -1089,7 +1090,7 @@ public abstract class Assembler extends Application
 		 */
 		public boolean compile ()
 		{
-			section = data;
+			setSection (".data");
 			return (false);
 		}
 	};
@@ -1104,7 +1105,7 @@ public abstract class Assembler extends Application
 		 */
 		public boolean compile ()
 		{
-			section = bss;
+			setSection (".bss");
 			return (false);
 		}
 	};
@@ -1123,7 +1124,7 @@ public abstract class Assembler extends Application
 			Expr expr = parseExpr ();
 			
 			if ((expr != null) && expr.isAbsolute ()) {
-				section = section.setOrigin (expr.resolve (null, null));
+				sections.put(sectionName, section = section.setOrigin (expr.resolve (null, null)));
 			}
 			else
 				error (Error.ERR_CONSTANT_EXPR);
@@ -1277,9 +1278,14 @@ public abstract class Assembler extends Application
 	 */
 	protected String			title;
 	
-	
 	protected MemoryModel		memory = null;
 	
+	/**
+	 * The collection of named sections.
+	 */
+	protected Hashtable<String,Section> sections
+		= new Hashtable<String,Section> ();
+
 	/**
 	 * Constructs an <CODE>Assembler</CODE> that adds code to the given module.
 	 * 
@@ -1396,9 +1402,10 @@ public abstract class Assembler extends Application
 		lineCount = 0;
 		throwPage = false;
 		
-		code = module.findSection (".code");
-		data = module.findSection (".data");
-		bss  = module.findSection (".bss");
+		sections.clear ();
+		sections.put(".code", module.findSection (".code"));
+		sections.put(".data", module.findSection (".data"));
+		sections.put(".bss", module.findSection (".bss"));
 	}
 	
 	/**
@@ -1565,14 +1572,13 @@ public abstract class Assembler extends Application
 	}
 	
 	/**
-	 * Allows a derived class to modify the active section.
+	 * Allows a derived class to modify the active section name.
 	 * 
-	 * @param 	value			The section to activate.
+	 * @param 	name			The name of the section to activate.
 	 */
-	protected final void setSection (Section value)
+	protected final void setSection (String name)
 	{
-		section = value;
-		
+		section = sections.get (sectionName = name);
 	}
 	
 	/**
@@ -2268,20 +2274,7 @@ public abstract class Assembler extends Application
 	 */
 	private Section				section;
 	
-	/**
-	 * The default code section.
-	 */
-	private Section				code;
-	
-	/**
-	 * The default data section.
-	 */
-	private Section				data;
-	
-	/**
-	 * The default bss section.
-	 */
-	private Section				bss;
+	private String				sectionName	= null;
 	
 	/**
 	 * The current pass.
@@ -2411,13 +2404,14 @@ public abstract class Assembler extends Application
 		
 		errors 	  	= 0;
 		warnings  	= 0;
-		section	  	= code;
 		lastLabel 	= null;
 		
 		savedLines 	= null;
 		repeatDepth	= 0;
 		macroDepth	= 0;
 		instance    = 0;
+		
+		setSection (".code");
 		
 		try {
 			if (pass == Pass.FINAL) {
