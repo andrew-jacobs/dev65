@@ -495,6 +495,33 @@ public abstract class Assembler extends Application
 	};
 	
 	/**
+	 * An <CODE>Opcode</CODE> that handles .ALIGN directives
+	 */
+	protected final Token 		ALIGN	= new Opcode (KEYWORD, ".ALIGN")
+	{
+		/**
+		 * {@inheritDoc}
+		 */
+		public boolean compile ()
+		{
+			token = nextRealToken ();
+			Expr expr = parseExpr ();
+		
+			if (expr.isAbsolute ()) {
+				long	value = expr.resolve (null, null);
+				long	count = origin.resolve () % value;
+				
+				while ((count > 0) && (count++ != value))
+					addByte (0);
+			}
+			else
+				error (Error.ERR_CONSTANT_EXPR);
+			
+			return (true);
+		}
+	};
+	
+	/**
 	 * An <CODE>Opcode</CODE> that handles .DCB directives
 	 */
 	protected final Token 		DCB	= new Opcode (KEYWORD, ".DCB")

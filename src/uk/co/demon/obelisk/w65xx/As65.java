@@ -37,7 +37,6 @@ import uk.co.demon.obelisk.xasm.TokenKind;
 import uk.co.demon.obelisk.xobj.Expr;
 import uk.co.demon.obelisk.xobj.Hex;
 import uk.co.demon.obelisk.xobj.Module;
-import uk.co.demon.obelisk.xobj.Section;
 import uk.co.demon.obelisk.xobj.Value;
 
 /**
@@ -3932,6 +3931,7 @@ public final class As65 extends Assembler
 		addToken (WORD);
 		addToken (LONG);
 		addToken (SPACE);
+		addToken (ALIGN);
 		addToken (DCB);
 		addToken (CODE);
 		addToken (DATA);
@@ -5336,11 +5336,6 @@ public final class As65 extends Assembler
 	 * A <CODE>StringBuffer</CODE> used to format output.
 	 */
 	private StringBuffer			output 	= new StringBuffer ();
-	
-	/**
-	 * The default page0 section.
-	 */
-	private Section					page0;
 	
 	private int						ifIndex;
 	
