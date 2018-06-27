@@ -16,7 +16,7 @@ import uk.co.demon.obelisk.xide.swing.MenuManager;
 public class FrameWindow extends DesktopFrame
 {
 
-	protected FrameWindow ()
+	public FrameWindow ()
 	{
 		super ("uk.co.demon.obelisk.xide.FrameWindow");
 		// Construct the menu bar
@@ -120,13 +120,7 @@ public class FrameWindow extends DesktopFrame
 		pasteButton.setEnabled (false);
 		deleteButton.setEnabled (false);
 		
-		//viewXmlText.setEnabled (false);
-		//viewXmlTree.setEnabled (false);
-		
-		//toolsReformat.setEnabled (false);
-		//toolsValidate.setEnabled (false);
-		
-		contentPanel.add (BorderLayout.NORTH, toolBar);
+		//contentPanel.add (BorderLayout.NORTH, toolBar);
 			
 		frame.setSize (750, 570);
 		center ();

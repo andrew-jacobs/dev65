@@ -1,8 +1,8 @@
 package uk.co.demon.obelisk.w65xx;
 
-import uk.co.demon.obelisk.xide.IntegratedDevelopmentEnvironment;
+import uk.me.obelisk.xide.Environment;
 
-public final class Dev65 extends IntegratedDevelopmentEnvironment
+public final class Dev65 extends Environment
 {
 	public static void main (String [] arguments)
 	{
