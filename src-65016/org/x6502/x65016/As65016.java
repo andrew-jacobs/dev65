@@ -23,20 +23,19 @@
 package org.x6502.x65016;
 
 import java.util.Hashtable;
-import java.util.Vector;
 import java.util.Stack;
+import java.util.Vector;
 
 import uk.co.demon.obelisk.xasm.Assembler;
 import uk.co.demon.obelisk.xasm.ErrorHandler;
 import uk.co.demon.obelisk.xasm.MemoryModelShort;
-import uk.co.demon.obelisk.xasm.Pass;
 import uk.co.demon.obelisk.xasm.Opcode;
+import uk.co.demon.obelisk.xasm.Pass;
 import uk.co.demon.obelisk.xasm.Token;
 import uk.co.demon.obelisk.xasm.TokenKind;
 import uk.co.demon.obelisk.xobj.Expr;
 import uk.co.demon.obelisk.xobj.Hex;
 import uk.co.demon.obelisk.xobj.Module;
-import uk.co.demon.obelisk.xobj.Section;
 import uk.co.demon.obelisk.xobj.Value;
 
 /**
@@ -68,7 +67,7 @@ public final class As65016 extends Assembler
 		 */
 		public boolean compile ()
 		{
-			setSection (page0);
+			setSection (".page0");
 			return (false);
 		}
 	};
@@ -2446,12 +2445,12 @@ public final class As65016 extends Assembler
 	{
 		super.startPass ();
 						
-		page0 		= getModule ().findSection (".page0");
+		sections.put (".page0", getModule ().findSection (".page0"));
 		
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65016 Assembler - V1.0 (2011-11-19)";
+		title 		= "Portable 65016 Assembler - [18.06]";
 	}
 	
 	/**
@@ -3280,11 +3279,6 @@ public final class As65016 extends Assembler
 	 * A <CODE>StringBuffer</CODE> used to format output.
 	 */
 	private StringBuffer			output 	= new StringBuffer ();
-	
-	/**
-	 * The default page0 section.
-	 */
-	private Section					page0;
 	
 	private int						ifIndex;
 	

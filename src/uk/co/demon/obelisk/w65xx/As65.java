@@ -37,7 +37,6 @@ import uk.co.demon.obelisk.xasm.TokenKind;
 import uk.co.demon.obelisk.xobj.Expr;
 import uk.co.demon.obelisk.xobj.Hex;
 import uk.co.demon.obelisk.xobj.Module;
-import uk.co.demon.obelisk.xobj.Section;
 import uk.co.demon.obelisk.xobj.Value;
 
 /**
@@ -258,7 +257,7 @@ public final class As65 extends Assembler
 		 */
 		public boolean compile ()
 		{
-			setSection (page0);
+			setSection (".page0");
 			return (false);
 		}
 	};
@@ -3932,6 +3931,7 @@ public final class As65 extends Assembler
 		addToken (WORD);
 		addToken (LONG);
 		addToken (SPACE);
+		addToken (ALIGN);
 		addToken (DCB);
 		addToken (CODE);
 		addToken (DATA);
@@ -4236,12 +4236,12 @@ public final class As65 extends Assembler
 		bitsA		= 8;
 		bitsI		= 8;
 		
-		page0 		= getModule ().findSection (".page0");
+		sections.put (".page0", getModule ().findSection (".page0"));
 		
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [17.12]";
+		title 		= "Portable 65xx Assembler [18.06]";
 	}
 	
 	/**
@@ -5336,11 +5336,6 @@ public final class As65 extends Assembler
 	 * A <CODE>StringBuffer</CODE> used to format output.
 	 */
 	private StringBuffer			output 	= new StringBuffer ();
-	
-	/**
-	 * The default page0 section.
-	 */
-	private Section					page0;
 	
 	private int						ifIndex;
 	
