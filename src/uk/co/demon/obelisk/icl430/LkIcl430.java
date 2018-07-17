@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2014-2018 Andrew John Jacobs.
+ * Copyright (C),2013-2018 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -20,34 +20,41 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package uk.me.obelisk.xide;
+package uk.co.demon.obelisk.icl430;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import uk.co.demon.obelisk.xlnk.Linker;
 
-import com.javadocking.dock.Position;
-
-import uk.me.obelisk.xide.swing.DockableTree;
-import uk.me.obelisk.xide.swing.DockingFrame;
-
-public class ProjectView extends DockableTree
+/**
+ * The <CODE>LkIcl430</CODE> provides access to the base <CODE>Linker</CODE> code
+ * for the ICO 4-30 suite.
+ *
+ * @author 	Andrew Jacobs
+ */
+public final class LkIcl430 extends Linker
 {
-	public ProjectView (DockingFrame dockingFrame)
+	/**
+	 * Main program entry point.
+	 * 
+	 * @param arguments		Command line arguments.
+	 */
+	public static void main (String arguments [])
 	{
-		super ("project", "uk.me.obelisk.xide.ProjectView");
-		
-		root.insert (includes, 0);
-		root.insert (sources, 0);
-		root.insert (libraries, 0);
-		
-		dockingFrame.getLeftUpperTabbedDock ().addDockable (dockable, new Position (0));;
+		new LkIcl430 ().run (arguments);
 	}
-	
-	protected DefaultMutableTreeNode	includes
-		= new DefaultMutableTreeNode ("Includes");
-	
-	protected DefaultMutableTreeNode	sources
-		= new DefaultMutableTreeNode ("Sources");
-	
-	protected DefaultMutableTreeNode	libraries
-		= new DefaultMutableTreeNode ("Libraries");
+
+	/**
+	 * Constructs a <CODE>Lk65</CODE> instance.
+	 */
+	protected LkIcl430 ()
+	{
+		super (8);
+	}
+		
+	/**
+	 * {@inheritDoc}
+	 */
+	protected int getAddrSize ()
+	{
+		return (16);
+	}
 }

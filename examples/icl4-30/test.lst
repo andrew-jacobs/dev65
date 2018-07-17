@@ -1,0 +1,20 @@
+
+Portable ICL4-30 Assembler [18.07]
+
+                            
+                                            .code
+                                            
+                                            start   0
+000000' 050C              :                 balr    0,12
+                                            using   *,12
+                                            
+000002' 1E02              :                 alr     1,2
+                                            
+                                            
+                                            .end
+
+
+Portable ICL4-30 Assembler [18.07]
+
+Symbol Table
+

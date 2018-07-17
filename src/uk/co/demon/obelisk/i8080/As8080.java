@@ -53,7 +53,6 @@ public final class As8080 extends Assembler
 		new As8080 ().run (args);
 	}
 
-	
 	protected class ImpliedOpcode extends Opcode
 	{
 		public ImpliedOpcode (String text, int opcode)
