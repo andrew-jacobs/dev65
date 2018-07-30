@@ -162,6 +162,7 @@ COUNT	.SET	COUNT+1
 	BNE $+2
 	BPL $+2
 	BRK
+	BRK #$11
 	BVC $+2
 	BVS $+2
 	CLC
