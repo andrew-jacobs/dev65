@@ -1,0 +1,437 @@
+
+Portable MELPS 740 Assembler [18.10]
+
+                             ;===============================================================================
+                             ; As740 Opcode Test
+                             ;-------------------------------------------------------------------------------
+                             ; Copyright (C),2016-2018 Andrew John Jacobs.
+                             ;
+                             ; This program is provided free of charge for educational purposes
+                             ;
+                             ; Redistribution and use in binary form without modification, is permitted
+                             ; provided that the above copyright notice, this list of conditions and the
+                             ; following disclaimer in the documentation and/or other materials provided
+                             ; with the distribution.
+                             ;
+                             ; THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS 'AS IS' AND ANY
+                             ; EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+                             ; WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+                             ; DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
+                             ; DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+                             ; (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+                             ; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+                             ; ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+                             ; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+                             ; THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+                             ;-------------------------------------------------------------------------------
+                             ; Notes:
+                             ;
+                             ;
+                             ;===============================================================================
+                             
+         0000FF12          = SPC             .equ    $ff12           ; Special page address $FF00-$FFFF
+                             
+                                             .page0
+                                             .org    $12
+                             
+00:0012  00                : ZPG             .space  1
+                             
+                                             .bss
+                                             .org    $1234
+                                             
+00:1234  00                : ABS             .space  1
+                             
+                             
+                                             .data
+                                             
+00:0000' 01020304          :                 .byte   1,2,3,4
+00:0004' 6162636465        :                 .byte   "abcde"
+00:0009' 0100020003000400  :                 .word   1,2,3,4
+                             
+                             ;==============================================================================
+                             ; Opcodes
+                             ;------------------------------------------------------------------------------
+                             
+                                             .code
+                                             .org    $f000
+                             
+
+Portable MELPS 740 Assembler [18.10]
+
+                             Test:
+00:F000  6912              :                 adc     #ZPG
+00:F002  6512              :                 adc     ZPG
+00:F004  7512              :                 adc     ZPG,x
+00:F006  6D3412            :                 adc     ABS
+00:F009  7D3412            :                 adc     ABS,x
+00:F00C  793412            :                 adc     ABS,y
+00:F00F  6112              :                 adc     (ZPG,x)
+00:F011  7112              :                 adc     (ZPG),y
+                                             
+00:F013  2912              :                 and     #ZPG
+00:F015  2512              :                 and     ZPG
+00:F017  3512              :                 and     ZPG,x
+00:F019  2D3412            :                 and     ABS
+00:F01C  3D3412            :                 and     ABS,x
+00:F01F  393412            :                 and     ABS,y
+00:F022  2112              :                 and     (ZPG,x)
+00:F024  3112              :                 and     (ZPG),y
+                                             
+00:F026  0A                :                 asl     A
+00:F027  0612              :                 asl     ZPG
+00:F029  1612              :                 asl     ZPG,x
+00:F02B  0E3412            :                 asl     ABS
+00:F02E  1E3412            :                 asl     ABS,x
+                             
+                             .BBC
+00:F031  13FE              :                 bbc     0,A,.BBC
+00:F033  33FC              :                 bbc     1,A,.BBC
+00:F035  53FA              :                 bbc     2,A,.BBC
+00:F037  73F8              :                 bbc     3,A,.BBC
+00:F039  93F6              :                 bbc     4,A,.BBC
+00:F03B  B3F4              :                 bbc     5,A,.BBC
+00:F03D  D3F2              :                 bbc     6,A,.BBC
+00:F03F  F3F0              :                 bbc     7,A,.BBC
+00:F041  1712ED            :                 bbc     0,ZPG,.BBC
+00:F044  3712EA            :                 bbc     1,ZPG,.BBC
+00:F047  5712E7            :                 bbc     2,ZPG,.BBC
+00:F04A  7712E4            :                 bbc     3,ZPG,.BBC
+00:F04D  9712E1            :                 bbc     4,ZPG,.BBC
+00:F050  B712DE            :                 bbc     5,ZPG,.BBC
+00:F053  D712DB            :                 bbc     6,ZPG,.BBC
+00:F056  F712D8            :                 bbc     7,ZPG,.BBC
+                                             
+                             .BBS
+00:F059  03FE              :                 bbs     0,A,.BBS
+00:F05B  23FC              :                 bbs     1,A,.BBS
+00:F05D  43FA              :                 bbs     2,A,.BBS
+00:F05F  63F8              :                 bbs     3,A,.BBS
+00:F061  83F6              :                 bbs     4,A,.BBS
+00:F063  A3F4              :                 bbs     5,A,.BBS
+00:F065  C3F2              :                 bbs     6,A,.BBS
+00:F067  E3F0              :                 bbs     7,A,.BBS
+00:F069  0712ED            :                 bbs     0,ZPG,.BBS
+00:F06C  2712EA            :                 bbs     1,ZPG,.BBS
+
+Portable MELPS 740 Assembler [18.10]
+
+00:F06F  4712E7            :                 bbs     2,ZPG,.BBS
+00:F072  6712E4            :                 bbs     3,ZPG,.BBS
+00:F075  8712E1            :                 bbs     4,ZPG,.BBS
+00:F078  A712DE            :                 bbs     5,ZPG,.BBS
+00:F07B  C712DB            :                 bbs     6,ZPG,.BBS
+00:F07E  E712D8            :                 bbs     7,ZPG,.BBS
+                                             
+00:F081  90FE              :                 bcc     .
+                                             
+00:F083  B0FE              :                 bcs     .
+                                             
+00:F085  F0FE              :                 beq     .
+                                             
+00:F087  2412              :                 bit     ZPG
+00:F089  2C3412            :                 bit     ABS
+                                             
+00:F08C  30FE              :                 bmi     .
+                                             
+00:F08E  D0FE              :                 bne     .
+                                             
+00:F090  10FE              :                 bpl     .
+                                             
+00:F092  80FE              :                 bra     .
+                                             
+00:F094  00                :                 brk
+00:F095  000C              :                 brk     #12
+                                             
+00:F097  50FE              :                 bvc     .
+                                             
+00:F099  70FE              :                 bvs     .
+                                             
+00:F09B  1B                :                 clb     0,A
+00:F09C  3B                :                 clb     1,A
+00:F09D  5B                :                 clb     2,A
+00:F09E  7B                :                 clb     3,A
+00:F09F  9B                :                 clb     4,A
+00:F0A0  BB                :                 clb     5,A
+00:F0A1  DB                :                 clb     6,A
+00:F0A2  FB                :                 clb     7,A
+00:F0A3  1F12              :                 clb     0,ZPG
+00:F0A5  3F12              :                 clb     1,ZPG
+00:F0A7  5F12              :                 clb     2,ZPG
+00:F0A9  7F12              :                 clb     3,ZPG
+00:F0AB  9F12              :                 clb     4,ZPG
+00:F0AD  BF12              :                 clb     5,ZPG
+00:F0AF  DF12              :                 clb     6,ZPG
+00:F0B1  FF12              :                 clb     7,ZPG
+                                             
+00:F0B3  18                :                 clc
+                                             
+00:F0B4  D8                :                 cld
+                                             
+00:F0B5  58                :                 cli
+                                             
+
+Portable MELPS 740 Assembler [18.10]
+
+00:F0B6  12                :                 clt
+                                             
+00:F0B7  B8                :                 clv
+                                             
+00:F0B8  C912              :                 cmp     #ZPG
+00:F0BA  C512              :                 cmp     ZPG
+00:F0BC  D512              :                 cmp     ZPG,x
+00:F0BE  CD3412            :                 cmp     ABS
+00:F0C1  DD3412            :                 cmp     ABS,x
+00:F0C4  D93412            :                 cmp     ABS,y
+00:F0C7  C112              :                 cmp     (ZPG,x)
+00:F0C9  D112              :                 cmp     (ZPG),y
+                                             
+00:F0CB  4412              :                 com     ZPG
+                                             
+00:F0CD  E012              :                 cpx     #ZPG
+00:F0CF  E412              :                 cpx     ZPG
+00:F0D1  EC3412            :                 cpx     ABS
+                             
+00:F0D4  C012              :                 cpy     #ZPG
+00:F0D6  C412              :                 cpy     ZPG
+00:F0D8  CC3412            :                 cpy     ABS
+                             
+00:F0DB  1A                :                 dec     A
+00:F0DC  C612              :                 dec     ZPG
+00:F0DE  D612              :                 dec     ZPG,x
+00:F0E0  CE3412            :                 dec     ABS
+00:F0E3  DE3412            :                 dec     ABS,x
+                             
+00:F0E6  CA                :                 dex
+                                             
+00:F0E7  88                :                 dey
+                                             
+00:F0E8  E212              :                 div     ZPG,x
+                                             
+00:F0EA  4912              :                 eor     #ZPG
+00:F0EC  4512              :                 eor     ZPG
+00:F0EE  5512              :                 eor     ZPG,x
+00:F0F0  4D3412            :                 eor     ABS
+00:F0F3  5D3412            :                 eor     ABS,x
+00:F0F6  593412            :                 eor     ABS,y
+00:F0F9  4112              :                 eor     (ZPG,x)
+00:F0FB  5112              :                 eor     (ZPG),y
+                             
+00:F0FD  3A                :                 inc     A
+00:F0FE  E612              :                 inc     ZPG
+00:F100  F612              :                 inc     ZPG,x
+00:F102  EE3412            :                 inc     ABS
+00:F105  FE3412            :                 inc     ABS,x
+                             
+00:F108  E8                :                 inx
+                                             
+00:F109  C8                :                 iny
+                                             
+
+Portable MELPS 740 Assembler [18.10]
+
+00:F10A  4C3412            :                 jmp     ABS
+00:F10D  6C3412            :                 jmp     (ABS)
+00:F110  B212              :                 jmp     (ZPG)
+                             
+00:F112  203412            :                 jsr     ABS
+00:F115  2212              :                 jsr     SPC
+00:F117  0212              :                 jsr     (ZPG)
+                             
+00:F119  A912              :                 lda     #ZPG
+00:F11B  A512              :                 lda     ZPG
+00:F11D  B512              :                 lda     ZPG,x
+00:F11F  AD3412            :                 lda     ABS
+00:F122  BD3412            :                 lda     ABS,x
+00:F125  B93412            :                 lda     ABS,y
+00:F128  A112              :                 lda     (ZPG,x)
+00:F12A  B112              :                 lda     (ZPG),y
+                             
+00:F12C  32FF12            :                 ldm     #$ff,ZPG
+                             
+00:F12F  A212              :                 ldx     #ZPG
+00:F131  A612              :                 ldx     ZPG
+00:F133  B612              :                 ldx     ZPG,y
+00:F135  AE3412            :                 ldx     ABS
+00:F138  BE3412            :                 ldx     ABS,y
+                                             
+00:F13B  A012              :                 ldy     #ZPG
+00:F13D  A412              :                 ldy     ZPG
+00:F13F  B412              :                 ldy     ZPG,x
+00:F141  AC3412            :                 ldy     ABS
+00:F144  BC3412            :                 ldy     ABS,x
+                                             
+00:F147  4A                :                 lsr     A
+00:F148  4612              :                 lsr     ZPG
+00:F14A  5612              :                 lsr     ZPG,x
+00:F14C  4E3412            :                 lsr     ABS
+00:F14F  5E3412            :                 lsr     ABS,x
+                                             
+00:F152  6212              :                 mul     ZPG,x
+                                             
+00:F154  EA                :                 nop
+                                             
+00:F155  0912              :                 ora     #ZPG
+00:F157  0512              :                 ora     ZPG
+00:F159  1512              :                 ora     ZPG,x
+00:F15B  0D3412            :                 ora     ABS
+00:F15E  1D3412            :                 ora     ABS,x
+00:F161  193412            :                 ora     ABS,y
+00:F164  0112              :                 ora     (ZPG,x)
+00:F166  1112              :                 ora     (ZPG),y
+                             
+00:F168  48                :                 pha
+                                             
+00:F169  08                :                 php
+                                             
+
+Portable MELPS 740 Assembler [18.10]
+
+00:F16A  68                :                 pla
+                                             
+00:F16B  28                :                 plp
+                             
+00:F16C  2A                :                 rol     A
+00:F16D  2612              :                 rol     ZPG
+00:F16F  3612              :                 rol     ZPG,x
+00:F171  2E3412            :                 rol     ABS
+00:F174  3E3412            :                 rol     ABS,x
+                             
+00:F177  6A                :                 ror     A
+00:F178  6612              :                 ror     ZPG
+00:F17A  7612              :                 ror     ZPG,x
+00:F17C  6E3412            :                 ror     ABS
+00:F17F  7E3412            :                 ror     ABS,x
+                                             
+00:F182  8212              :                 rrf     ZPG
+                                             
+00:F184  40                :                 rti
+                                             
+00:F185  60                :                 rts
+                                             
+00:F186  E912              :                 sbc     #ZPG
+00:F188  E512              :                 sbc     ZPG
+00:F18A  F512              :                 sbc     ZPG,x
+00:F18C  ED3412            :                 sbc     ABS
+00:F18F  FD3412            :                 sbc     ABS,x
+00:F192  F93412            :                 sbc     ABS,y
+00:F195  E112              :                 sbc     (ZPG,x)
+00:F197  F112              :                 sbc     (ZPG),y
+                                             
+00:F199  0B                :                 seb     0,A
+00:F19A  2B                :                 seb     1,A
+00:F19B  4B                :                 seb     2,A
+00:F19C  6B                :                 seb     3,A
+00:F19D  8B                :                 seb     4,A
+00:F19E  AB                :                 seb     5,A
+00:F19F  CB                :                 seb     6,A
+00:F1A0  EB                :                 seb     7,A
+00:F1A1  0F12              :                 seb     0,ZPG
+00:F1A3  2F12              :                 seb     1,ZPG
+00:F1A5  4F12              :                 seb     2,ZPG
+00:F1A7  6F12              :                 seb     3,ZPG
+00:F1A9  8F12              :                 seb     4,ZPG
+00:F1AB  AF12              :                 seb     5,ZPG
+00:F1AD  CF12              :                 seb     6,ZPG
+00:F1AF  EF12              :                 seb     7,ZPG
+                             
+00:F1B1  38                :                 sec
+                                             
+00:F1B2  F8                :                 sed
+                                             
+00:F1B3  78                :                 sei
+                                             
+
+Portable MELPS 740 Assembler [18.10]
+
+00:F1B4  32                :                 set             
+                                             
+00:F1B5  8512              :                 sta     ZPG
+00:F1B7  9512              :                 sta     ZPG,x
+00:F1B9  8D3412            :                 sta     ABS
+00:F1BC  9D3412            :                 sta     ABS,x
+00:F1BF  993412            :                 sta     ABS,y
+00:F1C2  8112              :                 sta     (ZPG,x)
+00:F1C4  9112              :                 sta     (ZPG),y
+                                             
+00:F1C6  42                :                 stp
+                                             
+00:F1C7  8612              :                 stx     ZPG
+00:F1C9  9612              :                 stx     ZPG,y
+00:F1CB  8E3412            :                 stx     ABS
+                                             
+00:F1CE  8412              :                 sty     ZPG
+00:F1D0  9412              :                 sty     ZPG,x
+00:F1D2  8C3412            :                 sty     ABS
+                                             
+00:F1D5  AA                :                 tax
+                                             
+00:F1D6  A8                :                 tay
+                                             
+00:F1D7  6412              :                 tst     ZPG
+                                             
+00:F1D9  BA                :                 tsx
+                                             
+00:F1DA  8A                :                 txa
+                                             
+00:F1DB  9A                :                 txs
+                                             
+00:F1DC  98                :                 tya
+                                             
+00:F1DD  C2                :                 wit
+                                             
+                                             
+                             ;==============================================================================
+                             ; Structured Programming
+                             ;------------------------------------------------------------------------------
+                             
+00:F1DE  B001              :                 if cc
+00:F1E0  EA                :                  nop
+                                             endif
+                                             
+                                             repeat
+00:F1E1  EA                :                  nop
+00:F1E2  80FD              :                 forever
+                                             
+                                             repeat
+00:F1E4  EA                :                  nop
+00:F1E5  10FD              :                 until mi
+                                             
+                                             repeat
+
+Portable MELPS 740 Assembler [18.10]
+
+00:F1E7  B002              :                  if cc
+00:F1E9  8005              :                   break
+                                              endif
+00:F1EB  1003              :                  break pl
+00:F1ED  EA                :                  nop
+00:F1EE  80F7              :                 forever
+                                             
+                                             repeat
+00:F1F0  3002              :                  if pl
+00:F1F2  80FC              :                   continue
+                                              endif
+00:F1F4  30FA              :                  continue mi
+00:F1F6  80F8              :                 forever
+                                             
+                                             repeat
+00:F1F8  3A                :                  inc a
+00:F1F9  D0FD              :                 until eq
+                                             
+00:F1FB  F003              :                 while ne
+00:F1FD  3A                :                  inc a
+00:F1FE  80FB              :                 endw
+                                             
+                                             .end
+
+
+Portable MELPS 740 Assembler [18.10]
+
+Symbol Table
+
+ABS                              00001234  | ZPG                              00000012 
+SPC                              0000FF12  | ABS                              00001234 
+Test                             0000F000  | Test                             0000F000 
+Test.BBC                         0000F031  | Test.BBC                         0000F031 
+Test.BBS                         0000F059  | Test.BBS                         0000F059 
+ZPG                              00000012  | SPC                              0000FF12 
