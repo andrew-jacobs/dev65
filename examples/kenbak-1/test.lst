@@ -1,0 +1,313 @@
+
+Portable KENBAK-1 Assembler [18.12]
+
+                            ;===============================================================================
+                            ; AsKb1 Opcode Test
+                            ;-------------------------------------------------------------------------------
+                            ; Copyright (C),2018 Andrew John Jacobs.
+                            ;
+                            ; This program is provided free of charge for educational purposes
+                            ;
+                            ; Redistribution and use in binary form without modification, is permitted
+                            ; provided that the above copyright notice, this list of conditions and the
+                            ; following disclaimer in the documentation and/or other materials provided
+                            ; with the distribution.
+                            ;
+                            ; THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS 'AS IS' AND ANY
+                            ; EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+                            ; WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+                            ; DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
+                            ; DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+                            ; (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+                            ; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+                            ; ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+                            ; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+                            ; THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+                            ;-------------------------------------------------------------------------------
+                            ; Notes:
+                            ;
+                            ; This generates more code than a KENBAK can actually hold. 
+                            ;
+                            ;===============================================================================;
+                                                            
+                                            .code
+                            
+                                            .org    0
+                                            
+000  000                  : REG_A           .space  1
+001  000                  : REG_B           .space  1
+002  000                  : REG_X           .space  1
+003  004                  : REG_P           .byte   START
+                            
+                            START:
+004  003 204              :                 add     a =DATA
+006  004 204              :                 add     a DATA
+010  006 204              :                 add     a DATA,X
+012  005 204              :                 add     a (DATA)
+014  007 204              :                 add     a (DATA),X
+016  103 204              :                 add     b =DATA
+020  104 204              :                 add     b DATA
+022  106 204              :                 add     b DATA,X
+024  105 204              :                 add     b (DATA)
+026  107 204              :                 add     b (DATA),X
+030  203 204              :                 add     x =DATA
+032  204 204              :                 add     x DATA
+034  206 204              :                 add     x DATA,X
+036  205 204              :                 add     x (DATA)
+040  207 204              :                 add     x (DATA),X
+
+Portable KENBAK-1 Assembler [18.12]
+
+                            
+042  013 204              :                 sub     a =DATA
+044  014 204              :                 sub     a DATA
+046  016 204              :                 sub     a DATA,X
+050  015 204              :                 sub     a (DATA)
+052  017 204              :                 sub     a (DATA),X
+054  113 204              :                 sub     b =DATA
+056  114 204              :                 sub     b DATA
+060  116 204              :                 sub     b DATA,X
+062  115 204              :                 sub     b (DATA)
+064  117 204              :                 sub     b (DATA),X
+066  213 204              :                 sub     x =DATA
+070  214 204              :                 sub     x DATA
+072  216 204              :                 sub     x DATA,X
+074  215 204              :                 sub     x (DATA)
+076  217 204              :                 sub     x (DATA),X
+                            
+100  023 204              :                 load    a =DATA
+102  024 204              :                 load    a DATA
+104  026 204              :                 load    a DATA,X
+106  025 204              :                 load    a (DATA)
+110  027 204              :                 load    a (DATA),X
+112  123 204              :                 load    b =DATA
+114  124 204              :                 load    b DATA
+116  126 204              :                 load    b DATA,X
+120  125 204              :                 load    b (DATA)
+122  127 204              :                 load    b (DATA),X
+124  223 204              :                 load    x =DATA
+126  224 204              :                 load    x DATA
+130  226 204              :                 load    x DATA,X
+132  225 204              :                 load    x (DATA)
+134  227 204              :                 load    x (DATA),X
+                                            
+136  033 204              :                 store   a =DATA
+140  034 204              :                 store   a DATA
+142  036 204              :                 store   a DATA,X
+144  035 204              :                 store   a (DATA)
+146  037 204              :                 store   a (DATA),X
+150  133 204              :                 store   b =DATA
+152  134 204              :                 store   b DATA
+154  136 204              :                 store   b DATA,X
+156  135 204              :                 store   b (DATA)
+160  137 204              :                 store   b (DATA),X
+162  233 204              :                 store   x =DATA
+164  234 204              :                 store   x DATA
+166  236 204              :                 store   x DATA,X
+170  235 204              :                 store   x (DATA)
+172  237 204              :                 store   x (DATA),X
+                                            
+174  323 204              :                 and     =DATA
+176  324 204              :                 and     DATA
+200  326 204              :                 and     DATA,X
+202  325 204              :                 and     (DATA)
+204  327 204              :                 and     (DATA),X
+
+Portable KENBAK-1 Assembler [18.12]
+
+                            
+206  303 204              :                 or      =DATA
+210  304 204              :                 or      DATA
+212  306 204              :                 or      DATA,X
+214  305 204              :                 or      (DATA)
+216  307 204              :                 or      (DATA),X
+                            
+220  333 204              :                 lneg    =DATA
+222  334 204              :                 lneg    DATA
+224  336 204              :                 lneg    DATA,X
+226  335 204              :                 lneg    (DATA)
+230  337 204              :                 lneg    (DATA),X
+                            
+232  043 204              :                 jpd     a<>0 DATA
+234  044 204              :                 jpd     a=0 DATA
+236  045 204              :                 jpd     a<0 DATA
+240  046 204              :                 jpd     a>0 DATA
+242  047 204              :                 jpd     a>=0 DATA
+244  143 204              :                 jpd     b<>0 DATA
+246  144 204              :                 jpd     b=0 DATA
+250  145 204              :                 jpd     b<0 DATA
+252  146 204              :                 jpd     b>0 DATA
+254  147 204              :                 jpd     b>=0 DATA
+256  243 204              :                 jpd     x<>0 DATA
+260  244 204              :                 jpd     x=0 DATA
+262  245 204              :                 jpd     x<0 DATA
+264  246 204              :                 jpd     x>0 DATA
+266  247 204              :                 jpd     x>=0 DATA
+                                            
+270  053 204              :                 jpi     a<>0 DATA
+272  054 204              :                 jpi     a=0 DATA
+274  055 204              :                 jpi     a<0 DATA
+276  056 204              :                 jpi     a>0 DATA
+300  057 204              :                 jpi     a>=0 DATA
+302  153 204              :                 jpi     b<>0 DATA
+304  154 204              :                 jpi     b=0 DATA
+306  155 204              :                 jpi     b<0 DATA
+310  156 204              :                 jpi     b>0 DATA
+312  157 204              :                 jpi     b>=0 DATA
+314  253 204              :                 jpi     x<>0 DATA
+316  254 204              :                 jpi     x=0 DATA
+320  255 204              :                 jpi     x<0 DATA
+322  256 204              :                 jpi     x>0 DATA
+324  257 204              :                 jpi     x>=0 DATA
+                                            
+326  063 204              :                 jmd     a<>0 DATA
+330  064 204              :                 jmd     a=0 DATA
+332  065 204              :                 jmd     a<0 DATA
+334  066 204              :                 jmd     a>0 DATA
+336  067 204              :                 jmd     a>=0 DATA
+340  163 204              :                 jmd     b<>0 DATA
+342  164 204              :                 jmd     b=0 DATA
+344  165 204              :                 jmd     b<0 DATA
+346  166 204              :                 jmd     b>0 DATA
+
+Portable KENBAK-1 Assembler [18.12]
+
+350  167 204              :                 jmd     b>=0 DATA
+352  263 204              :                 jmd     x<>0 DATA
+354  264 204              :                 jmd     x=0 DATA
+356  265 204              :                 jmd     x<0 DATA
+360  266 204              :                 jmd     x>0 DATA
+362  267 204              :                 jmd     x>=0 DATA
+                                            
+364  073 204              :                 jmi     a<>0 DATA
+366  074 204              :                 jmi     a=0 DATA
+370  075 204              :                 jmi     a<0 DATA
+372  076 204              :                 jmi     a>0 DATA
+374  077 204              :                 jmi     a>=0 DATA
+376  173 204              :                 jmi     b<>0 DATA
+400  174 204              :                 jmi     b=0 DATA
+402  175 204              :                 jmi     b<0 DATA
+404  176 204              :                 jmi     b>0 DATA
+406  177 204              :                 jmi     b>=0 DATA
+410  273 204              :                 jmi     x<>0 DATA
+412  274 204              :                 jmi     x=0 DATA
+414  275 204              :                 jmi     x<0 DATA
+416  276 204              :                 jmi     x>0 DATA
+420  277 204              :                 jmi     x>=0 DATA
+                                            
+422  340 204              :                 jpd     DATA
+424  350 204              :                 jpi     DATA
+426  360 204              :                 jmd     DATA
+430  370 204              :                 jmi     DATA
+                                            
+432  202 204              :                 skp0    0 DATA
+434  212 204              :                 skp0    1 DATA
+436  222 204              :                 skp0    2 DATA
+440  232 204              :                 skp0    3 DATA
+442  242 204              :                 skp0    4 DATA
+444  252 204              :                 skp0    5 DATA
+446  262 204              :                 skp0    6 DATA
+450  272 204              :                 skp0    7 DATA
+452  302 204              :                 skp1    0 DATA
+454  312 204              :                 skp1    1 DATA
+456  322 204              :                 skp1    2 DATA
+460  332 204              :                 skp1    3 DATA
+462  342 204              :                 skp1    4 DATA
+464  352 204              :                 skp1    5 DATA
+466  362 204              :                 skp1    6 DATA
+470  372 204              :                 skp1    7 DATA
+                            
+472  002 204              :                 set0    0 DATA
+474  012 204              :                 set0    1 DATA
+476  022 204              :                 set0    2 DATA
+500  032 204              :                 set0    3 DATA
+502  042 204              :                 set0    4 DATA
+504  052 204              :                 set0    5 DATA
+506  062 204              :                 set0    6 DATA
+510  072 204              :                 set0    7 DATA
+512  102 204              :                 set1    0 DATA
+
+Portable KENBAK-1 Assembler [18.12]
+
+514  112 204              :                 set1    1 DATA
+516  122 204              :                 set1    2 DATA
+520  132 204              :                 set1    3 DATA
+522  142 204              :                 set1    4 DATA
+524  152 204              :                 set1    5 DATA
+526  162 204              :                 set1    6 DATA
+530  172 204              :                 set1    7 DATA
+                                            
+532  211                  :                 sftl    a 1
+533  221                  :                 sftl    a 2
+534  231                  :                 sftl    a 3
+535  201                  :                 sftl    a 4
+536  211                  :                 sftl    b 1
+537  221                  :                 sftl    b 2
+540  231                  :                 sftl    b 3
+541  201                  :                 sftl    b 4
+                                            
+542  011                  :                 sftr    a 1
+543  021                  :                 sftr    a 2
+544  031                  :                 sftr    a 3
+545  001                  :                 sftr    a 4
+546  011                  :                 sftr    b 1
+547  021                  :                 sftr    b 2
+550  031                  :                 sftr    b 3
+551  001                  :                 sftr    b 4
+                                            
+552  111                  :                 rotl    a 1
+553  121                  :                 rotl    a 2
+554  131                  :                 rotl    a 3
+555  101                  :                 rotl    a 4
+556  111                  :                 rotl    b 1
+557  121                  :                 rotl    b 2
+560  131                  :                 rotl    b 3
+561  101                  :                 rotl    b 4
+                                            
+562  311                  :                 rotr    a 1
+563  321                  :                 rotr    a 2
+564  331                  :                 rotr    a 3
+565  301                  :                 rotr    a 4
+566  311                  :                 rotr    b 1
+567  321                  :                 rotr    b 2
+570  331                  :                 rotr    b 3
+571  301                  :                 rotr    b 4
+                                            
+572  200                  :                 noop
+                                            
+573  000                  :                 halt
+                            
+                                            .org    200O
+                                            
+200  000                  : REG_OUT         .space  1
+201  000                  : FLG_A           .space  1
+202  000                  : FLG_B           .space  1
+203  000                  : FLG_X           .space  1
+
+Portable KENBAK-1 Assembler [18.12]
+
+                            
+204  000                  : DATA            .space  1
+                            
+                                            .org    377O
+                                            
+377  000                  : REG_IN          .space  1
+                            
+                                            .end
+
+
+Portable KENBAK-1 Assembler [18.12]
+
+Symbol Table
+
+DATA                             00000084  | REG_A                            00000000 
+FLG_A                            00000081  | REG_B                            00000001 
+FLG_B                            00000082  | REG_X                            00000002 
+FLG_X                            00000083  | REG_P                            00000003 
+REG_A                            00000000  | START                            00000004 
+REG_B                            00000001  | REG_OUT                          00000080 
+REG_IN                           000000FF  | FLG_A                            00000081 
+REG_OUT                          00000080  | FLG_B                            00000082 
+REG_P                            00000003  | FLG_X                            00000083 
+REG_X                            00000002  | DATA                             00000084 
+START                            00000004  | REG_IN                           000000FF 

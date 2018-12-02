@@ -25,7 +25,6 @@ package uk.co.demon.obelisk.xobj;
  * A utility class for hexadecimal string conversion.
  * 
  * @author 	Andrew Jacobs
- * @version	$Id$
  */
 public abstract class Hex
 {

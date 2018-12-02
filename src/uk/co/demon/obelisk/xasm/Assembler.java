@@ -481,14 +481,18 @@ public abstract class Assembler extends Application
 			token = nextRealToken ();
 			Expr expr = parseExpr ();
 		
-			if (expr.isAbsolute ()) {
-				long	value = expr.resolve (null, null);
-				
-				for (int index = 0; index < value; ++index)
-					addByte (0);
+			if (expr != null) {
+				if (expr.isAbsolute ()) {
+					long	value = expr.resolve (null, null);
+					
+					for (int index = 0; index < value; ++index)
+						addByte (0);
+				}
+				else
+					error (Error.ERR_CONSTANT_EXPR);
 			}
 			else
-				error (Error.ERR_CONSTANT_EXPR);
+				error (Error.ERR_INVALID_EXPRESSION);
 			
 			return (true);
 		}
