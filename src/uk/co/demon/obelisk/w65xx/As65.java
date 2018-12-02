@@ -127,6 +127,9 @@ public final class As65 extends Assembler
 			doSet ("__65SC02__", FALSE);
 			doSet ("__65816__", FALSE);
 			doSet ("__65832__", FALSE);
+			
+			bitsA = 8;
+			bitsI = 8;
 
 			return (false);
 		}
@@ -151,6 +154,9 @@ public final class As65 extends Assembler
 			doSet ("__65816__", FALSE);
 			doSet ("__65832__", FALSE);
 			
+			bitsA = 8;
+			bitsI = 8;
+
 			return (false);
 		}
 	};
@@ -174,6 +180,9 @@ public final class As65 extends Assembler
 			doSet ("__65816__", FALSE);
 			doSet ("__65832__", FALSE);
 			
+			bitsA = 8;
+			bitsI = 8;
+
 			return (false);
 		}
 	};
@@ -197,6 +206,9 @@ public final class As65 extends Assembler
 			doSet ("__65816__", FALSE);
 			doSet ("__65832__", FALSE);
 			
+			bitsA = 8;
+			bitsI = 8;
+
 			return (false);
 		}
 	};
@@ -220,6 +232,9 @@ public final class As65 extends Assembler
 			doSet ("__65816__", TRUE);
 			doSet ("__65832__", FALSE);
 			
+			bitsA = 8;
+			bitsI = 8;
+
 			return (false);
 		}
 	};
@@ -243,6 +258,9 @@ public final class As65 extends Assembler
 			doSet ("__65816__", FALSE);
 			doSet ("__65832__", TRUE);
 			
+			bitsA = 8;
+			bitsI = 8;
+
 			return (false);
 		}
 	};
@@ -326,7 +344,11 @@ public final class As65 extends Assembler
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
 				token = nextRealToken ();
-				if ((token == ON) || (token == OFF)) {
+				if (token == QUESTION) {
+					bitsA = -1;
+					token = nextRealToken ();
+				}
+				else if ((token == ON) || (token == OFF)) {
 					bitsA = (token == ON) ? 16 : 8;
 					token = nextRealToken ();
 				}
@@ -352,7 +374,11 @@ public final class As65 extends Assembler
 		{
 			if ((processor & (M65816 | M65832)) != 0) {
 				token = nextRealToken ();
-				if ((token == ON) || (token == OFF)) {
+				if (token == QUESTION) {
+					bitsI = -1;
+					token = nextRealToken ();
+				}
+				else if ((token == ON) || (token == OFF)) {
 					bitsI = (token == ON) ? 16 : 8;
 					token = nextRealToken ();
 				}
@@ -378,6 +404,10 @@ public final class As65 extends Assembler
 		{
 			if (processor == M65832) {
 				token = nextRealToken ();
+				if (token == QUESTION) {
+					bitsA = -1;
+					token = nextRealToken ();
+				}
 				if ((token == ON) || (token == OFF)) {
 					bitsA = (token == ON) ? 32 : 8;
 					token = nextRealToken ();
@@ -404,7 +434,11 @@ public final class As65 extends Assembler
 		{
 			if (processor == M65832) {
 				token = nextRealToken ();
-				if ((token == ON) || (token == OFF)) {
+				if (token == QUESTION) {
+					bitsA = -1;
+					token = nextRealToken ();
+				}
+				else if ((token == ON) || (token == OFF)) {
 					bitsI = (token == ON) ? 32 : 8;
 					token = nextRealToken ();
 				}
@@ -442,6 +476,12 @@ public final class As65 extends Assembler
 			return (true);
 		}
 	};
+
+	/**
+	 * A <CODE>Token</CODE> representing the '?' character.
+	 */
+	protected final Token 	QUESTION
+		= new Token (KEYWORD, "?");
 
 	/**
 	 * A <CODE>Token</CODE> representing the '#' character.
@@ -4241,7 +4281,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [18.06]";
+		title 		= "Portable 65xx Assembler [18.11]";
 	}
 	
 	/**
@@ -4296,6 +4336,7 @@ public final class As65 extends Assembler
 
 		// Handle characters
 		switch (ch) {
+		case '?':	return (QUESTION);
 		case '#':	return (HASH);
 		case '^':	return (BINARYXOR);
 		case '-':	return (MINUS);
@@ -5128,6 +5169,9 @@ public final class As65 extends Assembler
 	{
 		addByte (opcode);
 		switch (bits) {
+		default:
+			error ("Undefined memory size");
+			addByte (expr); break;
 		case 8:		addByte (expr); break;
 		case 16:	addWord (expr); break;
 		case 32:	addLong (expr); break;
