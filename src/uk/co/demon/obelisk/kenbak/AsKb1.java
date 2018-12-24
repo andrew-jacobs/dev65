@@ -147,18 +147,20 @@ public final class AsKb1  extends Assembler
 		
 		@Override
 		public boolean compile() {
-			Token		reg;
+			int		reg = 0000;
 			
 			token = nextRealToken ();
 			if ((token == A) || (token == B)) {
-				reg = token;
+				if (token == A) reg = 0000;
+				if (token == B) reg = 0040;
 				token = nextRealToken ();
+				
 				if (((arg = parseExpr ()) != null) && arg.isAbsolute()) {
 					switch ((int) arg.resolve ()) {
-					case 1:	addByte (opcode | 0010); break;
-					case 2:	addByte (opcode | 0020); break;
-					case 3:	addByte (opcode | 0030); break;
-					case 4:	addByte (opcode | 0000); break;
+					case 1:	addByte (opcode | reg | 0010); break;
+					case 2:	addByte (opcode | reg | 0020); break;
+					case 3:	addByte (opcode | reg | 0030); break;
+					case 4:	addByte (opcode | reg | 0000); break;
 					
 					default:
 						error ("Invalid number of places");
@@ -224,7 +226,7 @@ public final class AsKb1  extends Assembler
 		@Override
 		public boolean compile() {
 			int			reg  = 0300;
-			int			cond = 0000;
+			int			cond = 0003;
 			
 			token = nextRealToken ();
 			
@@ -306,9 +308,9 @@ public final class AsKb1  extends Assembler
 	
 	protected final Opcode	SFTR	= new ShiftOpcode ("SFTR", 0001);
 	
-	protected final Opcode	ROTL	= new ShiftOpcode ("ROTL", 0101);
+	protected final Opcode	ROTL	= new ShiftOpcode ("ROTL", 0301);
 	
-	protected final Opcode	ROTR	= new ShiftOpcode ("ROTR", 0301);
+	protected final Opcode	ROTR	= new ShiftOpcode ("ROTR", 0101);
 	
 	protected final Opcode	HALT	= new SimpleOpcode ("HALT", 0000);
 	
