@@ -1740,8 +1740,8 @@ public final class As65 extends Assembler
 		{
 			switch (parseMode (PBANK)) {
 			case DPAG:
-			case ABSL:
-			case ALNG:	genAbsl (0x4C, arg);	break;
+			case ABSL:	genAbsl (0x4C, arg); break;
+			case ALNG:	genLong (0x5C, arg); break;
 			
 			case INDI:	genIndi	(0x6C, arg, true);	break;
 			case INDX:	
