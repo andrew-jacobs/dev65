@@ -1535,11 +1535,14 @@ public abstract class Assembler extends Application
 	}
 
 	/**
-	 * Output a line of text to the listing and 
-	 * @param text
+	 * Output a line of text to the listing trimming trailing spaces
+	 * 
+	 * @param text			The text to output.
 	 */
 	protected final void paginate (final String text)
 	{
+		int			len;
+		
 		if ((listFile != null) && listing) {
 			if (lineCount == 0) {
 				listFile.println ();
@@ -1549,7 +1552,13 @@ public abstract class Assembler extends Application
 				lineCount += 3;
 			}
 			
-			listFile.println (text);
+			for (len = text.length (); len > 0; len -= 1)
+				if (text.charAt (len - 1) != ' ') break;
+			
+			if (len > 0) 
+				listFile.println (text.substring (0, len));
+			else
+				listFile.println ();
 			
 			if ((throwPage) || (++lineCount == (linesPerPage - 3))) {
 				listFile.print ('\f');
