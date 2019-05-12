@@ -81,9 +81,10 @@ public abstract class Linker extends Application
 		if (s28.isPresent ()) ++count;
 		if (s37.isPresent ()) ++count;
 		if (dmp.isPresent ()) ++count;
+		if (cdo.isPresent ()) ++count;
 		
 		if (count == 0) {
-			error ("No output format selected (-bin, -hex, -ihx, -s19, -dmp, -s28 or -s37).");
+			error ("No output format selected (-bin, -hex, -ihx, -s19, -dmp, -c, -s28 or -s37).");
 			setFinished (true);
 			return;
 		}
@@ -119,6 +120,8 @@ public abstract class Linker extends Application
 				target = new S37Target (lo, hi, byteSize);
 			else if (dmp.isPresent ())
 				target = new DumpTarget (lo, hi, byteSize);
+			else if (cdo.isPresent ())
+				target = new CTarget (lo, hi, byteSize);
 		}
 		
 		if (getArguments ().length == 0) {
@@ -438,6 +441,12 @@ public abstract class Linker extends Application
 	 */
 	private Option			dmp
 		= new Option ("-dmp", "Generate Dump HEX output");
+
+	/**
+	 * Option for specifying C data output format.
+	 */
+	private Option			cdo
+		= new Option ("-c", "Generate C data output");
 
 	/**
 	 * Option for specifying output file.
