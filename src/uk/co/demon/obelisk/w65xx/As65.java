@@ -4281,7 +4281,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [18.11]";
+		title 		= "Portable 65xx Assembler [19.05]";
 	}
 	
 	/**
@@ -5092,7 +5092,7 @@ public final class As65 extends Assembler
 			
 			if ((processor & (M65816 | M65832)) != 0) {
 				if ((addr & 0xff0000) == 0) {
-					return ((((addr - directPage) & 0xffff00) == 0) ? DPAG : ABSL);
+					return (isByteAddress ((int) addr) ? DPAG : ABSL);
 				}
 				else {
 					if (targetBank == PBANK) {
@@ -5415,9 +5415,6 @@ public final class As65 extends Assembler
 	 */
 	private boolean isByteAddress (int value)
 	{
-		switch (value & 0xffffff00) {
-		case 0x00000000:	return (true);
-		default:			return (false);
-		}
+		return ((directPage <= value) && (value <= (directPage + 0xff)));
 	}
 }
