@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2016 Andrew John Jacobs.
+ * Copyright (C),2005-2019 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -4281,7 +4281,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [19.05]";
+		title 		= "Portable 65xx Assembler [19.12]";
 	}
 	
 	/**

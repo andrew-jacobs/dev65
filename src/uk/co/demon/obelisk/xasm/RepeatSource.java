@@ -24,21 +24,21 @@ package uk.co.demon.obelisk.xasm;
 
 /**
  * The <CODE>RepeatSource</CODE> holds a collection of lines that will
- * be repeated while the count is not zero.
+ * be repeated while the specified number of times.
  * 
  * @author 	Andrew Jacobs
- * @version	$Id$
  */
 public final class RepeatSource extends TextSource
 {
 	/**
 	 * Constructs a <CODE>RepeatSource</CODE> instance.
 	 * 
-	 * @param 	count			The number of times to repeat.
+	 * @param 	limit			The number of times to repeat.
 	 */
-	public RepeatSource (int count)
+	public RepeatSource (int limit)
 	{
-		this.count = count;
+		this.count = 0;
+		this.limit = limit;
 	}
 	
 	/**
@@ -46,12 +46,16 @@ public final class RepeatSource extends TextSource
 	 */
 	public Line nextLine ()
 	{
-		while (count > 0) {
+		while (count < limit) {
 			Line line = super.nextLine ();
 		
-			if (line != null) return (line);
+			if (line != null) {
+				String text 	= line.getText ().replace("\\!", Integer.toString (count + 1));
 			
-			--count;
+				return (new Line (line.getFileName(), line.getLineNumber(), text));
+			}
+			
+			++count;
 			reset ();
 		}
 		return (null);
@@ -59,6 +63,11 @@ public final class RepeatSource extends TextSource
 	
 	/**
 	 * The number of times to repeat
+	 */
+	private int			limit;
+	
+	/**
+	 * The repetition count.
 	 */
 	private int			count;
 }
