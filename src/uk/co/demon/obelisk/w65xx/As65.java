@@ -1715,7 +1715,7 @@ public final class As65 extends Assembler
 				case DPAG:
 				case ABSL:
 				case ALNG:	genLong (0x5C, arg); break;
-				case INDI:	genIndi (0xDC, arg, true);	break;
+				case LIND:	genIndi (0xDC, arg, true);	break;
 				default:
 					error (ERR_ILLEGAL_ADDR);
 				}
@@ -1740,13 +1740,23 @@ public final class As65 extends Assembler
 		{
 			switch (parseMode (PBANK)) {
 			case DPAG:
-			case ABSL:	genAbsl (0x4C, arg); break;
-			case ALNG:	genLong (0x5C, arg); break;
-			
+			case ABSL:	genAbsl (0x4C, arg); break;	
 			case INDI:	genIndi	(0x6C, arg, true);	break;
 			case INDX:	
 				if ((processor & (M65C02 | M65SC02 | M65816 | M65832)) != 0)
 					genAbsl (0x7C, arg);
+				else
+					error (ERR_MODE_NOT_SUPPORTED);
+				break;
+			case ALNG:	
+				if ((processor & (M65816 | M65832)) != 0)
+					genLong (0x5C, arg);
+				else
+					error (ERR_MODE_NOT_SUPPORTED);
+				break;
+			case LIND:	
+				if ((processor & (M65816 | M65832)) != 0)
+					genLong (0xDC, arg);
 				else
 					error (ERR_MODE_NOT_SUPPORTED);
 				break;
