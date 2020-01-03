@@ -1756,7 +1756,7 @@ public final class As65 extends Assembler
 				break;
 			case LIND:	
 				if ((processor & (M65816 | M65832)) != 0)
-					genLong (0xDC, arg);
+					genIndi (0xDC, arg, true);
 				else
 					error (ERR_MODE_NOT_SUPPORTED);
 				break;
