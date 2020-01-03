@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2019 Andrew John Jacobs.
+ * Copyright (C),2005-2020 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -4291,7 +4291,7 @@ public final class As65 extends Assembler
 		ifIndex 	= 0;
 		loopIndex 	= 0;
 		
-		title 		= "Portable 65xx Assembler [19.12]";
+		title 		= "Portable 65xx Assembler [20.01]";
 	}
 	
 	/**
@@ -5310,7 +5310,7 @@ public final class As65 extends Assembler
 			if (condition == VS) genRel (0x50, skipOver, false);
 						
 			if ((processor & (M65816 | M65832)) != 0)
-				genRel (0x82, target, true);
+				genRel (0x82, Expr.sub (target,  TWO), true);
 			else
 				genAbsl (0x4C, target);
 		}
