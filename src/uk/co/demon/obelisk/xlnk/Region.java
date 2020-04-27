@@ -22,6 +22,7 @@
 
 package uk.co.demon.obelisk.xlnk;
 
+import uk.co.demon.obelisk.xapp.Application;
 import uk.co.demon.obelisk.xobj.Hex;
 
 /**
@@ -133,18 +134,20 @@ final class Region
 	private long		end;
 	
 	/**
-	 * Parses an address expressed in hex, oct, bin or decimal.
+	 * Parses an address expressed in hex.
 	 * 
 	 * @param 	addr		The address string
 	 * @return	The parsed address.
 	 */
 	private static long parseAddr (final String addr)
 	{
-		switch (addr.charAt(0)) {
-		case '%': 	return (Long.parseLong(addr.substring (1), 2));
-		case '@': 	return (Long.parseLong(addr.substring (1), 8));
-		case '$': 	return (Long.parseLong(addr.substring (1), 16));
-		default:	return (Long.parseLong(addr));
+		try {
+			return (Long.parseLong(addr, 16));
 		}
+		catch (Exception error) {
+			System.err.println ("Error: Invalid hex address (" + addr + ")");
+			Application.getApplication().setFinished (true);
+		}
+		return (0);
 	}
 }

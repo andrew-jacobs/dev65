@@ -74,9 +74,9 @@ public final class Lk65 extends Linker
 		
 		// Create page zero areas
 		if (W65C816.isPresent () || W65832.isPresent ())
-			addArea (".page0", "$0000-$ffff");
+			addArea (".page0", "0000-ffff");
 		else
-			addArea (".page0", "$00-$ff");
+			addArea (".page0", "00-ff");
 	}
 	
 	/**

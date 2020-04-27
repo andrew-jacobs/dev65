@@ -39,8 +39,8 @@ final class Area
 {
 	/**
 	 * Constructs an <CODE>Area</CODE> given
-	 * a character string containing a list of memory address pairs (e.g.
-	 * '$FF00-$FDFF,$FF00-$FFFF').
+	 * a character string containing a list of memory address pairs in
+	 * hexadecimal (e.g. 'FF00-FDFF,FF00-FFFF').
 	 * 
 	 * @param 	location		The memory address pairs.
 	 */
