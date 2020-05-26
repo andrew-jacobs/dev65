@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="create_run_jar" name="Dev65">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.jarfile" value="${dir.buildfile}"/>
+
+    <path id="Dev65.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="lib/javadocking.jar"/>
+        <pathelement location="lib/rsyntaxtextarea-2.6.1.jar"/>
+    </path>
+    <path id="run.As65.classpath">
+        <path refid="Dev65.classpath"/>
+        <pathelement location="lib/javadocking.jar"/>
+        <pathelement location="lib/rsyntaxtextarea-2.6.1.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src-65016">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    	<delete file="${dir.jarfile}/dev65.jar"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <src path="src-65016"/>
+            <classpath refid="Dev65.classpath"/>
+        </javac>
+    </target>
+
+    <target name="create_run_jar" depends="build">
+        <jar destfile="${dir.jarfile}/dev65.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="uk.co.demon.obelisk.w65xx.As65"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ javadocking.jar rsyntaxtextarea-2.6.1.jar"/>
+            </manifest>
+            <zipfileset src="lib/jar-in-jar-loader.zip"/>
+            <fileset dir="${dir.jarfile}/bin"/>
+            <zipfileset dir="${dir.jarfile}/lib" includes="javadocking.jar"/>
+            <zipfileset dir="${dir.jarfile}/lib" includes="rsyntaxtextarea-2.6.1.jar"/>
+        </jar>
+    </target>
+</project>
