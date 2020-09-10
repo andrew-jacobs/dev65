@@ -1,6 +1,5 @@
 package uk.co.demon.obelisk.xide;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
