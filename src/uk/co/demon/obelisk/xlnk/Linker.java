@@ -1,5 +1,5 @@
 /*
- * Copyright (C),2005-2016 Andrew John Jacobs.
+ * Copyright (C),2005-2020 Andrew John Jacobs.
  *
  * This program is provided free of charge for educational purposes
  *
@@ -77,6 +77,7 @@ public abstract class Linker extends Application
 		if (hex.isPresent ()) ++count;
 		if (ihx.isPresent ()) ++count;
 		if (bin.isPresent ()) ++count;
+		if (wdc.isPresent ()) ++count;
 		if (s19.isPresent ()) ++count;
 		if (s28.isPresent ()) ++count;
 		if (s37.isPresent ()) ++count;
@@ -84,7 +85,7 @@ public abstract class Linker extends Application
 		if (cdo.isPresent ()) ++count;
 		
 		if (count == 0) {
-			error ("No output format selected (-bin, -hex, -ihx, -s19, -dmp, -c, -s28 or -s37).");
+			error ("No output format selected (-bin, -hex, -ihx, -s19, -dmp, -c, -wdc, -s28 or -s37).");
 			setFinished (true);
 			return;
 		}
@@ -112,6 +113,8 @@ public abstract class Linker extends Application
 				target = new IntelHexTarget (lo, hi, byteSize);
 			else if (bin.isPresent ())
 				target = new BinTarget (lo, hi, byteSize);
+			else if (wdc.isPresent ())
+				target = new WDCTarget (lo, hi, byteSize);
 			else if (s19.isPresent ())
 				target = new S19Target (lo, hi, byteSize);
 			else if (s28.isPresent ())
@@ -417,6 +420,12 @@ public abstract class Linker extends Application
 	 */
 	private Option			bin
 		= new Option ("-bin", "Generate binary output");
+
+	/**
+	 * Option for specifying WDC binary output format.
+	 */
+	private Option			wdc
+		= new Option ("-wdc", "Generate WDC binary output");
 
 	/**
 	 * Option for specifying Motorola S19 output format.
