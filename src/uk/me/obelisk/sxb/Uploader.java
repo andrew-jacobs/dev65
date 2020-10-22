@@ -395,7 +395,7 @@ public class Uploader
         if (str.startsWith ("0x") || str.startsWith ("0X"))
             return (Integer.parseInt (str.substring (2), 16));
 
-        return (Integer.parseInt (str));
+        return (Integer.parseInt (str, 16));
     }
 
     /**
