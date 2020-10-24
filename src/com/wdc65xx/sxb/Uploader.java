@@ -32,7 +32,7 @@
 //
 //------------------------------------------------------------------------------
 
-package uk.me.obelisk.sxb;
+package com.wdc65xx.sxb;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -108,11 +108,11 @@ public class Uploader
             System.out.println ("\tsxb -port <port> command*");
             System.out.println ("Commands:");
             System.out.println ("\tinfo");
+            System.out.println ("\tload <S19/S28 File>");
             System.out.println ("\tshow <address> <size>");
             System.out.println ("\tsave <address> <size> <S28 File>");
-            System.out.println ("\tsavebin <address> <size> <WDC File>");
-            System.out.println ("\tload <S28 File>");
             System.out.println ("\tloadbin <WDC File>");
+            System.out.println ("\tsavebin <address> <size> <WDC File>");
             System.out.println ("\texec <address>");
             System.out.println ("\tterm");
 
@@ -382,7 +382,7 @@ public class Uploader
 
     /**
      * Convert the value in str to a number. Allows $ or 0x prefixes for
-     * hexadecimal numbers.
+     * hexadecimal numbers. Note all values are treated as hex.
      * 
      * @param str			The value to convert
      * @return The numeric value.
@@ -390,10 +390,9 @@ public class Uploader
     private int convert (String str)
     {
         if (str.startsWith ("$"))
-            return (Integer.parseInt (str.substring (1), 16));
-
-        if (str.startsWith ("0x") || str.startsWith ("0X"))
-            return (Integer.parseInt (str.substring (2), 16));
+            str = str.substring (1);
+        else if (str.startsWith ("0x") || str.startsWith ("0X"))
+            str = str.substring (2);
 
         return (Integer.parseInt (str, 16));
     }
@@ -560,15 +559,33 @@ public class Uploader
             int             count;
             byte []         data = null;
 
-            if (line.startsWith ("S2")) {
-                count = Integer.parseInt (line.substring (2, 2), 16) - 4;
-                addr = Integer.parseInt (line.substring (4, 6), 16);
+            
+            if (line.startsWith ("S1")) {
+                count = Integer.parseInt (line.substring (2, 4), 16) - 3;
+                addr = Integer.parseInt (line.substring (4, 8), 16);
 
                 if ((data == null) || (data.length != count))
                     data = new byte [count];
 
-                for (int offset = 0; offset < count; ++offset)
-                    data [offset] = (byte) Integer.parseInt (line.substring (10 + 2 * offset, 2), 16);
+                for (int offset = 0; offset < count; ++offset) {
+                	int index = 8 + 2 * offset;
+                    data [offset] = (byte) Integer.parseInt (line.substring (index, index + 2), 16);
+                }
+
+                writeMemory (addr, data);
+                total += count;
+            }
+            else if (line.startsWith ("S2")) {
+                count = Integer.parseInt (line.substring (2, 4), 16) - 4;
+                addr = Integer.parseInt (line.substring (4, 10), 16);
+
+                if ((data == null) || (data.length != count))
+                    data = new byte [count];
+
+                for (int offset = 0; offset < count; ++offset) {
+                	int index = 10 + 2 * offset;
+                    data [offset] = (byte) Integer.parseInt (line.substring (index, index + 2), 16);
+                }
 
                 writeMemory (addr, data);
                 total += count;
