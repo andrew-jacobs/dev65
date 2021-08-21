@@ -1,38 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="create_run_jar" name="Dev65">
+<project basedir="." default="create_run_jar" name="dev65">
     <property environment="env"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
 
     <property name="dir.buildfile" value="."/>
     <property name="dir.jarfile" value="${dir.buildfile}"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
 
-    <path id="Dev65.classpath">
+    <path id="dev65.classpath">
         <pathelement location="bin"/>
         <pathelement location="lib/javadocking.jar"/>
         <pathelement location="lib/rsyntaxtextarea-2.6.1.jar"/>
+	<pathelement location="lib/jSerialComm-2.6.2.jar"/>
     </path>
-    <path id="run.As65.classpath">
-        <path refid="Dev65.classpath"/>
+    <path id="run.as65.classpath">
+        <path refid="dev65.classpath"/>
         <pathelement location="lib/javadocking.jar"/>
         <pathelement location="lib/rsyntaxtextarea-2.6.1.jar"/>
+	<pathelement location="lib/jSerialComm-2.6.2.jar"/>
     </path>
     <target name="init">
-        <mkdir dir="bin"/>
-        <copy includeemptydirs="false" todir="bin">
+        <mkdir dir="${classes.dir}"/>
+	<copy includeemptydirs="false" todir="${classes.dir}">
             <fileset dir="src">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
-        <copy includeemptydirs="false" todir="bin">
+	<copy includeemptydirs="false" todir="${classes.dir}">
             <fileset dir="src-65016">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
     </target>
     <target name="clean">
-        <delete dir="bin"/>
+        <delete dir="${build.dir}"/>
     	<delete file="${dir.jarfile}/dev65.jar"/>
     </target>
     <target depends="clean" name="cleanall"/>
@@ -40,25 +42,29 @@
     <target name="build-subprojects"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+	<javac debug="true" debuglevel="${debuglevel}" 
+                destdir="${classes.dir}" includeantruntime="false">
             <src path="src"/>
             <src path="src-65016"/>
-            <classpath refid="Dev65.classpath"/>
+            <classpath refid="dev65.classpath"/>
         </javac>
     </target>
 
     <target name="create_run_jar" depends="build">
-        <jar destfile="${dir.jarfile}/dev65.jar">
+        <jar destfile="${build.dir}/dev65.jar">
             <manifest>
-                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-                <attribute name="Rsrc-Main-Class" value="uk.co.demon.obelisk.w65xx.As65"/>
+		    <attribute name="Main-Class"
+		    value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="uk.co.demon.obelisk.w65xx.Dev65"/>
                 <attribute name="Class-Path" value="."/>
-                <attribute name="Rsrc-Class-Path" value="./ javadocking.jar rsyntaxtextarea-2.6.1.jar"/>
+		<attribute name="Rsrc-Class-Path" 
+		value="./ javadocking.jar rsyntaxtextarea-2.6.1.jar jSerialComm-2.6.2.jar"/>
             </manifest>
             <zipfileset src="lib/jar-in-jar-loader.zip"/>
-            <fileset dir="${dir.jarfile}/bin"/>
-            <zipfileset dir="${dir.jarfile}/lib" includes="javadocking.jar"/>
-            <zipfileset dir="${dir.jarfile}/lib" includes="rsyntaxtextarea-2.6.1.jar"/>
+            <fileset dir="${classes.dir}"/>
+            <zipfileset dir="lib" includes="javadocking.jar"/>
+	    <zipfileset dir="lib" includes="rsyntaxtextarea-2.6.1.jar"/>
+	    <zipfileset dir="lib" includes="jSerialComm-2.6.2.jar"/>
         </jar>
     </target>
 </project>
