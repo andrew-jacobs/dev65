@@ -2,10 +2,10 @@ package uk.co.demon.obelisk.xide;
 
 import javax.swing.UIManager;
 
-public abstract class IntegratedDevelopmentEnvironment
+public abstract class IDE
 {
 
-	protected IntegratedDevelopmentEnvironment (String title)
+	protected IDE (String title)
 	{
 
 	}

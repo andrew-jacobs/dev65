@@ -2269,10 +2269,16 @@ public abstract class Assembler extends Application
 	private static StringBuffer	buffer	= new StringBuffer ();
 	
 	/**
-	 * The <CODE>Option</CODE> instance use to detect <CODE>-help</CODE>
+	 * The <CODE>Option</CODE> instance used to detect <CODE>-define</CODE>
 	 */
 	private Option				defineOption
-		= new Option ("-define", "Define symbols",  "(symbol|symbol=value)(,..)*");
+		= new Option ("-define", "Define symbols", "(symbol|symbol=value)(,..)*");
+	
+	/**
+	 * The <CODE>Option</CODE> instance used to detect <CODE>-include</CODE>
+	 */
+	private Option 				includeOption
+		= new Option ("-include", "Define include path", "path[,path]*");
 
 	/**
 	 * Tab expansion size.
@@ -2802,17 +2808,24 @@ public abstract class Assembler extends Application
 	 */
 	private FileInputStream findFile (final String filename, boolean search)
 	{
-		FileInputStream		stream	= null;
-		
 		try {
-			stream = new FileInputStream (filename);
+			return (new FileInputStream (filename));
 		}
 		catch (FileNotFoundException error) {
-			if (search) {
-				; // TODO Implement search
+			if (search && includeOption.isPresent()) {
+				String [] paths = includeOption.getValue ().split(",");
+				
+				for (String path : paths) {
+					try {
+						return (new FileInputStream (path + "/" + filename)); 
+					}
+					catch (Exception err) {
+						/* Ignore */
+					}
+				}
 			}
 			error ("Could not find the specified file");
 		}
-		return (stream);
+		return (null);
 	}
 }

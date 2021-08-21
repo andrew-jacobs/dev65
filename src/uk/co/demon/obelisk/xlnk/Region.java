@@ -142,7 +142,7 @@ final class Region
 	private static long parseAddr (final String addr)
 	{
 		try {
-			return (Long.parseLong(addr, 16));
+			return (Long.parseLong (addr.toUpperCase (), 16));
 		}
 		catch (Exception error) {
 			System.err.println ("Error: Invalid hex address (" + addr + ")");

@@ -40,8 +40,11 @@ abstract class CachedTarget extends Target
 	 */
 	public void store (long addr, long value)
 	{
-		if ((start <= addr) && (addr <= end))
+		if ((start <= addr) && (addr <= end)) {
+			if (addr < min) min = addr;
+			if (addr > max) max = addr;
 			code [(int)(addr - start)] = (int) value;
+		}
 	}
 	
 	/**
@@ -68,6 +71,16 @@ abstract class CachedTarget extends Target
 	 * The data comprising the linked code.
 	 */
 	protected int [] 		code;
+	
+	/**
+	 * The lowest address written.
+	 */
+	protected long			min = Long.MAX_VALUE;
+	
+	/**
+	 * The highest address written.
+	 */
+	protected long			max = Long.MIN_VALUE;
 
 	/**
 	 * Constructs a <CODE>CachedTarget</CODE> that will capture and store

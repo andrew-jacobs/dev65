@@ -48,12 +48,11 @@ abstract class SRecordTarget extends CachedTarget
 			PrintWriter		writer = new PrintWriter (file);
 			
 			// Generate code records
-			for (int index = 0; index < size; index += 32) {
-				long addr = start + index;
+			for (long addr = min; addr <= max; addr += 32) {
 				writer.print ('S');
 				total = 0;
 
-				bytes = size - index;
+				bytes = (int) (max - addr + 1);
 				if (bytes > 32) bytes = 32;
 					
 				switch (addrSize) {
@@ -89,8 +88,9 @@ abstract class SRecordTarget extends CachedTarget
 				}
 								
 				for (int offset = 0; offset < bytes; ++offset) {
-					writer.print (Hex.toHex (code [index + offset], 2));
-					total += code [index + offset];
+					int value = code [(int)(addr - start + offset)];
+					writer.print (Hex.toHex (value, 2));
+					total += value;
 				}
 				writer.print(Hex.toHex (~total & 0xff, 2));
 				
