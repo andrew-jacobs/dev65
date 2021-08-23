@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="create_run_jar" name="dev65">
+
+<project basedir="." default="jar" name="dev65">
+
     <property environment="env"/>
     <property name="debuglevel" value="source,lines,vars"/>
 
@@ -8,18 +10,32 @@
     <property name="build.dir" value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
 
+    <property name="izpack-dist" value="${user.home}/opt/izPack"/>
+    <property name="app-installer" value="${ant.project}-setup.jar"/>
+
+  <path id="lib.path">
+    <fileset dir="${izpack-dist}/lib" includes="*.jar"/>
+  </path>
+
+  <taskdef name="izpack"
+           classname="com.izforge.izpack.ant.IzPackTask"
+           classpathref="lib.path"
+           />
+
     <path id="dev65.classpath">
         <pathelement location="bin"/>
         <pathelement location="lib/javadocking.jar"/>
         <pathelement location="lib/rsyntaxtextarea-2.6.1.jar"/>
 	<pathelement location="lib/jSerialComm-2.6.2.jar"/>
     </path>
+
     <path id="run.as65.classpath">
         <path refid="dev65.classpath"/>
         <pathelement location="lib/javadocking.jar"/>
         <pathelement location="lib/rsyntaxtextarea-2.6.1.jar"/>
 	<pathelement location="lib/jSerialComm-2.6.2.jar"/>
     </path>
+
     <target name="init">
         <mkdir dir="${classes.dir}"/>
 	<copy includeemptydirs="false" todir="${classes.dir}">
@@ -33,13 +49,18 @@
             </fileset>
         </copy>
     </target>
+
     <target name="clean">
         <delete dir="${build.dir}"/>
     	<delete file="${dir.jarfile}/dev65.jar"/>
     </target>
+
     <target depends="clean" name="cleanall"/>
+
     <target depends="build-subprojects,build-project" name="build"/>
+    
     <target name="build-subprojects"/>
+
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
 	<javac debug="true" debuglevel="${debuglevel}" 
@@ -50,7 +71,7 @@
         </javac>
     </target>
 
-    <target name="create_run_jar" depends="build">
+    <target name="jar" depends="build">
         <jar destfile="${build.dir}/dev65.jar">
             <manifest>
 		    <attribute name="Main-Class"
@@ -67,4 +88,15 @@
 	    <zipfileset dir="lib" includes="jSerialComm-2.6.2.jar"/>
         </jar>
     </target>
+
+  <target name="installer" depends="jar">
+    <echo message="Makes the installer using IzPack to ${app-installer}"/>
+    <izpack input="${basedir}/build-installer.xml"
+            output="${basedir}/${app-installer}"
+            installerType="standard"
+            basedir="${basedir}"
+            izPackDir="${izpack-dist}"/>
+    <echo message="${izpack-installer} created"/>
+  </target>
+
 </project>

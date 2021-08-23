@@ -1,0 +1,49 @@
+<izpack:installation version="5.0"
+                     xmlns:izpack="http://izpack.org/schema/installation"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
+ 
+  <info>
+    <appname>dev65</appname>
+    <appversion>2021-08-22</appversion>
+    <appsubpath>dev65</appsubpath>
+    <javaversion>1.4</javaversion>
+    <url>https://github.com/andrew-jacobs/dev65</url>
+    <authors>
+	    <author name="Andres Jacobs" email="N/A"/>
+	    <author name="Bill Chatfield" email="bill_chatfield@yahoo.com"/>
+    </authors>
+  </info>
+ 
+  <locale>
+    <langpack iso3="eng"/>
+  </locale>
+ 
+  <guiprefs width="800" height="600" resizable="no">
+    <laf name="substance">
+      <os family="windows" />
+      <os family="unix" />
+      <param name="variant" value="mist-silver" />
+    </laf>
+    <laf name="substance">
+      <os family="mac" />
+      <param name="variant" value="mist-aqua" />
+    </laf>
+    <modifier key="useHeadingPanel" value="yes" />
+  </guiprefs>
+ 
+  <panels>
+    <panel classname="TargetPanel"/>
+    <panel classname="InstallPanel"/>
+    <panel classname="SimpleFinishPanel"/>
+  </panels>
+ 
+  <packs>
+    <pack name="core" required="yes">
+      <description>The core files needed for the application</description>
+      <fileset dir="plain" targetdir="${INSTALL_PATH}" override="true"/>
+    </pack>
+  </packs>
+ 
+</izpack:installation>
+
