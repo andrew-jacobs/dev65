@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# Script:  add-to-path.bat
+# Author:  Bill Chatfield
+# License: GPL2
+
+findDotProfile()
+{
+	for f in .bash_profile .profile
+	do
+		profile="$HOME"/"$f"
+		if [ -f "$profile" ]
+		then
+			echo $profile
+			break
+		fi
+	done
+}
+
+addSingleDirToPath()
+{
+	if echo $PATH | grep -q "$1"
+	then
+		echo $1 is already in the PATH.
+	else
+		echo Run this: export PATH=\$PATH:$1
+		echo export PATH=\$PATH:$1 >> "$profile"
+	fi
+}
+
+addToPath()
+{
+	if [ $# -eq 0 ]
+	then
+		addSingleDirToPath `pwd`
+	else
+		for directory in "$@"
+		do
+			addSingleDirToPath "$directory"
+		done
+	fi
+}
+
+findDotProfile
+addToPath "$@"
+

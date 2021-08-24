@@ -23,6 +23,6 @@ OUTPUT_CAPTURE=as65-output.log
 # non-zero code when it fails. This is necessary for "make" to work properly.
 # If As65 writes any output, then it will be assumed that it failed and then
 # this script will exit with a non-zero exit code.
-java -classpath "$CLASS_PATH" "$MAIN_CLASS" "%@" 2>&1 \
+java -classpath "$CLASS_PATH" "$MAIN_CLASS" "$@" 2>&1 \
     | tee "$OUTPUT_CAPTURE" && [ ! -s "$OUTPUT_CAPTURE" ]
 

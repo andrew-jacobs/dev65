@@ -9,18 +9,21 @@
     <property name="dir.jarfile" value="${dir.buildfile}"/>
     <property name="build.dir" value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="app.jar" value="${build.dir}/${ant.project.name}.jar"/>
 
-    <property name="izpack-dist" value="${user.home}/opt/izPack"/>
-    <property name="app-installer" value="${ant.project}-setup.jar"/>
+    <property name="izpack.dist" value="${user.home}/IzPack"/>
+    <property name="app.installer.setup.dir" value="${build.dir}/${ant.project.name}-setup"/>
+    <property name="app.installer" value="${build.dir}/${ant.project.name}-setup.jar"/>
+    <property name="javac-1.4" value="${user.home}/Dropbox/opt/j2sdk1.4.2/j2sdk1.4.2_19/bin/javac"/>
 
   <path id="lib.path">
-    <fileset dir="${izpack-dist}/lib" includes="*.jar"/>
+	  <fileset dir="${izpack.dist}" includes="**/*.jar"/>
   </path>
 
   <taskdef name="izpack"
-           classname="com.izforge.izpack.ant.IzPackTask"
-           classpathref="lib.path"
-           />
+       classname="com.izforge.izpack.ant.IzPackTask"
+	classpathref="lib.path"
+  />
 
     <path id="dev65.classpath">
         <pathelement location="bin"/>
@@ -52,7 +55,6 @@
 
     <target name="clean">
         <delete dir="${build.dir}"/>
-    	<delete file="${dir.jarfile}/dev65.jar"/>
     </target>
 
     <target depends="clean" name="cleanall"/>
@@ -64,7 +66,8 @@
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
 	<javac debug="true" debuglevel="${debuglevel}" 
-                destdir="${classes.dir}" includeantruntime="false">
+	destdir="${classes.dir}" includeantruntime="false"
+	fork="yes" executable="${javac-1.4}">
             <src path="src"/>
             <src path="src-65016"/>
             <classpath refid="dev65.classpath"/>
@@ -72,7 +75,7 @@
     </target>
 
     <target name="jar" depends="build">
-        <jar destfile="${build.dir}/dev65.jar">
+        <jar destfile="${app.jar}">
             <manifest>
 		    <attribute name="Main-Class"
 		    value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
@@ -90,13 +93,22 @@
     </target>
 
   <target name="installer" depends="jar">
-    <echo message="Makes the installer using IzPack to ${app-installer}"/>
-    <izpack input="${basedir}/build-installer.xml"
-            output="${basedir}/${app-installer}"
+        <mkdir dir="${app.installer.setup.dir}"/>
+	<copy includeemptydirs="false" todir="${app.installer.setup.dir}/bin">
+            <fileset dir="scripts">
+                <include name="*"/>
+            </fileset>
+        </copy>
+	<copy includeemptydirs="false" todir="${app.installer.setup.dir}/lib">
+		<fileset dir="${build.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </copy>
+    <izpack input="build-installer.xml"
+            output="${app.installer}"
             installerType="standard"
             basedir="${basedir}"
-            izPackDir="${izpack-dist}"/>
-    <echo message="${izpack-installer} created"/>
+            izPackDir="${izpack.dist}"/>
   </target>
 
 </project>

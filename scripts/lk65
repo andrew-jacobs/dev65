@@ -17,5 +17,5 @@ JAR_DIR="$PARENT_DIR"/lib
 CLASS_PATH="$JAR_DIR"/dev65.jar
 MAIN_CLASS=uk.co.demon.obelisk.w65xx.Lk65
 
-java -classpath "$CLASS_PATH" "$MAIN_CLASS" "%@"
+java -classpath "$CLASS_PATH" "$MAIN_CLASS" "$@"
 
