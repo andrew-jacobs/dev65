@@ -15,6 +15,7 @@
     <property name="app.installer.setup.dir" value="${build.dir}/${ant.project.name}-setup"/>
     <property name="app.installer" value="${build.dir}/${ant.project.name}-setup.jar"/>
     <property name="javac-1.4" value="${user.home}/Dropbox/opt/j2sdk1.4.2/j2sdk1.4.2_19/bin/javac"/>
+    <property name="javac-1.5" value="${user.home}/Dropbox/opt/jdk1.5.0/jdk1.5.0_22/bin/javac"/>
 
   <path id="lib.path">
 	  <fileset dir="${izpack.dist}" includes="**/*.jar"/>
@@ -67,7 +68,7 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
 	<javac debug="true" debuglevel="${debuglevel}" 
 	destdir="${classes.dir}" includeantruntime="false"
-	fork="yes" executable="${javac-1.4}">
+	source="1.6" target="1.6">
             <src path="src"/>
             <src path="src-65016"/>
             <classpath refid="dev65.classpath"/>
@@ -110,5 +111,12 @@
             basedir="${basedir}"
             izPackDir="${izpack.dist}"/>
   </target>
+
+	<target name="dist-zip" depends="installer">
+		<zip destfile="build/dev65-setup.zip">
+			<zipfileset dir="scripts" includes="dev65-setup.*"/>
+			<zipfileset dir="build"   includes="dev65-setup.jar"/>
+		</zip>
+	</target>
 
 </project>

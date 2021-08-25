@@ -2,7 +2,6 @@ rem @echo off
 
 rem Script:  add-to-path.bat
 rem Author:  Bill Chatfield
-rem License: GPL2
 
 rem
 rem Check for help argument.

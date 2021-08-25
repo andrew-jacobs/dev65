@@ -20,11 +20,7 @@
   </locale>
  
   <guiprefs width="740" height="380" resizable="yes">
-	  <!--
     <modifier key="useHeadingPanel" value="yes" />
-    <modifier key="headingFontSize" value="1.5"/>
-      <modifier key="labelFontSize" value="1.5"/>
-	  -->
   </guiprefs>
  
   <panels>
@@ -56,7 +52,7 @@
 		<os family="mac" />
 		<os family="windows" />
 		<args>
-			<arg value='"$INSTALL_PATH"/bin'/>
+			<arg value="$INSTALL_PATH/bin"/>
 		</args>
 	</executable>
     </pack>

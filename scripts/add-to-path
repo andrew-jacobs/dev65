@@ -1,14 +1,18 @@
 #!/bin/sh
 
-# Script:  add-to-path.bat
+# Script:  add-to-path.sh
 # Author:  Bill Chatfield
-# License: GPL2
 
 findDotProfile()
 {
 	for f in .bash_profile .profile
 	do
-		profile="$HOME"/"$f"
+		if [ -n "$SUDO_USER" ]
+		then
+			profile=/home/$SUDO_USER/$f
+		else
+			profile="$HOME"/"$f"
+		fi
 		if [ -f "$profile" ]
 		then
 			echo $profile
@@ -19,28 +23,28 @@ findDotProfile()
 
 addSingleDirToPath()
 {
-	if echo $PATH | grep -q "$1"
+	if grep -eq "^export PATH=.*:$1" "$2"
 	then
 		echo $1 is already in the PATH.
 	else
 		echo Run this: export PATH=\$PATH:$1
-		echo export PATH=\$PATH:$1 >> "$profile"
+		echo export PATH=\$PATH:$1 >> "$2"
 	fi
 }
 
 addToPath()
 {
+	profile=`findDotProfile`
 	if [ $# -eq 0 ]
 	then
-		addSingleDirToPath `pwd`
+		addSingleDirToPath `pwd` "$profile"
 	else
 		for directory in "$@"
 		do
-			addSingleDirToPath "$directory"
+			addSingleDirToPath "$directory" "$profile"
 		done
 	fi
 }
 
-findDotProfile
 addToPath "$@"
 
