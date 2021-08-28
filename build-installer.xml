@@ -4,23 +4,26 @@
                      xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
 
   <info>
-	  <appname>dev65</appname>
+	<appname>dev65</appname>
     <appversion>from 2021-08-23</appversion>
     <appsubpath>dev65</appsubpath>
     <javaversion>1.4</javaversion>
-    <url>https://github.com/andrew-jacobs/dev65</url>
+    <url>https://github.com/gungwald/dev65</url>
     <authors>
-	    <author name="Andres Jacobs" email=""/>
-	    <author name="Bill Chatfield" email="bill_chatfield@yahoo.com"/>
+	    <author name="Andres Jacobs (original author)" email=""/>
+	    <author name="Bill Chatfield (installer, run scripts)" email="bill_chatfield@yahoo.com"/>
     </authors>
+    <run-privileged condition="izpack.windowsinstall" uninstaller="true"/>
   </info>
  
   <locale>
     <langpack iso3="eng"/>
   </locale>
  
-  <guiprefs width="740" height="380" resizable="yes">
+  <guiprefs width="640" height="480" resizable="yes">
     <modifier key="useHeadingPanel" value="yes" />
+	<modifier key="labelFontSize" value="1.1"/>
+	<modifier key="allYGap" value="10"/>
   </guiprefs>
  
   <panels>
