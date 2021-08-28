@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project basedir="." default="jar" name="dev65">
+<project basedir="." default="installer" name="dev65">
 
 	<property environment="env" />
 	<property name="debuglevel" value="source,lines,vars" />
@@ -12,7 +12,6 @@
 	<property name="app.jar" value="${build.dir}/${ant.project.name}.jar" />
 	<property name="app.jar.1.4" value="${build.dir}/${ant.project.name}-1.4.jar" />
 	<property name="app.jar.1.3" value="${build.dir}/${ant.project.name}-1.3.jar" />
-
 
 	<property name="izpack.dist" value="${user.home}/IzPack" />
 	<property name="app.installer.setup.dir" value="${build.dir}/${ant.project.name}-setup" />
@@ -42,32 +41,6 @@
 		</classpath>
 	</taskdef>
 
-	<retrotranslator target="1.4" destjar="${app.jar.1.4}" smart="true" verify="true" failonwarning="false">
-		<fileset dir="${classes.dir}" includes="**/*.class" />
-		<jarfileset dir="lib" includes="**/*.jar" />
-		<classpath>
-			<fileset dir="${java.1.4.dir}/jre/lib" includes="**/*.jar" />
-			<fileset dir="${retro.tx.dir}">
-				<include name="retrotranslator-runtime-${retro.tx.ver}.jar" />
-				<include name="backport-util-concurrent-3.1.jar" />
-			</fileset>
-			<fileset dir="lib" includes="**/*.jar" />
-		</classpath>
-	</retrotranslator>
-
-	<retrotranslator target="1.3" destjar="${app.jar.1.3}" smart="true" verify="true" failonwarning="false">
-		<fileset dir="build/classes" includes="**/*.class" />
-		<jarfileset dir="build/lib" includes="**/*.jar" />
-		<classpath>
-			<fileset dir="${java.1.3.dir}/jre/lib" includes="**/*.jar" />
-			<fileset dir="${retro.tx.dir}">
-				<include name="retrotranslator-runtime13-${retro.tx.ver}.jar" />
-				<include name="backport-util-concurrent-java12-3.1.jar" />
-			</fileset>
-			<fileset dir="lib" includes="**/*.jar" />
-		</classpath>
-	</retrotranslator>
-	
 	<path id="dev65.classpath">
 		<pathelement location="${classes.dir}" />
 		<pathelement location="lib/javadocking.jar" />
@@ -130,8 +103,39 @@
 			<zipfileset dir="lib" includes="jSerialComm-2.6.2.jar" />
 		</jar>
 	</target>
+	
+	<target name="backport" depends="jar">
+		<retrotranslator target="1.4" destjar="${app.jar.1.4}" smart="true" verify="true" failonwarning="false">
+			<!-- <fileset dir="${classes.dir}" includes="**/*.class" /> -->
+			<jarfileset file="${app.jar}" />
+			<classpath>
+				<fileset dir="${java.1.4.dir}/jre/lib" includes="**/*.jar" />
+				<fileset dir="${retro.tx.dir}">
+					<include name="retrotranslator-runtime-${retro.tx.ver}.jar" />
+					<include name="backport-util-concurrent-3.1.jar" />
+				</fileset>
+				<fileset file="${app.jar}" />
+			</classpath>
+		</retrotranslator>
+	</target>
+	
+	<!-- Will not work until a 1.3 JDK is defined. -->
+	<target name="backport-to-1.3" depends="jar">
+		<retrotranslator target="1.3" destjar="${app.jar.1.3}" smart="true" verify="true" failonwarning="false">
+			<fileset dir="build/classes" includes="**/*.class" />
+			<jarfileset dir="build/lib" includes="**/*.jar" />
+			<classpath>
+				<fileset dir="${java.1.3.dir}/jre/lib" includes="**/*.jar" />
+				<fileset dir="${retro.tx.dir}">
+					<include name="retrotranslator-runtime13-${retro.tx.ver}.jar" />
+					<include name="backport-util-concurrent-java12-3.1.jar" />
+				</fileset>
+				<fileset dir="lib" includes="**/*.jar" />
+			</classpath>
+		</retrotranslator>
+	</target>
 
-	<target name="installer" depends="jar">
+	<target name="installer" depends="backport">
 		<mkdir dir="${app.installer.setup.dir}" />
 		<copy includeemptydirs="false" todir="${app.installer.setup.dir}/bin">
 			<fileset dir="scripts">
