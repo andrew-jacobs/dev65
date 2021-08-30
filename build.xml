@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
+<!-- This DOCTYPE tag shuts off the warning from Eclipse that there is no DTD
+     associated with this XML file. -->
+
+<!DOCTYPE project>
+
 <project basedir="." default="installer" name="dev65">
 
 	<property environment="env" />
@@ -15,19 +20,22 @@
 
 	<property name="izpack.dist" value="${user.home}/IzPack" />
 	<property name="app.installer.setup.dir" value="${build.dir}/${ant.project.name}-setup" />
-	<property name="app.installer" value="${build.dir}/${ant.project.name}-setup-1.6.jar" />
+	<property name="app.installer" value="${build.dir}/${ant.project.name}-setup-1.5.jar" />
 	<property name="app.installer.1.4" value="${build.dir}/${ant.project.name}-setup.jar" />
 	<property name="java.1.3.dir" value="N/A" />
 	<property name="java.1.4.dir" value="${user.home}/Dropbox/opt/j2sdk1.4.2/j2sdk1.4.2_19" />
 	<property name="java.1.5.dir" value="${user.home}/Dropbox/opt/jdk1.5.0/jdk1.5.0_22" />
 	<property name="javac-1.4" value="${java.1.4.dir}/bin/javac" />
 	<property name="javac-1.5" value="${java.1.5.dir}/bin/javac" />
-	
+
 	<property name="retro.tx.ver" value="1.2.9" />
 	<property name="retro.tx.dir" value="lib/Retrotranslator-${retro.tx.ver}-bin" />
 
 	<path id="lib.path">
-		<fileset dir="${izpack.dist}" includes="**/*.jar" />
+		<!-- <fileset dir="${izpack.dist}" includes="**/*.jar" /> -->
+		<fileset dir="lib">
+			<include name="izpack-standalone-compiler-4.3.5.jar"/>
+		</fileset>
 	</path>
 
 	<taskdef name="izpack" classname="com.izforge.izpack.ant.IzPackTask" classpathref="lib.path" />
@@ -98,12 +106,14 @@
 			<fileset dir="${classes.dir}" />
 			<zipfileset src="lib/rsyntaxtextarea-2.6.1.jar" />
 			<zipfileset src="lib/jSerialComm-2.6.2.jar" />
-			<zipfileset src="lib/javadocking.jar"/>
+			<zipfileset src="lib/javadocking.jar" />
 		</jar>
 	</target>
-	
+
 	<target name="backport" depends="jar">
-		<retrotranslator target="1.4" destjar="${app.jar.1.4}" smart="true" verify="true" failonwarning="false">
+		<retrotranslator target="1.4" destjar="${app.jar.1.4}" smart="true" 
+				verify="true" failonwarning="false"
+				embed="com.alteredmechanism.retrotranslator.backport">
 			<!-- <fileset dir="${classes.dir}" includes="**/*.class" /> -->
 			<jarfileset file="${app.jar}" />
 			<classpath>
@@ -116,7 +126,7 @@
 			</classpath>
 		</retrotranslator>
 	</target>
-	
+
 	<!-- Will not work until a 1.3 JDK is defined. -->
 	<target name="backport-to-1.3" depends="jar">
 		<retrotranslator target="1.3" destjar="${app.jar.1.3}" smart="true" verify="true" failonwarning="false">
@@ -133,20 +143,22 @@
 		</retrotranslator>
 	</target>
 
-	<target name="installer" depends="backport">
+	<target name="installer-setup" depends="backport">
 		<mkdir dir="${app.installer.setup.dir}" />
-		<copy includeemptydirs="false" todir="${app.installer.setup.dir}/bin">
+		<copy includeemptydirs="false" todir="${app.installer.setup.dir}/bin" verbose="true">
 			<fileset dir="scripts">
 				<include name="*" />
 			</fileset>
 		</copy>
-		<copy includeemptydirs="false" todir="${app.installer.setup.dir}/lib">
+		<mkdir dir="${app.installer.setup.dir}/lib" />
+		<copy includeemptydirs="false" todir="${app.installer.setup.dir}/lib" verbose="true">
 			<fileset dir="${build.dir}">
-				<include name="**/*.jar" />
-				<exclude name="${app.installer}"/>
-				<exclude name="${app.installer.1.4}"/>
+				<include name="dev65.jar" />
 			</fileset>
 		</copy>
+	</target>
+
+	<target name="installer" depends="installer-setup">
 		<izpack input="build-installer.xml" output="${app.installer}" installerType="standard" basedir="${basedir}" izPackDir="${izpack.dist}" />
 	</target>
 
@@ -158,7 +170,9 @@
 	</target>
 
 	<target name="backport-installer" depends="installer">
-		<retrotranslator target="1.4" destjar="${app.installer.1.4}" smart="true" verify="true" failonwarning="false">
+		<retrotranslator target="1.4" destjar="${app.installer.1.4}" 
+				smart="true" verify="true" failonwarning="false"
+				embed="com.alteredmechanism.retrotranslator.backport">
 			<jarfileset file="${app.installer}" />
 			<classpath>
 				<fileset dir="${java.1.4.dir}/jre/lib" includes="**/*.jar" />
@@ -170,5 +184,5 @@
 			</classpath>
 		</retrotranslator>
 	</target>
-	
+
 </project>

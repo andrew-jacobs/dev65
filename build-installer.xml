@@ -1,8 +1,13 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<installation version="1.0">
+
+<!--
 <izpack:installation version="5.0"
                      xmlns:izpack="http://izpack.org/schema/installation"
                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
-
+  -->
   <info>
 	<appname>dev65</appname>
     <appversion>from 2021-08-23</appversion>
@@ -13,7 +18,7 @@
 	    <author name="Andres Jacobs (original author)" email=""/>
 	    <author name="Bill Chatfield (installer, run scripts)" email="bill_chatfield@yahoo.com"/>
     </authors>
-    <run-privileged condition="izpack.windowsinstall" uninstaller="true"/>
+    <run-privileged condition="izpack.windowsinstall" uninstaller="yes"/>
   </info>
  
   <locale>
@@ -22,13 +27,13 @@
  
   <guiprefs width="640" height="480" resizable="yes">
     <modifier key="useHeadingPanel" value="yes" />
-	<modifier key="labelFontSize" value="1.1"/>
-	<modifier key="allYGap" value="10"/>
+	<modifier key="labelFontSize" value="1.4"/>
+	<modifier key="allYGap" value="20"/>
   </guiprefs>
  
   <panels>
     <panel classname="HelloPanel"/>
-    <panel classname="DataCheckPanel"/>
+	<panel classname="DataCheckPanel"/> 
     <panel classname="TargetPanel"/>
     <panel classname="InstallPanel"/>
     <panel classname="SimpleFinishPanel"/>
@@ -61,5 +66,4 @@
     </pack>
   </packs>
  
-</izpack:installation>
-
+</installation>
