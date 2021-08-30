@@ -27,13 +27,13 @@
  
   <guiprefs width="640" height="480" resizable="yes">
     <modifier key="useHeadingPanel" value="yes" />
-	<modifier key="labelFontSize" value="1.4"/>
+	<modifier key="labelFontSize" value="1.3"/>
 	<modifier key="allYGap" value="20"/>
   </guiprefs>
  
   <panels>
     <panel classname="HelloPanel"/>
-	<panel classname="DataCheckPanel"/> 
+<!-- <panel classname="DataCheckPanel"/>  -->	
     <panel classname="TargetPanel"/>
     <panel classname="InstallPanel"/>
     <panel classname="SimpleFinishPanel"/>
