@@ -33,3 +33,33 @@ needed in your code and makes the logic much easier to understand. The generated
 uses the shortest branch/jump sequence needed. More documentation for about this is available here:
 
 http://www.obelisk.me.uk/dev65/
+
+## Requirements
+
+    Runtime: Java 1.6 or greater
+    Compile: Java 1.6 to Java 11
+
+Although the sources are written to Java 1.4, there is a 3rd party jar file that requires Java 1.6 at
+runtime. So you must have Java 1.6 or greater to run it. It doesn't matter if you have the JRE or JDK.
+
+Additionally, IzPack, the installer component, requires at least Java 1.6.
+
+To support the oldest possible Java at runtime, the compile step specifies Java 1.6 bytecode for the
+output. This will be the format of the class files in dev65.jar. This means that Java 1.6 will be
+required to run the code. But, at most Java 11 is require to perform the compile step because it is
+the last version to be able to generate bytecode as old as Java 1.6.
+
+Why is support being provided for a version of Java as old as 1.6? Why not only support the latest
+version of Java? To answer that, ask yourself why you want an assembler for a CPU as old as the 6502.
+Additionally, the latest version of Java is only available for the latest versions of Linux, Mac,
+and Windows on 64-bit AMD/Intel hardware. If you have older hardware, non-Intel hardware, and/or
+an older operating system, you can't run the lastest version of Java. So, supporting the oldest
+version of Java possible expands the types of systems this software will run on. To achieve,
+"Write once, run anywhere" an older version of Java is required. For example,
+it would be preferrable to support these older system which were supported until the most recent code
+was added:
+
+    Mac G3 - can run MacOS 10.3 at most - Java 1.4 at most
+    Mac G4 - can run MacOS 10.4 at most - Java 1.5 at most
+    Solaris 8 - Java 1.5 at most
+

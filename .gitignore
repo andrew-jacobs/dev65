@@ -2,3 +2,5 @@
 /examples/6809/test.obj
 /examples/melps-740/test.obj
 /examples/4004/*.obj
+.*.swp
+/build/
